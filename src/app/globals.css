@@ -1,0 +1,329 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  /* Futuristic Card Styles */
+  .futuristic-card {
+    @apply bg-gray-900/80 backdrop-blur-md border border-gray-700/50 rounded-xl shadow-2xl;
+    background: linear-gradient(135deg, rgba(17, 24, 39, 0.8) 0%, rgba(31, 41, 55, 0.6) 100%);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(75, 85, 99, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .futuristic-card:hover {
+    @apply border-gray-600/50;
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Neon Glow Effects */
+  .neon-glow {
+    box-shadow: 
+      0 0 5px rgba(0, 212, 255, 0.5),
+      0 0 10px rgba(0, 212, 255, 0.3),
+      0 0 15px rgba(0, 212, 255, 0.1);
+  }
+
+  .neon-glow-green {
+    box-shadow: 
+      0 0 5px rgba(0, 255, 136, 0.5),
+      0 0 10px rgba(0, 255, 136, 0.3),
+      0 0 15px rgba(0, 255, 136, 0.1);
+  }
+
+  .neon-glow-purple {
+    box-shadow: 
+      0 0 5px rgba(139, 92, 246, 0.5),
+      0 0 10px rgba(139, 92, 246, 0.3),
+      0 0 15px rgba(139, 92, 246, 0.1);
+  }
+
+  .neon-glow-pink {
+    box-shadow: 
+      0 0 5px rgba(255, 105, 180, 0.5),
+      0 0 10px rgba(255, 105, 180, 0.3),
+      0 0 15px rgba(255, 105, 180, 0.1);
+  }
+
+  /* Neon Button Styles */
+  .futuristic-button {
+    @apply px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-lg;
+    background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .futuristic-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .futuristic-button:hover::before {
+    left: 100%;
+  }
+
+  .futuristic-button:hover {
+    @apply scale-105;
+    box-shadow: 
+      0 0 20px rgba(0, 212, 255, 0.4),
+      0 0 40px rgba(0, 212, 255, 0.2);
+  }
+
+  /* Animated Background */
+  .animated-bg {
+    background: linear-gradient(-45deg, #0f172a, #1e293b, #334155, #475569);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+  }
+
+  @keyframes gradientShift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  /* Glass Morphism */
+  .glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Chart Container Styles */
+  .chart-container {
+    @apply futuristic-card p-6;
+    min-height: 400px;
+  }
+
+  /* Table Styles */
+  .futuristic-table {
+    @apply w-full;
+  }
+
+  .futuristic-table th {
+    @apply text-left py-3 px-4 text-sm font-medium text-gray-300 border-b border-gray-600;
+  }
+
+  .futuristic-table td {
+    @apply py-3 px-4 border-b border-gray-700;
+  }
+
+  .futuristic-table tr:hover {
+    @apply bg-gray-800/50;
+  }
+
+  /* Loading Animation */
+  .loading-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  /* Scrollbar Styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-800;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-600 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500;
+  }
+
+  /* Focus Styles for Accessibility */
+  .focus-visible {
+    @apply outline-none ring-2 ring-cyan-500 ring-offset-2 ring-offset-gray-900;
+  }
+
+  /* Responsive Typography */
+  .text-responsive {
+    @apply text-sm sm:text-base lg:text-lg;
+  }
+
+  .text-responsive-xl {
+    @apply text-lg sm:text-xl lg:text-2xl;
+  }
+
+  .text-responsive-2xl {
+    @apply text-xl sm:text-2xl lg:text-3xl;
+  }
+
+  /* Mobile Navigation */
+  .mobile-nav {
+    @apply fixed inset-0 z-50 bg-gray-900/95 backdrop-blur-md;
+  }
+
+  .mobile-nav-content {
+    @apply flex flex-col items-center justify-center h-full space-y-8;
+  }
+
+  /* Tab Navigation */
+  .tab-nav {
+    @apply flex space-x-1 overflow-x-auto scrollbar-hide;
+  }
+
+  .tab-button {
+    @apply flex-shrink-0 px-4 py-2 rounded-lg font-medium transition-all duration-300;
+  }
+
+  .tab-button.active {
+    @apply bg-gradient-to-r from-cyan-500 to-pink-500 text-white shadow-lg neon-glow;
+  }
+
+  .tab-button:not(.active) {
+    @apply text-gray-300 hover:text-white hover:bg-gray-700/50;
+  }
+
+  /* Hide scrollbar for tab navigation */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Custom Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.5s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s ease-out;
+}
+
+/* Leaflet map customizations */
+.leaflet-container {
+  background: #0f0f23 !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: #1a1a2e !important;
+  border: 1px solid #00d4ff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.3) !important;
+}
+
+.leaflet-popup-content {
+  color: white !important;
+  margin: 0 !important;
+}
+
+.leaflet-popup-tip {
+  background: #1a1a2e !important;
+  border: 1px solid #00d4ff !important;
+}
+
+.leaflet-control-zoom a {
+  background: #1a1a2e !important;
+  border: 1px solid #00d4ff !important;
+  color: #00d4ff !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: #00d4ff !important;
+  color: #1a1a2e !important;
+} 
