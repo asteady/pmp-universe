@@ -26,9 +26,13 @@ import {
   getChartData,
   getBadgeConditions,
   getLeaderboardData,
-  getProgressData
+  getProgressData,
+  audiencePerformanceData
 } from '@/api/mockData'
 import Link from 'next/link'
+import { AudienceTable } from '@/components/AudienceTable'
+import { AudienceLeaderboard } from '@/components/AudienceLeaderboard'
+import { SmartInsight } from '@/components/SmartInsight'
 
 const InteractiveMap = dynamic(() => import('@/components/InteractiveMap').then(mod => mod.InteractiveMap), { ssr: false }) as FC
 
@@ -49,7 +53,7 @@ export default function DashboardPage() {
     { id: 'geo-device', label: 'Geo/Device' },
     { id: 'placements', label: 'Placements' },
     { id: 'foot-traffic', label: 'Foot Traffic' },
-    { id: 'audiences', label: 'Audiences', href: '/dashboard/audiences' },
+    { id: 'audiences', label: 'Audiences' },
   ]
 
   const handleFiltersChange = (newFilters: FilterParams) => {
@@ -100,31 +104,19 @@ export default function DashboardPage() {
           {/* Tab Navigation */}
           <div className="flex space-x-1 pb-4 overflow-x-auto">
             {tabs.map((tab) => (
-              tab.href ? (
-                <Link key={tab.id} href={tab.href} legacyBehavior>
-                  <a className={`flex-shrink-0 px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                    activeTab === tab.id
-                      ? 'bg-gradient-to-r from-cyan-500 to-pink-500 text-white shadow-lg neon-glow'
-                      : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
-                  }`}>
-                    {tab.label}
-                  </a>
-                </Link>
-              ) : (
-                <motion.button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex-shrink-0 px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                    activeTab === tab.id
-                      ? 'bg-gradient-to-r from-cyan-500 to-pink-500 text-white shadow-lg neon-glow'
-                      : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
-                  }`}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {tab.label}
-                </motion.button>
-              )
+              <motion.button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex-shrink-0 px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                  activeTab === tab.id
+                    ? 'bg-gradient-to-r from-cyan-500 to-pink-500 text-white shadow-lg neon-glow'
+                    : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {tab.label}
+              </motion.button>
             ))}
           </div>
         </div>
@@ -676,11 +668,183 @@ function FootTrafficDashboard({ benchmarkMode }: { benchmarkMode: boolean }) {
   )
 } 
 
-// Add a placeholder component for AudiencesDashboard
 function AudiencesDashboard() {
+  // Table columns config
+  const defaultColumns = [
+    { key: 'advertiser', label: 'Advertiser Name' },
+    { key: 'campaign', label: 'Campaign Name' },
+    { key: 'strategy', label: 'Strategy Name' },
+    { key: 'creative', label: 'Creative Name' },
+    { key: 'ctr', label: 'CTR%' },
+    { key: 'vcr', label: 'VCR%' },
+  ]
+  const [columns, setColumns] = useState(defaultColumns)
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  const [showColumnConfig, setShowColumnConfig] = useState(false)
+
+  // Type for table row
+  type TableRow = {
+    [key: string]: string | number
+    advertiser: string
+    campaign: string
+    strategy: string
+    creative: string
+    ctr: string
+    vcr: string
+    id: string
+    name: string
+    type: string
+    impressions: number
+    clicks: number
+    conversions: number
+    roi: number
+    discrepancy: number
+    confidence: number
+    color: string
+    description: string
+  }
+
+  // Mock data for table (replace with real data as needed)
+  const tableData: TableRow[] = audiencePerformanceData.map(seg => ({
+    advertiser: (seg as any).advertiser || 'Acme Corp',
+    campaign: (seg as any).campaign || seg.name,
+    strategy: (seg as any).strategy || 'Awareness',
+    creative: (seg as any).creative || 'Creative A',
+    ctr: ((seg.clicks / seg.impressions) * 100).toFixed(2) + '%',
+    vcr: ((seg as any).vcr ? ((seg as any).vcr * 100).toFixed(2) : '68.2') + '%',
+    ...seg
+  }))
+  const paginatedData = tableData.slice((page - 1) * pageSize, page * pageSize)
+
+  // Column config UI
+  const handleColumnToggle = (key: string) => {
+    if (columns.find(col => col.key === key)) {
+      setColumns(columns.filter(col => col.key !== key))
+    } else {
+      const col = defaultColumns.find(col => col.key === key)
+      if (col) setColumns([...columns, col])
+    }
+  }
+
   return (
-    <div className="futuristic-card p-8 text-center text-white text-2xl font-bold neon-glow">
-      Audiences Tab Coming Soon: Executive Segment Reporting, Leaderboard, Smart Insights, and More!
+    <div className="space-y-8">
+      {/* Campaign Audience Insights Table */}
+      <div className="futuristic-card p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-xl font-bold text-white">Campaign Audience Insights</h3>
+          <div className="flex items-center space-x-2">
+            <button onClick={() => setShowColumnConfig(v => !v)} className="px-3 py-1 bg-neon-blue text-white rounded-lg text-xs font-medium hover:bg-neon-green transition-all">Configure Columns</button>
+            <button className="px-4 py-2 bg-neon-blue text-white rounded-lg font-medium hover:bg-neon-green transition-all">Export CSV</button>
+          </div>
+        </div>
+        {showColumnConfig && (
+          <div className="mb-4 flex flex-wrap gap-2">
+            {defaultColumns.map(col => (
+              <label key={col.key} className="flex items-center space-x-1 text-sm text-white">
+                <input type="checkbox" checked={!!columns.find(c => c.key === col.key)} onChange={() => handleColumnToggle(col.key)} />
+                <span>{col.label}</span>
+              </label>
+            ))}
+          </div>
+        )}
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-gray-600">
+                {columns.map(col => (
+                  <th key={col.key} className="text-left py-3 px-4 text-sm font-medium text-gray-300">{col.label}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedData.map((row, idx) => (
+                <tr key={idx} className="border-b border-gray-700">
+                  {columns.map(col => (
+                    <td key={col.key} className="py-3 px-4 text-white">{row[col.key]}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {/* Pagination */}
+        <div className="flex justify-end items-center mt-4 space-x-2">
+          <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="px-2 py-1 bg-dark-300 text-white rounded disabled:opacity-50">Prev</button>
+          <span className="text-white text-sm">Page {page}</span>
+          <button onClick={() => setPage(p => (p * pageSize < tableData.length ? p + 1 : p))} disabled={page * pageSize >= tableData.length} className="px-2 py-1 bg-dark-300 text-white rounded disabled:opacity-50">Next</button>
+          <select value={pageSize} onChange={e => setPageSize(Number(e.target.value))} className="ml-2 px-2 py-1 rounded bg-dark-300 text-white">
+            {[10, 20, 50].map(size => <option key={size} value={size}>{size} / page</option>)}
+          </select>
+        </div>
+      </div>
+
+      {/* Rest of Audiences Tab: SmartInsight, Filters, Leaderboard, Charts, Table */}
+      <SmartInsight confidence={0.97} message={'Segment "Luxury Auto Intenders" is outperforming with ROI 4.10x and 320 conversions.'} />
+      <Filter
+        filters={{}}
+        onFiltersChange={() => {}}
+        userRole={'admin'}
+        reportType={'audiences'}
+        segmentTypes={['demographic', 'behavioral', 'custom']}
+        segmentNames={audiencePerformanceData.map(seg => seg.name)}
+        audienceMode
+      />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Chart
+          type="bar"
+          data={{
+            labels: audiencePerformanceData.map(seg => seg.name),
+            datasets: [
+              {
+                label: 'Conversions',
+                data: audiencePerformanceData.map(seg => seg.conversions),
+                backgroundColor: audiencePerformanceData.map(seg => seg.color),
+              },
+            ],
+          }}
+          height={320}
+          options={{
+            plugins: {
+              title: {
+                display: true,
+                text: 'Conversions by Audience Segment',
+                color: '#fff',
+                font: { size: 16, weight: 'bold' },
+              },
+            },
+          }}
+        />
+        <Chart
+          type="scatter"
+          data={{
+            datasets: [
+              {
+                label: 'Segments',
+                data: audiencePerformanceData.map(seg => ({ x: seg.discrepancy, y: seg.roi, r: 10 })),
+                backgroundColor: audiencePerformanceData.map(seg => seg.color),
+              },
+            ],
+          }}
+          height={320}
+          options={{
+            plugins: {
+              title: {
+                display: true,
+                text: 'ROI vs. Discrepancy by Segment',
+                color: '#fff',
+                font: { size: 16, weight: 'bold' },
+              },
+            },
+            scales: {
+              x: { title: { display: true, text: 'Discrepancy', color: '#fff' } },
+              y: { title: { display: true, text: 'ROI', color: '#fff' } },
+            },
+          }}
+        />
+      </div>
+      <AudienceLeaderboard entries={audiencePerformanceData.map(seg => ({ id: seg.id, name: seg.name, roi: seg.roi, conversions: seg.conversions, impressions: seg.impressions }))} />
+      <AudienceTable segments={audiencePerformanceData} />
     </div>
   )
 } 
