@@ -69,6 +69,7 @@ const generateMapPoints = (): MapPoint[] => {
   }))
 }
 
+// NOTE: This component must be imported using dynamic(() => import('./InteractiveMap'), { ssr: false }) wherever it is used, to avoid SSR errors with window/Leaflet.
 export function InteractiveMap({ className = '' }: InteractiveMapProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [mapPoints, setMapPoints] = useState<MapPoint[]>([])

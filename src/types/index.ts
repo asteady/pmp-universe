@@ -37,12 +37,14 @@ export interface CampaignData {
   strategy_id: string
   strategy_type: string
   audience_segment_name: string
+  advertiser: string
+  creative: string
   impressions: number
   clicks: number
   total_conversions: number
   total_revenue: number
   total_spend: number
-  ctr: number
+  ctr: string | number
   cpa: number
   roi: number
   viewability_rate: number
@@ -52,6 +54,11 @@ export interface CampaignData {
   city_name?: string
   demographic_discrepancy?: number
   inventory_type?: string
+  channel?: string
+  device_type?: string
+  poi?: string
+  completed_views?: number
+  confidence?: number
 }
 
 export interface NewToBrandData extends CampaignData {
@@ -61,6 +68,7 @@ export interface NewToBrandData extends CampaignData {
   new_to_brand_roi: number
   returning_conversions: number
   returning_revenue: number
+  lookback_window?: number
 }
 
 export interface ViewabilityData extends CampaignData {
@@ -70,12 +78,16 @@ export interface ViewabilityData extends CampaignData {
   vcr: number
   video_starts: number
   video_completions: number
+  creative_size?: string
+  channel_type?: string
 }
 
 export interface GeoDeviceData extends CampaignData {
   country: string
   region: string
   city: string
+  dma?: string
+  zip_code?: string
   device_type: string
   device_make: string
   device_model: string
@@ -85,6 +97,9 @@ export interface GeoDeviceData extends CampaignData {
   gender: string
   hh_income: string
   demographic_discrepancy: number
+  conversions?: number
+  revenue?: number
+  spend?: number
 }
 
 export interface PlacementData {
@@ -102,6 +117,11 @@ export interface PlacementData {
   video_starts: number
   skipped_impressions: number
   rank: number
+  goal_impressions?: number
+  budget_spent?: number
+  total_budget?: number
+  advertiser?: string
+  campaign_name?: string
 }
 
 export interface FootTrafficData {
@@ -116,6 +136,10 @@ export interface FootTrafficData {
   projected_visits: number
   projected_unique_visits: number
   dwell_time: number
+  average_dwell_time?: number
+  median_dwell_time?: number
+  advertiser?: string
+  campaign_name?: string
 }
 
 export interface ChartData {

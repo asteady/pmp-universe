@@ -1,5 +1,5 @@
-import { audiencePerformanceData } from './mockData'
+import { getAudiencePerformanceData } from './mockData'
 
-export function getAudiencePerformance() {
-  return audiencePerformanceData
+export function getAudiencePerformance(count = 20) {
+  return getAudiencePerformanceData(count)
 } 

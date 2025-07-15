@@ -61,12 +61,12 @@ export default function DashboardPage() {
   useEffect(() => {
     // Only generate data on client
     if (typeof window !== 'undefined') {
-      setLocalCampaignData(getCampaignData())
-      setLocalGeoDeviceData(getGeoDeviceData())
-      setLocalNewToBrandData(getNewToBrandData())
-      setLocalViewabilityData(getViewabilityData())
-      setLocalPlacementData(getPlacementData())
-      setLocalFootTrafficData(getFootTrafficData())
+      setLocalCampaignData(getCampaignData(20) || [])
+      setLocalGeoDeviceData(getGeoDeviceData(20) || [])
+      setLocalNewToBrandData(getNewToBrandData(20) || [])
+      setLocalViewabilityData(getViewabilityData(20) || [])
+      setLocalPlacementData(getPlacementData(20) || [])
+      setLocalFootTrafficData(getFootTrafficData(20) || [])
     }
   }, [])
 
@@ -207,12 +207,12 @@ export default function DashboardPage() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            {activeTab === 'main' && <MainDashboard benchmarkMode={benchmarkMode} />}
-            {activeTab === 'new-to-brand' && <NewToBrandDashboard benchmarkMode={benchmarkMode} />}
-            {activeTab === 'viewability' && <ViewabilityDashboard benchmarkMode={benchmarkMode} />}
-            {activeTab === 'geo-device' && <GeoDeviceDashboard benchmarkMode={benchmarkMode} />}
-            {activeTab === 'placements' && <PlacementsDashboard benchmarkMode={benchmarkMode} />}
-            {activeTab === 'foot-traffic' && <FootTrafficDashboard benchmarkMode={benchmarkMode} />}
+            {activeTab === 'main' && <MainDashboard benchmarkMode={benchmarkMode} localCampaignData={localCampaignData} />}
+            {activeTab === 'new-to-brand' && <NewToBrandDashboard benchmarkMode={benchmarkMode} localNewToBrandData={localNewToBrandData} />}
+            {activeTab === 'viewability' && <ViewabilityDashboard benchmarkMode={benchmarkMode} localViewabilityData={localViewabilityData} />}
+            {activeTab === 'geo-device' && <GeoDeviceDashboard benchmarkMode={benchmarkMode} localGeoDeviceData={localGeoDeviceData} />}
+            {activeTab === 'placements' && <PlacementsDashboard benchmarkMode={benchmarkMode} localPlacementData={localPlacementData} />}
+            {activeTab === 'foot-traffic' && <FootTrafficDashboard benchmarkMode={benchmarkMode} localFootTrafficData={localFootTrafficData} />}
             {activeTab === 'audiences' && <AudiencesDashboard />}
             {activeTab === 'custom' && <CustomReportBuilder />}
           </motion.div>
@@ -235,7 +235,19 @@ export default function DashboardPage() {
   )
 }
 
-function MainDashboard({ benchmarkMode }: { benchmarkMode: boolean }) {
+function MainDashboard({ benchmarkMode, localCampaignData }: { benchmarkMode: boolean; localCampaignData: CampaignData[] }) {
+  // Safety check for empty data
+  if (!localCampaignData || localCampaignData.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="text-2xl text-gray-400 mb-2">📊</div>
+          <div className="text-gray-400">Loading campaign data...</div>
+        </div>
+      </div>
+    )
+  }
+
   // Generate metric cards data
   const metricCards = [
     {
@@ -256,7 +268,7 @@ function MainDashboard({ benchmarkMode }: { benchmarkMode: boolean }) {
     },
     {
       title: 'Average CTR',
-      value: (localCampaignData.reduce((sum: number, item: CampaignData) => sum + parseFloat(item.ctr), 0) / localCampaignData.length * 100).toFixed(2),
+      value: (localCampaignData.reduce((sum: number, item: CampaignData) => sum + (typeof item.ctr === 'string' ? parseFloat(item.ctr) : item.ctr), 0) / localCampaignData.length * 100).toFixed(2),
       change: -2.1,
       changeType: 'decrease' as const,
       icon: '📊',
@@ -282,7 +294,7 @@ function MainDashboard({ benchmarkMode }: { benchmarkMode: boolean }) {
       icon: '👁️',
       color: 'neon-blue',
       achieved: true,
-      progress: parseFloat(badgeConditions.topCTR.value) * 100,
+      progress: typeof badgeConditions.topCTR.value === 'number' ? badgeConditions.topCTR.value * 100 : parseFloat(badgeConditions.topCTR.value) * 100,
       maxProgress: 10
     },
     {
@@ -291,8 +303,8 @@ function MainDashboard({ benchmarkMode }: { benchmarkMode: boolean }) {
       description: 'Achieve >90% viewability rate',
       icon: '⭐',
       color: 'neon-green',
-      achieved: parseFloat(badgeConditions.topViewability.value) > 0.9,
-      progress: parseFloat(badgeConditions.topViewability.value) * 100,
+      achieved: typeof badgeConditions.topViewability.value === 'number' ? badgeConditions.topViewability.value > 0.9 : parseFloat(badgeConditions.topViewability.value) > 0.9,
+      progress: typeof badgeConditions.topViewability.value === 'number' ? badgeConditions.topViewability.value * 100 : parseFloat(badgeConditions.topViewability.value) * 100,
       maxProgress: 100
     },
     {
@@ -319,8 +331,8 @@ function MainDashboard({ benchmarkMode }: { benchmarkMode: boolean }) {
 
   const roiLeaderboard = getLeaderboardData(localCampaignData, 'roi').map(item => ({
     ...item,
-    value: parseFloat(item.value),
-    change: parseFloat(item.change)
+    value: typeof item.value === 'string' ? parseFloat(item.value) : item.value,
+    change: typeof item.change === 'string' ? parseFloat(item.change) : item.change
   }))
   const progressBars = getProgressData(localCampaignData)
 
@@ -378,7 +390,7 @@ function MainDashboard({ benchmarkMode }: { benchmarkMode: boolean }) {
   )
 }
 
-function NewToBrandDashboard({ benchmarkMode }: { benchmarkMode: boolean }) {
+function NewToBrandDashboard({ benchmarkMode, localNewToBrandData }: { benchmarkMode: boolean; localNewToBrandData: NewToBrandData[] }) {
   const newVsReturningData = getChartData(localNewToBrandData, 'doughnut', {
     labels: ['New to Brand', 'Returning'],
     data: [
@@ -449,7 +461,7 @@ function NewToBrandDashboard({ benchmarkMode }: { benchmarkMode: boolean }) {
                   <td className="py-3 px-4 text-neon-blue">{item.new_to_brand_conversions.toLocaleString()}</td>
                   <td className="py-3 px-4 text-neon-green">${item.new_to_brand_cpa}</td>
                   <td className="py-3 px-4 text-neon-purple">{item.new_to_brand_roi}x</td>
-                  <td className="py-3 px-4 text-gray-300">{item.lookback_window} days</td>
+                  <td className="py-3 px-4 text-gray-300">{typeof item.lookback_window !== 'undefined' ? `${item.lookback_window} days` : 'N/A'}</td>
                 </tr>
               ))}
             </tbody>
@@ -460,7 +472,7 @@ function NewToBrandDashboard({ benchmarkMode }: { benchmarkMode: boolean }) {
   )
 }
 
-function ViewabilityDashboard({ benchmarkMode }: { benchmarkMode: boolean }) {
+function ViewabilityDashboard({ benchmarkMode, localViewabilityData }: { benchmarkMode: boolean; localViewabilityData: ViewabilityData[] }) {
   const viewabilityBySizeData = getChartData(localViewabilityData, 'bar', {
     label: 'Viewability Rate',
     field: 'viewability_rate'
@@ -517,7 +529,7 @@ function ViewabilityDashboard({ benchmarkMode }: { benchmarkMode: boolean }) {
   )
 }
 
-function GeoDeviceDashboard({ benchmarkMode }: { benchmarkMode: boolean }) {
+function GeoDeviceDashboard({ benchmarkMode, localGeoDeviceData }: { benchmarkMode: boolean; localGeoDeviceData: GeoDeviceData[] }) {
   // Device performance data
   const deviceShareData = {
     labels: ['Desktop', 'Mobile', 'Tablet', 'Connected TV'],
@@ -782,7 +794,7 @@ function GeoDeviceDashboard({ benchmarkMode }: { benchmarkMode: boolean }) {
   )
 }
 
-function PlacementsDashboard({ benchmarkMode }: { benchmarkMode: boolean }) {
+function PlacementsDashboard({ benchmarkMode, localPlacementData }: { benchmarkMode: boolean; localPlacementData: PlacementData[] }) {
   const ctrBySiteData = getChartData(localPlacementData, 'bar', {
     label: 'CTR by Site',
     field: 'ctr'
@@ -847,7 +859,7 @@ function PlacementsDashboard({ benchmarkMode }: { benchmarkMode: boolean }) {
   )
 }
 
-function FootTrafficDashboard({ benchmarkMode }: { benchmarkMode: boolean }) {
+function FootTrafficDashboard({ benchmarkMode, localFootTrafficData }: { benchmarkMode: boolean; localFootTrafficData: FootTrafficData[] }) {
   const verifiedVisitsData = getChartData(localFootTrafficData, 'line', {
     label: 'Verified Visits',
     field: 'verified_visits'
@@ -860,8 +872,8 @@ function FootTrafficDashboard({ benchmarkMode }: { benchmarkMode: boolean }) {
 
   const topCampaignsLeaderboard = getLeaderboardData(localFootTrafficData, 'verified_visits').map(item => ({
     ...item,
-    value: parseFloat(item.value),
-    change: parseFloat(item.change)
+    value: typeof item.value === 'string' ? parseFloat(item.value) : item.value,
+    change: typeof item.change === 'string' ? parseFloat(item.change) : item.change
   }))
 
   // Calculate summary metrics
