@@ -178,13 +178,23 @@ export interface Notification {
 export interface AudienceSegment {
   id: string
   name: string
-  type: 'demographic' | 'behavioral' | 'custom'
+  advertiser: string
+  campaign: string
+  strategy: string
+  creative: string
+  channel: 'Video' | 'Display'
+  device_type: 'CTV' | 'Desktop' | 'Mobile'
+  poi: string
   impressions: number
   clicks: number
+  completed_views: number
+  vcr: number
+  ctr: number
   conversions: number
   roi: number
   discrepancy: number
   confidence: number
+  viewability: number
   color: string
   description: string
 }

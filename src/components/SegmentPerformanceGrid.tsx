@@ -47,11 +47,11 @@ export function SegmentPerformanceGrid() {
           <div key={m.key} className="text-xs font-semibold text-gray-300 text-center">{m.label}</div>
         ))}
         {segments.map((seg, rowIdx) => (
-          <React.Fragment key={seg.name}>
+          <React.Fragment key={`segment-${seg.name}-${rowIdx}`}>
             <div className="font-medium text-sm text-white flex items-center h-12">{seg.name}</div>
             {metrics.map((m, colIdx) => (
               <motion.div
-                key={m.key}
+                key={`${seg.name}-${m.key}-${rowIdx}-${colIdx}`}
                 className={`relative flex items-center justify-center h-12 rounded-lg cursor-pointer transition-all duration-200 ${getColor(m.key, seg[m.key as keyof typeof seg] as number)}`}
                 onMouseEnter={() => setHovered({row: rowIdx, col: colIdx})}
                 onMouseLeave={() => setHovered(null)}

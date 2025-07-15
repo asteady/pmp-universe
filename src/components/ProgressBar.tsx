@@ -94,7 +94,7 @@ export function ProgressBarCollection({ progressBars, title = 'Campaign Progress
       <h3 className="text-xl font-semibold text-white mb-4">{title}</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {progressBars.map((progress, index) => (
-          <ProgressBar key={index} progress={progress} />
+          <ProgressBar key={`${progress.label}-${index}`} progress={progress} />
         ))}
       </div>
     </div>

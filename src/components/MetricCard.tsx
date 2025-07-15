@@ -104,7 +104,7 @@ export function MetricCardGrid({ metrics, title, columns = 4 }: MetricCardGridPr
       <div className={`grid ${gridCols[columns]} gap-6`}>
         {metrics.map((metric, index) => (
           <MetricCard 
-            key={index} 
+            key={`${metric.title}-${index}`} 
             metric={metric} 
           />
         ))}

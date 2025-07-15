@@ -1,490 +1,279 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import dynamic from 'next/dynamic'
+import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { MapPin, TrendingUp } from 'lucide-react'
-import 'leaflet/dist/leaflet.css'
 
-const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false })
-const TileLayer = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false })
-const CircleMarker = dynamic(() => import('react-leaflet').then(mod => mod.CircleMarker), { ssr: false })
-const Popup = dynamic(() => import('react-leaflet').then(mod => mod.Popup), { ssr: false })
-const ZoomControl = dynamic(() => import('react-leaflet').then(mod => mod.ZoomControl), { ssr: false })
-
-interface CityData {
+interface MapPoint {
   id: string
-  name: string
   lat: number
   lng: number
-  verifiedVisits: number
+  city: string
+  state: string
   impressions: number
-  growth: number
-  subRegions?: {
-    name: string
-    visits: number
-    lat: number
-    lng: number
-  }[]
+  clicks: number
+  conversions: number
+  device_type: string
+  intensity: number // 0-1 for heatmap intensity
 }
-
-const mockCityData: CityData[] = [
-  {
-    id: 'nyc',
-    name: 'New York',
-    lat: 40.7128,
-    lng: -74.0060,
-    verifiedVisits: 2847,
-    impressions: 3200000,
-    growth: 12.5,
-    subRegions: [
-      { name: 'Manhattan', visits: 1247, lat: 40.7589, lng: -73.9851 },
-      { name: 'Brooklyn', visits: 892, lat: 40.6782, lng: -73.9442 },
-      { name: 'Queens', visits: 708, lat: 40.7282, lng: -73.7949 }
-    ]
-  },
-  {
-    id: 'la',
-    name: 'Los Angeles',
-    lat: 34.0522,
-    lng: -118.2437,
-    verifiedVisits: 2156,
-    impressions: 2800000,
-    growth: 8.3,
-    subRegions: [
-      { name: 'Downtown LA', visits: 987, lat: 34.0522, lng: -118.2437 },
-      { name: 'Hollywood', visits: 756, lat: 34.0928, lng: -118.3287 },
-      { name: 'Santa Monica', visits: 413, lat: 34.0195, lng: -118.4912 }
-    ]
-  },
-  {
-    id: 'chicago',
-    name: 'Chicago',
-    lat: 41.8781,
-    lng: -87.6298,
-    verifiedVisits: 1892,
-    impressions: 2100000,
-    growth: 15.7,
-    subRegions: [
-      { name: 'Loop', visits: 823, lat: 41.8781, lng: -87.6298 },
-      { name: 'River North', visits: 654, lat: 41.8925, lng: -87.6264 },
-      { name: 'Lincoln Park', visits: 415, lat: 41.9217, lng: -87.6334 }
-    ]
-  },
-  {
-    id: 'houston',
-    name: 'Houston',
-    lat: 29.7604,
-    lng: -95.3698,
-    verifiedVisits: 1654,
-    impressions: 1800000,
-    growth: 6.2,
-    subRegions: [
-      { name: 'Downtown', visits: 723, lat: 29.7604, lng: -95.3698 },
-      { name: 'Galleria', visits: 567, lat: 29.7375, lng: -95.4619 },
-      { name: 'Rice Village', visits: 364, lat: 29.7218, lng: -95.4181 }
-    ]
-  },
-  {
-    id: 'phoenix',
-    name: 'Phoenix',
-    lat: 33.4484,
-    lng: -112.0740,
-    verifiedVisits: 1432,
-    impressions: 1600000,
-    growth: 9.8,
-    subRegions: [
-      { name: 'Downtown', visits: 634, lat: 33.4484, lng: -112.0740 },
-      { name: 'Scottsdale', visits: 498, lat: 33.4942, lng: -111.9261 },
-      { name: 'Tempe', visits: 300, lat: 33.4255, lng: -111.9400 }
-    ]
-  },
-  {
-    id: 'philadelphia',
-    name: 'Philadelphia',
-    lat: 39.9526,
-    lng: -75.1652,
-    verifiedVisits: 1321,
-    impressions: 1500000,
-    growth: 11.4,
-    subRegions: [
-      { name: 'Center City', visits: 587, lat: 39.9526, lng: -75.1652 },
-      { name: 'University City', visits: 456, lat: 39.9522, lng: -75.1932 },
-      { name: 'Fishtown', visits: 278, lat: 39.9726, lng: -75.1282 }
-    ]
-  },
-  {
-    id: 'san-antonio',
-    name: 'San Antonio',
-    lat: 29.4241,
-    lng: -98.4936,
-    verifiedVisits: 1187,
-    impressions: 1300000,
-    growth: 7.6,
-    subRegions: [
-      { name: 'Downtown', visits: 523, lat: 29.4241, lng: -98.4936 },
-      { name: 'Pearl District', visits: 387, lat: 29.4478, lng: -98.4858 },
-      { name: 'King William', visits: 277, lat: 29.4168, lng: -98.4898 }
-    ]
-  },
-  {
-    id: 'san-diego',
-    name: 'San Diego',
-    lat: 32.7157,
-    lng: -117.1611,
-    verifiedVisits: 1098,
-    impressions: 1200000,
-    growth: 13.2,
-    subRegions: [
-      { name: 'Gaslamp Quarter', visits: 487, lat: 32.7157, lng: -117.1611 },
-      { name: 'La Jolla', visits: 356, lat: 32.8328, lng: -117.2713 },
-      { name: 'Pacific Beach', visits: 255, lat: 32.7978, lng: -117.2344 }
-    ]
-  },
-  {
-    id: 'dallas',
-    name: 'Dallas',
-    lat: 32.7767,
-    lng: -96.7970,
-    verifiedVisits: 987,
-    impressions: 1100000,
-    growth: 5.9,
-    subRegions: [
-      { name: 'Downtown', visits: 432, lat: 32.7767, lng: -96.7970 },
-      { name: 'Deep Ellum', visits: 298, lat: 32.7833, lng: -96.7833 },
-      { name: 'Bishop Arts', visits: 257, lat: 32.7500, lng: -96.8167 }
-    ]
-  },
-  {
-    id: 'san-jose',
-    name: 'San Jose',
-    lat: 37.3382,
-    lng: -121.8863,
-    verifiedVisits: 876,
-    impressions: 1000000,
-    growth: 16.8,
-    subRegions: [
-      { name: 'Downtown', visits: 387, lat: 37.3382, lng: -121.8863 },
-      { name: 'Santana Row', visits: 289, lat: 37.3219, lng: -121.9477 },
-      { name: 'Willow Glen', visits: 200, lat: 37.3047, lng: -121.8897 }
-    ]
-  },
-  {
-    id: 'austin',
-    name: 'Austin',
-    lat: 30.2672,
-    lng: -97.7431,
-    verifiedVisits: 765,
-    impressions: 900000,
-    growth: 18.4,
-    subRegions: [
-      { name: 'Downtown', visits: 334, lat: 30.2672, lng: -97.7431 },
-      { name: 'South Congress', visits: 231, lat: 30.2500, lng: -97.7500 },
-      { name: 'East Austin', visits: 200, lat: 30.2667, lng: -97.7333 }
-    ]
-  },
-  {
-    id: 'jacksonville',
-    name: 'Jacksonville',
-    lat: 30.3322,
-    lng: -81.6557,
-    verifiedVisits: 654,
-    impressions: 800000,
-    growth: 4.7,
-    subRegions: [
-      { name: 'Downtown', visits: 287, lat: 30.3322, lng: -81.6557 },
-      { name: 'Riverside', visits: 198, lat: 30.3167, lng: -81.6833 },
-      { name: 'San Marco', visits: 169, lat: 30.3167, lng: -81.6500 }
-    ]
-  },
-  {
-    id: 'fort-worth',
-    name: 'Fort Worth',
-    lat: 32.7555,
-    lng: -97.3308,
-    verifiedVisits: 543,
-    impressions: 700000,
-    growth: 8.9,
-    subRegions: [
-      { name: 'Downtown', visits: 238, lat: 32.7555, lng: -97.3308 },
-      { name: 'Stockyards', visits: 165, lat: 32.7883, lng: -97.3475 },
-      { name: 'West 7th', visits: 140, lat: 32.7500, lng: -97.3333 }
-    ]
-  },
-  {
-    id: 'columbus',
-    name: 'Columbus',
-    lat: 39.9612,
-    lng: -82.9988,
-    verifiedVisits: 432,
-    impressions: 600000,
-    growth: 12.1,
-    subRegions: [
-      { name: 'Downtown', visits: 189, lat: 39.9612, lng: -82.9988 },
-      { name: 'Short North', visits: 143, lat: 39.9833, lng: -83.0000 },
-      { name: 'German Village', visits: 100, lat: 39.9500, lng: -82.9833 }
-    ]
-  },
-  {
-    id: 'charlotte',
-    name: 'Charlotte',
-    lat: 35.2271,
-    lng: -80.8431,
-    verifiedVisits: 398,
-    impressions: 550000,
-    growth: 9.3,
-    subRegions: [
-      { name: 'Uptown', visits: 174, lat: 35.2271, lng: -80.8431 },
-      { name: 'South End', visits: 124, lat: 35.2167, lng: -80.8500 },
-      { name: 'NoDa', visits: 100, lat: 35.2333, lng: -80.8167 }
-    ]
-  },
-  {
-    id: 'san-francisco',
-    name: 'San Francisco',
-    lat: 37.7749,
-    lng: -122.4194,
-    verifiedVisits: 365,
-    impressions: 500000,
-    growth: 14.7,
-    subRegions: [
-      { name: 'Financial District', visits: 160, lat: 37.7749, lng: -122.4194 },
-      { name: 'Mission District', visits: 105, lat: 37.7599, lng: -122.4148 },
-      { name: 'North Beach', visits: 100, lat: 37.8099, lng: -122.4103 }
-    ]
-  },
-  {
-    id: 'indianapolis',
-    name: 'Indianapolis',
-    lat: 39.7684,
-    lng: -86.1581,
-    verifiedVisits: 321,
-    impressions: 450000,
-    growth: 6.8,
-    subRegions: [
-      { name: 'Downtown', visits: 141, lat: 39.7684, lng: -86.1581 },
-      { name: 'Broad Ripple', visits: 95, lat: 39.8667, lng: -86.1333 },
-      { name: 'Fountain Square', visits: 85, lat: 39.7500, lng: -86.1333 }
-    ]
-  },
-  {
-    id: 'seattle',
-    name: 'Seattle',
-    lat: 47.6062,
-    lng: -122.3321,
-    verifiedVisits: 298,
-    impressions: 400000,
-    growth: 11.9,
-    subRegions: [
-      { name: 'Downtown', visits: 131, lat: 47.6062, lng: -122.3321 },
-      { name: 'Capitol Hill', visits: 89, lat: 47.6167, lng: -122.3167 },
-      { name: 'Fremont', visits: 78, lat: 47.6500, lng: -122.3500 }
-    ]
-  },
-  {
-    id: 'denver',
-    name: 'Denver',
-    lat: 39.7392,
-    lng: -104.9903,
-    verifiedVisits: 276,
-    impressions: 380000,
-    growth: 13.5,
-    subRegions: [
-      { name: 'LoDo', visits: 121, lat: 39.7392, lng: -104.9903 },
-      { name: 'RiNo', visits: 78, lat: 39.7667, lng: -104.9833 },
-      { name: 'Highlands', visits: 77, lat: 39.7667, lng: -105.0167 }
-    ]
-  },
-  {
-    id: 'washington',
-    name: 'Washington DC',
-    lat: 38.9072,
-    lng: -77.0369,
-    verifiedVisits: 254,
-    impressions: 350000,
-    growth: 7.2,
-    subRegions: [
-      { name: 'Downtown', visits: 112, lat: 38.9072, lng: -77.0369 },
-      { name: 'Georgetown', visits: 76, lat: 38.9097, lng: -77.0653 },
-      { name: 'Adams Morgan', visits: 66, lat: 38.9167, lng: -77.0333 }
-    ]
-  }
-]
 
 interface InteractiveMapProps {
   className?: string
 }
 
-export function InteractiveMap({ className = "" }: InteractiveMapProps) {
-  const [selectedCity, setSelectedCity] = useState<CityData | null>(null)
+// Mock data for map points
+const generateMapPoints = (): MapPoint[] => {
+  const cities = [
+    { name: 'New York', lat: 40.7128, lng: -74.0060, state: 'NY' },
+    { name: 'Los Angeles', lat: 34.0522, lng: -118.2437, state: 'CA' },
+    { name: 'Chicago', lat: 41.8781, lng: -87.6298, state: 'IL' },
+    { name: 'Houston', lat: 29.7604, lng: -95.3698, state: 'TX' },
+    { name: 'Phoenix', lat: 33.4484, lng: -112.0740, state: 'AZ' },
+    { name: 'Philadelphia', lat: 39.9526, lng: -75.1652, state: 'PA' },
+    { name: 'San Antonio', lat: 29.4241, lng: -98.4936, state: 'TX' },
+    { name: 'San Diego', lat: 32.7157, lng: -117.1611, state: 'CA' },
+    { name: 'Dallas', lat: 32.7767, lng: -96.7970, state: 'TX' },
+    { name: 'San Jose', lat: 37.3382, lng: -121.8863, state: 'CA' },
+    { name: 'Austin', lat: 30.2672, lng: -97.7431, state: 'TX' },
+    { name: 'Jacksonville', lat: 30.3322, lng: -81.6557, state: 'FL' },
+    { name: 'Fort Worth', lat: 32.7555, lng: -97.3308, state: 'TX' },
+    { name: 'Columbus', lat: 39.9612, lng: -82.9988, state: 'OH' },
+    { name: 'Charlotte', lat: 35.2271, lng: -80.8431, state: 'NC' },
+    { name: 'San Francisco', lat: 37.7749, lng: -122.4194, state: 'CA' },
+    { name: 'Indianapolis', lat: 39.7684, lng: -86.1581, state: 'IN' },
+    { name: 'Seattle', lat: 47.6062, lng: -122.3321, state: 'WA' },
+    { name: 'Denver', lat: 39.7392, lng: -104.9903, state: 'CO' },
+    { name: 'Washington', lat: 38.9072, lng: -77.0369, state: 'DC' },
+    { name: 'Boston', lat: 42.3601, lng: -71.0589, state: 'MA' },
+    { name: 'El Paso', lat: 31.7619, lng: -106.4850, state: 'TX' },
+    { name: 'Nashville', lat: 36.1627, lng: -86.7816, state: 'TN' },
+    { name: 'Detroit', lat: 42.3314, lng: -83.0458, state: 'MI' },
+    { name: 'Oklahoma City', lat: 35.4676, lng: -97.5164, state: 'OK' },
+    { name: 'Portland', lat: 45.5152, lng: -122.6784, state: 'OR' },
+    { name: 'Las Vegas', lat: 36.1699, lng: -115.1398, state: 'NV' },
+    { name: 'Memphis', lat: 35.1495, lng: -90.0490, state: 'TN' },
+    { name: 'Louisville', lat: 38.2527, lng: -85.7585, state: 'KY' },
+    { name: 'Baltimore', lat: 39.2904, lng: -76.6122, state: 'MD' }
+  ]
+
+  return cities.map((city, index) => ({
+    id: `point_${index}`,
+    lat: city.lat,
+    lng: city.lng,
+    city: city.name,
+    state: city.state,
+    impressions: Math.floor(Math.random() * 500000) + 50000,
+    clicks: Math.floor(Math.random() * 25000) + 1000,
+    conversions: Math.floor(Math.random() * 2000) + 100,
+    device_type: ['Desktop', 'Mobile', 'Tablet', 'Connected TV'][Math.floor(Math.random() * 4)],
+    intensity: Math.random() * 0.8 + 0.2 // 0.2 to 1.0
+  }))
+}
+
+export function InteractiveMap({ className = '' }: InteractiveMapProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [mapPoints, setMapPoints] = useState<MapPoint[]>([])
+  const [hoveredPoint, setHoveredPoint] = useState<MapPoint | null>(null)
+  const [zoom, setZoom] = useState(1)
+  const [pan, setPan] = useState({ x: 0, y: 0 })
+  const [isDragging, setIsDragging] = useState(false)
+  const [lastMousePos, setLastMousePos] = useState({ x: 0, y: 0 })
   const [isClient, setIsClient] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     setIsClient(true)
+    // Use a timeout to ensure client-side rendering
+    const timer = setTimeout(() => {
+      setMapPoints(generateMapPoints())
+      setIsLoading(false)
+    }, 100)
+    
+    return () => clearTimeout(timer)
   }, [])
 
-  const getMarkerColor = (visits: number) => {
-    if (visits > 2000) return '#10b981' // neon-green
-    if (visits > 1000) return '#00d4ff' // neon-blue
-    if (visits > 500) return '#8b5cf6' // neon-purple
-    return '#ec4899' // neon-pink
-  }
-
-  const getMarkerSize = (visits: number) => {
-    if (visits > 2000) return 12
-    if (visits > 1000) return 10
-    if (visits > 500) return 8
-    return 6
-  }
-
-  if (!isClient) {
+  // Don't render anything until client-side
+  if (!isClient || isLoading) {
     return (
-      <div className={`futuristic-card ${className}`}>
-        <div className="h-96 flex items-center justify-center">
-          <div className="text-center">
-            <MapPin className="w-12 h-12 text-neon-blue mx-auto mb-4 animate-pulse" />
-            <p className="text-gray-400">Loading interactive map...</p>
-          </div>
+      <div className={`futuristic-card p-6 ${className}`}>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-gray-400">Loading interactive map...</div>
         </div>
       </div>
     )
   }
 
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas || !isClient) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    // Set canvas size
+    canvas.width = canvas.offsetWidth
+    canvas.height = canvas.offsetHeight
+
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    // Draw USA outline (simplified)
+    ctx.save()
+    ctx.translate(pan.x, pan.y)
+    ctx.scale(zoom, zoom)
+
+    // Draw heatmap background
+    drawHeatmap(ctx, canvas.width, canvas.height)
+
+    // Draw map points
+    mapPoints.forEach(point => {
+      drawMapPoint(ctx, point, hoveredPoint?.id === point.id)
+    })
+
+    ctx.restore()
+  }, [mapPoints, hoveredPoint, zoom, pan, isClient])
+
+  const drawHeatmap = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
+    // Create gradient for heatmap effect
+    const gradient = ctx.createRadialGradient(width / 2, height / 2, 0, width / 2, height / 2, width / 2)
+    
+    mapPoints.forEach(point => {
+      const x = (point.lng + 125) * (width / 50) // Convert longitude to x
+      const y = (50 - point.lat) * (height / 30) // Convert latitude to y
+      
+      const intensity = point.intensity
+      const alpha = intensity * 0.3
+      
+      const pointGradient = ctx.createRadialGradient(x, y, 0, x, y, 100)
+      pointGradient.addColorStop(0, `rgba(255, 0, 0, ${alpha})`)
+      pointGradient.addColorStop(0.5, `rgba(255, 165, 0, ${alpha * 0.7})`)
+      pointGradient.addColorStop(1, `rgba(0, 0, 255, ${alpha * 0.3})`)
+      
+      ctx.fillStyle = pointGradient
+      ctx.fillRect(x - 50, y - 50, 100, 100)
+    })
+  }
+
+  const drawMapPoint = (ctx: CanvasRenderingContext2D, point: MapPoint, isHovered: boolean) => {
+    const x = (point.lng + 125) * (ctx.canvas.width / 50)
+    const y = (50 - point.lat) * (ctx.canvas.height / 30)
+    
+    const radius = isHovered ? 8 : 6
+    const alpha = isHovered ? 1 : 0.8
+
+    // Draw point
+    ctx.beginPath()
+    ctx.arc(x, y, radius, 0, 2 * Math.PI)
+    ctx.fillStyle = `rgba(0, 212, 255, ${alpha})`
+    ctx.fill()
+    ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`
+    ctx.lineWidth = 2
+    ctx.stroke()
+
+    // Draw pulse effect for hovered point
+    if (isHovered) {
+      ctx.beginPath()
+      ctx.arc(x, y, radius + 10, 0, 2 * Math.PI)
+      ctx.strokeStyle = 'rgba(0, 212, 255, 0.3)'
+      ctx.lineWidth = 2
+      ctx.stroke()
+    }
+  }
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const rect = canvas.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+
+    if (isDragging) {
+      const deltaX = x - lastMousePos.x
+      const deltaY = y - lastMousePos.y
+      setPan(prev => ({
+        x: prev.x + deltaX,
+        y: prev.y + deltaY
+      }))
+      setLastMousePos({ x, y })
+    } else {
+      // Check for hover
+      const transformedX = (x - pan.x) / zoom
+      const transformedY = (y - pan.y) / zoom
+      
+      const hovered = mapPoints.find(point => {
+        const pointX = (point.lng + 125) * (canvas.width / 50)
+        const pointY = (50 - point.lat) * (canvas.height / 30)
+        const distance = Math.sqrt((transformedX - pointX) ** 2 + (transformedY - pointY) ** 2)
+        return distance < 20
+      })
+      
+      setHoveredPoint(hovered || null)
+    }
+  }
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    setIsDragging(true)
+    const rect = canvasRef.current?.getBoundingClientRect()
+    if (rect) {
+      setLastMousePos({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      })
+    }
+  }
+
+  const handleMouseUp = () => {
+    setIsDragging(false)
+  }
+
+  const handleWheel = (e: React.WheelEvent<HTMLCanvasElement>) => {
+    e.preventDefault()
+    const delta = e.deltaY > 0 ? 0.9 : 1.1
+    setZoom(prev => Math.max(0.5, Math.min(3, prev * delta)))
+  }
+
   return (
-    <div className={`futuristic-card ${className}`}>
-      <div className="p-4">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-semibold text-white">Geographic Performance</h3>
-          <div className="flex items-center space-x-2 text-sm text-gray-400">
-            <div className="flex items-center space-x-1">
-              <div className="w-3 h-3 rounded-full bg-neon-green"></div>
-              <span>2K+ visits</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <div className="w-3 h-3 rounded-full bg-neon-blue"></div>
-              <span>1K+ visits</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <div className="w-3 h-3 rounded-full bg-neon-purple"></div>
-              <span>500+ visits</span>
-            </div>
+    <div className={`futuristic-card p-6 ${className}`}>
+      <div className="mb-4">
+        <h3 className="text-lg font-semibold text-white mb-2">Geographic Performance Heatmap</h3>
+        <p className="text-sm text-gray-400">Interactive map showing traffic density across major US cities</p>
+      </div>
+      
+      <div className="relative">
+        <canvas
+          ref={canvasRef}
+          className="w-full h-96 border border-gray-600 rounded-lg cursor-grab active:cursor-grabbing"
+          onMouseMove={handleMouseMove}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          onWheel={handleWheel}
+        />
+        
+        {/* Legend */}
+        <div className="absolute bottom-4 left-4 bg-dark-200/90 backdrop-blur-sm p-3 rounded-lg border border-gray-600">
+          <div className="text-xs text-gray-300 mb-2">Traffic Density</div>
+          <div className="flex items-center space-x-2">
+            <div className="w-4 h-4 bg-red-500 rounded"></div>
+            <span className="text-xs text-gray-400">High</span>
+            <div className="w-4 h-4 bg-orange-500 rounded"></div>
+            <span className="text-xs text-gray-400">Medium</span>
+            <div className="w-4 h-4 bg-blue-500 rounded"></div>
+            <span className="text-xs text-gray-400">Low</span>
           </div>
         </div>
-        
-        <div className="h-96 rounded-lg overflow-hidden border border-neon-blue/20">
-          <MapContainer
-            center={[39.8283, -98.5795]}
-            zoom={4}
-            className="h-full w-full"
-            zoomControl={false}
-          >
-            <TileLayer
-              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-            />
-            <ZoomControl position="bottomright" />
-            
-            {mockCityData.map((city) => (
-              <CircleMarker
-                key={city.id}
-                center={[city.lat, city.lng]}
-                radius={getMarkerSize(city.verifiedVisits)}
-                fillColor={getMarkerColor(city.verifiedVisits)}
-                color={getMarkerColor(city.verifiedVisits)}
-                weight={2}
-                opacity={0.8}
-                fillOpacity={0.6}
-                eventHandlers={{
-                  click: () => setSelectedCity(city),
-                  mouseover: (e) => {
-                    const layer = e.target
-                    layer.setRadius(getMarkerSize(city.verifiedVisits) + 2)
-                    layer.setOpacity(1)
-                  },
-                  mouseout: (e) => {
-                    const layer = e.target
-                    layer.setRadius(getMarkerSize(city.verifiedVisits))
-                    layer.setOpacity(0.8)
-                  }
-                }}
-              >
-                <Popup className="custom-popup">
-                  <div className="p-2">
-                    <h3 className="font-semibold text-gray-900 mb-2">{city.name}</h3>
-                    <div className="space-y-1 text-sm">
-                      <div className="flex justify-between">
-                        <span>Verified Visits:</span>
-                        <span className="font-semibold">{city.verifiedVisits.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Impressions:</span>
-                        <span className="font-semibold">{(city.impressions / 1000000).toFixed(1)}M</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <TrendingUp className="w-3 h-3 text-green-500" />
-                        <span className="text-green-500 text-xs">+{city.growth}%</span>
-                      </div>
-                    </div>
-                  </div>
-                </Popup>
-              </CircleMarker>
-            ))}
-          </MapContainer>
-        </div>
 
-        {/* City Detail Panel */}
-        {selectedCity && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            className="mt-4 futuristic-card p-4 bg-gradient-to-r from-dark-300 to-dark-200 border border-neon-blue/20"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <h4 className="text-lg font-semibold text-white">{selectedCity.name}</h4>
-              <button
-                onClick={() => setSelectedCity(null)}
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                ×
-              </button>
+        {/* Tooltip */}
+        {hoveredPoint && (
+          <div className="absolute bg-dark-200/95 backdrop-blur-sm p-3 rounded-lg border border-neon-blue shadow-lg text-white text-sm">
+            <div className="font-semibold">{hoveredPoint.city}, {hoveredPoint.state}</div>
+            <div className="text-gray-300">
+              <div>Impressions: {hoveredPoint.impressions.toLocaleString()}</div>
+              <div>Clicks: {hoveredPoint.clicks.toLocaleString()}</div>
+              <div>Conversions: {hoveredPoint.conversions.toLocaleString()}</div>
+              <div>Device: {hoveredPoint.device_type}</div>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-              <div className="text-center">
-                <p className="text-2xl font-bold text-neon-blue">
-                  {selectedCity.verifiedVisits.toLocaleString()}
-                </p>
-                <p className="text-sm text-gray-400">Verified Visits</p>
-              </div>
-              <div className="text-center">
-                <p className="text-2xl font-bold text-neon-green">
-                  {(selectedCity.impressions / 1000000).toFixed(1)}M
-                </p>
-                <p className="text-sm text-gray-400">Impressions</p>
-              </div>
-              <div className="text-center">
-                <p className="text-2xl font-bold text-neon-purple">
-                  +{selectedCity.growth}%
-                </p>
-                <p className="text-sm text-gray-400">Growth</p>
-              </div>
-            </div>
-
-            {selectedCity.subRegions && (
-              <div>
-                <h5 className="text-sm font-semibold text-white mb-2">Sub-Regions</h5>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                  {selectedCity.subRegions.map((region, index) => (
-                    <div key={index} className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                      <span className="text-sm text-gray-300">{region.name}</span>
-                      <span className="text-sm font-semibold text-neon-blue">{region.visits}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </motion.div>
+          </div>
         )}
       </div>
     </div>

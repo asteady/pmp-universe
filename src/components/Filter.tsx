@@ -3,7 +3,9 @@
 import { useState, useEffect } from 'react'
 import { FilterParams, AudienceFilterParams } from '@/types'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronDown, Filter as FilterIcon, Play, Save, RotateCcw } from 'lucide-react'
+import { ChevronDown, Filter as FilterIcon, Play, Save, RotateCcw, Calendar, Target, Users, Globe, Monitor } from 'lucide-react'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 interface FilterProps {
   filters: FilterParams | AudienceFilterParams
@@ -17,6 +19,18 @@ interface FilterProps {
   onSegmentTypeChange?: (type: string) => void
   onSegmentNamesChange?: (names: string[]) => void
   audienceMode?: boolean
+  audiences?: string[]
+  channels?: string[]
+  deviceTypes?: string[]
+  strategies?: string[]
+  creatives?: string[]
+  onAudienceChange?: (aud: string[]) => void
+  onChannelChange?: (ch: string[]) => void
+  onDeviceTypeChange?: (dt: string[]) => void
+  onStrategyChange?: (st: string[]) => void
+  onCreativeChange?: (cr: string[]) => void
+  actionLabel?: string // 'Apply' or 'Run'
+  onAction?: () => void
 }
 
 export function Filter({ 
@@ -30,10 +44,23 @@ export function Filter({
   segmentNames,
   onSegmentTypeChange,
   onSegmentNamesChange,
-  audienceMode
+  audienceMode,
+  audiences,
+  channels,
+  deviceTypes,
+  strategies,
+  creatives,
+  onAudienceChange,
+  onChannelChange,
+  onDeviceTypeChange,
+  onStrategyChange,
+  onCreativeChange,
+  actionLabel,
+  onAction
 }: FilterProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [localFilters, setLocalFilters] = useState<any>(filters)
+  const [showCustomDatePicker, setShowCustomDatePicker] = useState(false)
 
   // Load saved filters from localStorage on mount
   useEffect(() => {
@@ -80,11 +107,11 @@ export function Filter({
   }
 
   const dateRangeOptions = [
-    { value: 'last_30_days', label: 'Last 30 Days' },
-    { value: 'yesterday', label: 'Yesterday' },
-    { value: 'last_7_days', label: 'Last 7 Days' },
-    { value: 'month_to_date', label: 'Month to Date' },
-    { value: 'custom', label: 'Custom' }
+    { value: 'last_30_days', label: 'Last 30 Days', icon: Calendar },
+    { value: 'yesterday', label: 'Yesterday', icon: Calendar },
+    { value: 'last_7_days', label: 'Last 7 Days', icon: Calendar },
+    { value: 'month_to_date', label: 'Month to Date', icon: Calendar },
+    { value: 'custom', label: 'Custom Range', icon: Calendar },
   ]
 
   const aggregationOptions = [
@@ -101,29 +128,39 @@ export function Filter({
     { value: 180, label: '180 Days' }
   ]
 
+  const kpiGoalOptions = [
+    { value: 'ctr', label: 'CTR Target' },
+    { value: 'roi', label: 'ROI Target' },
+    { value: 'viewability', label: 'Viewability Target' },
+    { value: 'conversions', label: 'Conversion Target' }
+  ]
+
   return (
     <motion.div 
-      className="futuristic-card mb-6"
+      className="futuristic-card mb-6 w-full"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center space-x-2">
+      <div className="flex items-center justify-between mb-6 px-6 py-4">
+        <div className="flex items-center space-x-3">
           <FilterIcon className="w-5 h-5 text-neon-blue" />
-          <h3 className="text-lg font-semibold text-white">Filters</h3>
+          <h3 className="text-lg font-semibold text-white">Advanced Filters</h3>
+          <span className="text-xs text-gray-400 bg-gray-700 px-3 py-1 rounded-full">
+            {Object.keys(localFilters).filter(k => localFilters[k]).length} active
+          </span>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-3">
           <button
             onClick={handleReset}
-            className="text-gray-400 hover:text-white transition-colors p-2"
-            title="Reset filters"
+            className="text-gray-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-gray-700/50"
+            title="Reset all filters"
           >
             <RotateCcw className="w-4 h-4" />
           </button>
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="text-neon-blue hover:text-white transition-colors p-2"
+            className="text-neon-blue hover:text-white transition-colors p-2 rounded-lg hover:bg-gray-700/50"
           >
             <ChevronDown className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
           </button>
@@ -139,77 +176,30 @@ export function Filter({
             transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4">
-              {/* Organization (Admin only) */}
-              {userRole === 'admin' && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Organization
-                  </label>
-                  <select
-                    value={localFilters.organization_id || ''}
-                    onChange={(e) => handleFilterChange('organization_id', e.target.value || undefined)}
-                    className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
-                  >
-                    <option value="">All Organizations</option>
-                    <option value="org1">Organization 1</option>
-                    <option value="org2">Organization 2</option>
-                  </select>
-                </div>
-              )}
-
-              {/* Advertiser */}
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Advertiser
-                </label>
-                <select
-                  value={localFilters.advertiser_id || ''}
-                  onChange={(e) => handleFilterChange('advertiser_id', e.target.value || undefined)}
-                  className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
-                >
-                  <option value="">All Advertisers</option>
-                  <option value="adv1">Advertiser 1</option>
-                  <option value="adv2">Advertiser 2</option>
-                </select>
-              </div>
-
-              {/* Campaign */}
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Campaign
-                </label>
-                <select
-                  value={localFilters.campaign_id || ''}
-                  onChange={(e) => handleFilterChange('campaign_id', e.target.value || undefined)}
-                  className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
-                >
-                  <option value="">All Campaigns</option>
-                  <option value="camp1">Campaign 1</option>
-                  <option value="camp2">Campaign 2</option>
-                </select>
-              </div>
-
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-8 px-6">
               {/* Date Range */}
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+              <div className="flex flex-col space-y-2">
+                <label className="block text-sm font-medium text-gray-300 mb-1 flex items-center">
+                  <Calendar className="w-4 h-4 mr-2" />
                   Date Range
                 </label>
-                <select
-                  value={localFilters.date_range}
-                  onChange={(e) => handleFilterChange('date_range', e.target.value as FilterParams['date_range'])}
-                  className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
-                >
-                  {dateRangeOptions.map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+                <DatePicker
+                  selected={localFilters.start_date ? new Date(localFilters.start_date) : null}
+                  onChange={([start, end]: [Date | null, Date | null]) => {
+                    handleFilterChange('start_date', start ? start.toISOString().split('T')[0] : '')
+                    handleFilterChange('end_date', end ? end.toISOString().split('T')[0] : '')
+                  }}
+                  startDate={localFilters.start_date ? new Date(localFilters.start_date) : null}
+                  endDate={localFilters.end_date ? new Date(localFilters.end_date) : null}
+                  selectsRange
+                  inline
+                  calendarClassName="bg-dark-200 text-white neon-glow"
+                  dayClassName={date => 'bg-dark-300 text-white hover:bg-neon-blue/30'}
+                />
               </div>
 
-              {/* Custom Date Range */}
-              {localFilters.date_range === 'custom' && (
+              {/* Custom Date Picker */}
+              {showCustomDatePicker && (
                 <>
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -242,8 +232,8 @@ export function Filter({
                   Aggregation
                 </label>
                 <select
-                  value={localFilters.aggregation}
-                  onChange={(e) => handleFilterChange('aggregation', e.target.value as FilterParams['aggregation'])}
+                  value={localFilters.aggregation || 'day'}
+                  onChange={(e) => handleFilterChange('aggregation', e.target.value)}
                   className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
                 >
                   {aggregationOptions.map(option => (
@@ -254,179 +244,364 @@ export function Filter({
                 </select>
               </div>
 
-              {/* Report-specific filters */}
-              {reportType === 'new-to-brand' && (
+              {/* Lookback Window */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Lookback Window
+                </label>
+                <select
+                  value={localFilters.lookback_window || 30}
+                  onChange={(e) => handleFilterChange('lookback_window', parseInt(e.target.value))}
+                  className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
+                >
+                  {lookbackOptions.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Organization (Admin only) */}
+              {userRole === 'admin' && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Lookback Window
+                  <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center">
+                    <Users className="w-4 h-4 mr-1" />
+                    Organization
                   </label>
                   <select
-                    value={localFilters.lookback_window || 30}
-                    onChange={(e) => handleFilterChange('lookback_window', parseInt(e.target.value))}
+                    value={localFilters.organization_id || ''}
+                    onChange={(e) => handleFilterChange('organization_id', e.target.value || undefined)}
                     className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
                   >
-                    {lookbackOptions.map(option => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
+                    <option value="">All Organizations</option>
+                    <option value="org1">Infillion Media BU</option>
+                    <option value="org2">Infillion Enterprise BU</option>
+                    <option value="org3">MediaMath Legacy</option>
                   </select>
                 </div>
               )}
 
-              {reportType === 'viewability' && (
+              {/* Advertiser */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Advertiser
+                </label>
+                <select
+                  value={localFilters.advertiser_id || ''}
+                  onChange={(e) => handleFilterChange('advertiser_id', e.target.value || undefined)}
+                  className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
+                >
+                  <option value="">All Advertisers</option>
+                  <option value="adv1">Nike</option>
+                  <option value="adv2">Coca-Cola</option>
+                  <option value="adv3">Toyota</option>
+                  <option value="adv4">Apple</option>
+                  <option value="adv5">McDonald's</option>
+                </select>
+              </div>
+
+              {/* Campaign */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Campaign
+                </label>
+                <select
+                  value={localFilters.campaign_id || ''}
+                  onChange={(e) => handleFilterChange('campaign_id', e.target.value || undefined)}
+                  className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
+                >
+                  <option value="">All Campaigns</option>
+                  <option value="camp1">Summer Surge 2025</option>
+                  <option value="camp2">Back to School</option>
+                  <option value="camp3">Holiday Prep</option>
+                  <option value="camp4">Q1 Brand Awareness</option>
+                </select>
+              </div>
+
+              {/* Channel Type */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center">
+                  <Monitor className="w-4 h-4 mr-1" />
+                  Channel Type
+                </label>
+                <select
+                  value={localFilters.channel_type || ''}
+                  onChange={(e) => handleFilterChange('channel_type', e.target.value || undefined)}
+                  className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
+                >
+                  <option value="">All Channels</option>
+                  <option value="display">Display</option>
+                  <option value="video">Video</option>
+                  <option value="social">Social</option>
+                  <option value="search">Search</option>
+                </select>
+              </div>
+
+              {/* Device Type */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Device Type
+                </label>
+                <select
+                  value={localFilters.device_type || ''}
+                  onChange={(e) => handleFilterChange('device_type', e.target.value || undefined)}
+                  className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
+                >
+                  <option value="">All Devices</option>
+                  <option value="desktop">Desktop</option>
+                  <option value="mobile">Mobile</option>
+                  <option value="tablet">Tablet</option>
+                  <option value="ctv">CTV</option>
+                </select>
+              </div>
+
+              {/* Country */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center">
+                  <Globe className="w-4 h-4 mr-1" />
+                  Country
+                </label>
+                <select
+                  value={localFilters.country || ''}
+                  onChange={(e) => handleFilterChange('country', e.target.value || undefined)}
+                  className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
+                >
+                  <option value="">All Countries</option>
+                  <option value="US">United States</option>
+                  <option value="CA">Canada</option>
+                  <option value="UK">United Kingdom</option>
+                  <option value="DE">Germany</option>
+                  <option value="FR">France</option>
+                </select>
+              </div>
+
+              {/* KPI Goal Target */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center">
+                  <Target className="w-4 h-4 mr-1" />
+                  KPI Goal
+                </label>
+                <select
+                  value={localFilters.kpi_goal || ''}
+                  onChange={(e) => handleFilterChange('kpi_goal', e.target.value || undefined)}
+                  className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
+                >
+                  <option value="">No Goal</option>
+                  {kpiGoalOptions.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* KPI Goal Value */}
+              {localFilters.kpi_goal && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Target Value
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={localFilters.kpi_target_value || ''}
+                    onChange={(e) => handleFilterChange('kpi_target_value', parseFloat(e.target.value))}
+                    placeholder="Enter target value"
+                    className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
+                  />
+                </div>
+              )}
+
+              {/* Audience Mode Filters */}
+              {audienceMode && (
                 <>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Channel Type
-                    </label>
-                    <select
-                      value={localFilters.channel_type || ''}
-                      onChange={(e) => handleFilterChange('channel_type', e.target.value || undefined)}
-                      className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
-                    >
-                      <option value="">All Channels</option>
-                      <option value="display">Display</option>
-                      <option value="video">Video</option>
-                      <option value="mobile">Mobile</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Creative Size
-                    </label>
-                    <select
-                      value={localFilters.creative_size || ''}
-                      onChange={(e) => handleFilterChange('creative_size', e.target.value || undefined)}
-                      className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
-                    >
-                      <option value="">All Sizes</option>
-                      <option value="300x250">300x250</option>
-                      <option value="728x90">728x90</option>
-                      <option value="160x600">160x600</option>
-                      <option value="320x50">320x50</option>
-                    </select>
-                  </div>
+                  {/* Segment Type */}
+                  {segmentTypes && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Segment Type
+                      </label>
+                      <select
+                        value={localFilters.segment_type || ''}
+                        onChange={(e) => {
+                          handleFilterChange('segment_type', e.target.value)
+                          onSegmentTypeChange?.(e.target.value)
+                        }}
+                        className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
+                      >
+                        <option value="">All Types</option>
+                        {segmentTypes.map(type => (
+                          <option key={type} value={type}>
+                            {type.charAt(0).toUpperCase() + type.slice(1)}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  {/* Segment Names */}
+                  {segmentNames && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Segment Names
+                      </label>
+                      <select
+                        multiple
+                        value={localFilters.segment_names || []}
+                        onChange={(e) => handleFilterChange('segment_names', Array.from(e.target.selectedOptions).map(option => option.value))}
+                        className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors min-h-[80px]"
+                      >
+                        {segmentNames.map(name => (
+                          <option key={name} value={name}>
+                            {name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  {/* Audiences */}
+                  {audiences && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Audiences
+                      </label>
+                      <select
+                        multiple
+                        value={localFilters.audiences || []}
+                        onChange={(e) => onAudienceChange?.(Array.from(e.target.selectedOptions).map(option => option.value))}
+                        className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors min-h-[80px]"
+                      >
+                        {audiences.map(aud => (
+                          <option key={aud} value={aud}>
+                            {aud}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  {/* Channels */}
+                  {channels && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Channels
+                      </label>
+                      <select
+                        multiple
+                        value={localFilters.channels || []}
+                        onChange={(e) => onChannelChange?.(Array.from(e.target.selectedOptions).map(option => option.value))}
+                        className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors min-h-[80px]"
+                      >
+                        {channels.map(ch => (
+                          <option key={ch} value={ch}>
+                            {ch}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  {/* Device Types */}
+                  {deviceTypes && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Device Types
+                      </label>
+                      <select
+                        multiple
+                        value={localFilters.device_types || []}
+                        onChange={(e) => onDeviceTypeChange?.(Array.from(e.target.selectedOptions).map(option => option.value))}
+                        className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors min-h-[80px]"
+                      >
+                        {deviceTypes.map(dt => (
+                          <option key={dt} value={dt}>
+                            {dt}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  {/* Strategies */}
+                  {strategies && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Strategies
+                      </label>
+                      <select
+                        multiple
+                        value={localFilters.strategies || []}
+                        onChange={(e) => onStrategyChange?.(Array.from(e.target.selectedOptions).map(option => option.value))}
+                        className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors min-h-[80px]"
+                      >
+                        {strategies.map(st => (
+                          <option key={st} value={st}>
+                            {st}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  {/* Creatives */}
+                  {creatives && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Creatives
+                      </label>
+                      <select
+                        multiple
+                        value={localFilters.creatives || []}
+                        onChange={(e) => onCreativeChange?.(Array.from(e.target.selectedOptions).map(option => option.value))}
+                        className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors min-h-[80px]"
+                      >
+                        {creatives.map(cr => (
+                          <option key={cr} value={cr}>
+                            {cr}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                 </>
-              )}
-
-              {(reportType === 'geo-device' || reportType === 'foot-traffic') && (
-                <>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Device Type
-                    </label>
-                    <select
-                      value={localFilters.device_type || ''}
-                      onChange={(e) => handleFilterChange('device_type', e.target.value || undefined)}
-                      className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
-                    >
-                      <option value="">All Devices</option>
-                      <option value="desktop">Desktop</option>
-                      <option value="mobile">Mobile</option>
-                      <option value="tablet">Tablet</option>
-                      <option value="connected_tv">Connected TV</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      City
-                    </label>
-                    <select
-                      value={localFilters.city || ''}
-                      onChange={(e) => handleFilterChange('city', e.target.value || undefined)}
-                      className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
-                    >
-                      <option value="">All Cities</option>
-                      <option value="New York">New York</option>
-                      <option value="Los Angeles">Los Angeles</option>
-                      <option value="Chicago">Chicago</option>
-                      <option value="Houston">Houston</option>
-                      <option value="Phoenix">Phoenix</option>
-                    </select>
-                  </div>
-                </>
-              )}
-
-              {reportType === 'placements' && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Site/App Domain
-                  </label>
-                  <select
-                    value={localFilters.site_domain || ''}
-                    onChange={(e) => handleFilterChange('site_domain', e.target.value || undefined)}
-                    className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
-                  >
-                    <option value="">All Sites/Apps</option>
-                    <option value="cnn.com">CNN</option>
-                    <option value="nytimes.com">NY Times</option>
-                    <option value="washingtonpost.com">Washington Post</option>
-                    <option value="usatoday.com">USA Today</option>
-                    <option value="foxnews.com">Fox News</option>
-                  </select>
-                </div>
-              )}
-
-              {/* Segment Type (if provided) */}
-              {segmentTypes && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Segment Type
-                  </label>
-                  <select
-                    value={localFilters.segment_type || ''}
-                    onChange={(e) => handleFilterChange('segment_type', e.target.value || undefined)}
-                    className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
-                  >
-                    <option value="">All Segments</option>
-                    {segmentTypes.map(type => (
-                      <option key={type} value={type}>
-                        {type}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-
-              {/* Segment Names (if provided) */}
-              {segmentNames && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Segment Names
-                  </label>
-                  <select
-                    multiple
-                    value={localFilters.segment_names || []}
-                    onChange={(e) => handleFilterChange('segment_names', Array.from(e.target.selectedOptions).map(option => option.value))}
-                    className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
-                  >
-                    {segmentNames.map(name => (
-                      <option key={name} value={name}>
-                        {name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
               )}
             </div>
 
             {/* Action Buttons */}
-            <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-700">
-              <button
-                onClick={handleApply}
-                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-neon-blue to-cyan-500 text-white rounded-lg font-medium hover:scale-105 transition-all duration-200 neon-glow"
-              >
-                <Save className="w-4 h-4" />
-                <span>Apply</span>
-              </button>
-              <button
-                onClick={handleRun}
-                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-neon-green to-emerald-500 text-white rounded-lg font-medium hover:scale-105 transition-all duration-200 neon-glow-green"
-              >
-                <Play className="w-4 h-4" />
-                <span>Run</span>
-              </button>
+            <div className="flex items-center justify-between pt-6 pb-6 px-6 border-t border-gray-600">
+              <div className="flex items-center space-x-3 text-sm text-gray-400">
+                <span>Quick Actions:</span>
+                <button
+                  onClick={() => handleFilterChange('date_range', 'last_7_days')}
+                  className="px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-xs transition-colors"
+                >
+                  Last 7 Days
+                </button>
+                <button
+                  onClick={() => handleFilterChange('date_range', 'month_to_date')}
+                  className="px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-xs transition-colors"
+                >
+                  MTD
+                </button>
+                <button
+                  onClick={() => handleFilterChange('aggregation', 'week')}
+                  className="px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-xs transition-colors"
+                >
+                  Weekly
+                </button>
+              </div>
+              
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={handleRun}
+                  className="flex items-center space-x-2 px-8 py-3 bg-gradient-to-r from-neon-green to-emerald-500 text-white rounded-lg font-medium hover:from-emerald-500 hover:to-neon-green transition-all duration-200 shadow-lg"
+                >
+                  <Play className="w-4 h-4" />
+                  <span>Run Report</span>
+                </button>
+              </div>
             </div>
           </motion.div>
         )}
