@@ -2,6 +2,7 @@ import React from 'react';
 import SidebarNav from '../../components/SidebarNav';
 import FilterBar from '../../components/FilterBar';
 import PMPGrid from '../../components/PMPGrid';
+import UserProfile from '../../components/UserProfile';
 
 const sampleDeals = [
   { id: 'TENT123', name: 'Holiday Shoppers', type: 'Tentpole', scale: 'Large' },
@@ -12,10 +13,15 @@ const sampleDeals = [
 const PMPUniversePage = () => (
   <div className="flex min-h-screen bg-infillion-dark">
     <SidebarNav />
-    <main className="flex-1 p-8 bg-gray-50">
-      <h2 className="text-2xl font-bold mb-4 text-infillion-dark font-sans">PMP Universe</h2>
+    <main className="flex-1 p-8 bg-gradient-to-br from-infillion-dark to-infillion-light min-h-screen">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-3xl font-bold text-infillion-light font-sans tracking-tight">PMP Universe</h2>
+        <UserProfile />
+      </div>
       <FilterBar />
-      <PMPGrid deals={sampleDeals} />
+      <div className="mt-8 flex flex-wrap gap-8">
+        <PMPGrid deals={sampleDeals} />
+      </div>
     </main>
   </div>
 );
