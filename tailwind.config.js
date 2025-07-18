@@ -62,7 +62,20 @@ module.exports = {
           200: '#111827',
           300: '#0f172a',
           400: '#020617',
-        }
+        },
+        infillion: {
+          dark: '#161D24',
+          light: '#2762A6',
+          purple: '#913198',
+          magenta: '#DC0053',
+          orange: '#FFC603',
+          yellow: '#FFAF00',
+          green: '#00C347',
+          teal: '#00C2BC',
+        },
+      },
+      fontFamily: {
+        sans: ['"Be Vietnam Pro"', 'Arial', 'sans-serif'],
       },
       animation: {
         'glow': 'glow 2s ease-in-out infinite alternate',

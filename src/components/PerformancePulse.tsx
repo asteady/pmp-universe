@@ -113,16 +113,13 @@ export function PerformancePulse({ className = '' }: PerformancePulseProps) {
     return Math.min((current / target) * 100, 120) // Cap at 120% for visual purposes
   }
 
-  const formatValue = (value: number, unit: string) => {
-    if (unit === '%') {
-      return `${value.toFixed(1)}%`
-    } else if (unit === 'x') {
-      return `${value.toFixed(2)}x`
-    } else if (unit === 's') {
-      return `${value}s`
-    } else {
-      return value.toLocaleString()
+  const formatValue = (value: number) => {
+    if (value >= 1000000) {
+      return `${(value / 1000000).toFixed(1)}M`
+    } else if (value >= 1000) {
+      return `${(value / 1000).toFixed(1)}K`
     }
+    return (value || 0).toLocaleString()
   }
 
   return (
@@ -187,10 +184,10 @@ export function PerformancePulse({ className = '' }: PerformancePulseProps) {
             <div className="mb-3">
               <div className="flex items-baseline space-x-2">
                 <span className="text-2xl font-bold">
-                  {formatValue(metric.current, metric.unit)}
+                  {formatValue(metric.current)}
                 </span>
                 <span className="text-sm text-gray-400">
-                  / {formatValue(metric.target, metric.unit)} target
+                  / {formatValue(metric.target)} target
                 </span>
               </div>
             </div>

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "seg1",
+    "name": "Gen Z Students",
+    "description": "College students aged 18-24, urban, tech-savvy."
+  },
+  {
+    "id": "seg2",
+    "name": "Luxury Shoppers",
+    "description": "High-income individuals with frequent luxury purchases."
+  },
+  {
+    "id": "seg3",
+    "name": "In-Market Auto Buyers",
+    "description": "Consumers actively researching or intending to purchase a vehicle."
+  }
+] 

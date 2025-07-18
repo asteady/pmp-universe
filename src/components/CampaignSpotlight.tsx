@@ -17,9 +17,9 @@ interface CampaignSpotlightProps {
   }
 }
 
-const mockCampaign = {
-  name: 'Summer Surge 2025',
-  logoUrl: '/logo-demo.png',
+const defaultCampaign = {
+  name: 'Nike Run Club 2024',
+  logoUrl: '', // Removed logo reference to prevent 404
   roi: 4.2,
   verifiedVisits: 18000,
   viewability: 0.91,
@@ -29,7 +29,7 @@ const mockCampaign = {
   kpiDirection: 'up' as const
 }
 
-export function CampaignSpotlight({ campaign = mockCampaign }: CampaignSpotlightProps) {
+export function CampaignSpotlight({ campaign = defaultCampaign }: CampaignSpotlightProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
@@ -51,7 +51,7 @@ export function CampaignSpotlight({ campaign = mockCampaign }: CampaignSpotlight
           </div>
           <div className="flex items-center space-x-1 text-neon-purple">
             <Eye className="w-4 h-4" />
-            <span className="font-semibold">{campaign.verifiedVisits.toLocaleString()} Visits</span>
+            <span className="font-semibold">{(campaign.verifiedVisits || 0).toLocaleString()} Visits</span>
           </div>
           <div className="flex items-center space-x-1 text-neon-pink">
             <Star className="w-4 h-4" />

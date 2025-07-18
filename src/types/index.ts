@@ -8,25 +8,46 @@ export interface User {
 }
 
 export interface FilterParams {
-  organization_id?: string
-  advertiser_id?: string
-  campaign_id?: string
-  date_range?: 'last_30_days' | 'yesterday' | 'last_7_days' | 'month_to_date' | 'custom'
+  date_range?: string
+  aggregation?: string
+  advertisers?: string[]
+  campaigns?: string[]
+  strategies?: string[]
+  creatives?: string[]
+  channels?: string[]
+  device_types?: string[]
+  audience_segments?: string[]
+  poi_categories?: string[]
+  regions?: string[]
+  cities?: string[]
+  dmas?: string[]
+  age_groups?: string[]
+  genders?: string[]
+  hh_incomes?: string[]
+  os_types?: string[]
+  browsers?: string[]
+  inventory_types?: string[]
+  viewability_providers?: string[]
+  creative_sizes?: string[]
+  site_domains?: string[]
+  app_names?: string[]
+  primary_sellers?: string[]
+  weather_conditions?: string[]
+  traffic_sources?: string[]
+  time_of_day?: string[]
+  day_of_week?: string[]
+  segment_types?: string[]
+  segment_names?: string[]
   start_date?: string
   end_date?: string
-  aggregation?: 'day' | 'week' | 'month' | 'all'
-  lookback_window?: 30 | 60 | 90 | 180
-  channel_type?: string
-  creative_size?: string
-  country?: string
-  region?: string
-  city?: string
-  device_type?: string
-  os_type?: string
-  site_domain?: string
-  app_name?: string
-  inventory_type?: string
-  placements?: string[]
+  city?: string;
+  device_type?: string;
+  os_type?: string;
+  viewability_rate?: string;
+  lookback_window?: number;
+  site_domain?: string;
+  inventory_type?: string;
+  country?: string;
 }
 
 export interface CampaignData {
@@ -44,21 +65,21 @@ export interface CampaignData {
   total_conversions: number
   total_revenue: number
   total_spend: number
-  ctr: string | number
+  ctr: number
   cpa: number
   roi: number
   viewability_rate: number
   vcr: number
   dwell_time: number
-  site_domain?: string
-  city_name?: string
-  demographic_discrepancy?: number
-  inventory_type?: string
-  channel?: string
-  device_type?: string
-  poi?: string
-  completed_views?: number
-  confidence?: number
+  site_domain: string
+  city_name: string
+  demographic_discrepancy: number
+  inventory_type: string
+  channel: string
+  device_type: string
+  poi: string
+  completed_views: number
+  confidence: number
 }
 
 export interface NewToBrandData extends CampaignData {
@@ -68,7 +89,7 @@ export interface NewToBrandData extends CampaignData {
   new_to_brand_roi: number
   returning_conversions: number
   returning_revenue: number
-  lookback_window?: number
+  lookback_window: number
 }
 
 export interface ViewabilityData extends CampaignData {
@@ -78,16 +99,16 @@ export interface ViewabilityData extends CampaignData {
   vcr: number
   video_starts: number
   video_completions: number
-  creative_size?: string
-  channel_type?: string
+  creative_size: string
+  channel_type: string
 }
 
 export interface GeoDeviceData extends CampaignData {
   country: string
   region: string
   city: string
-  dma?: string
-  zip_code?: string
+  dma: string
+  zip_code: string
   device_type: string
   device_make: string
   device_model: string
@@ -97,9 +118,11 @@ export interface GeoDeviceData extends CampaignData {
   gender: string
   hh_income: string
   demographic_discrepancy: number
-  conversions?: number
-  revenue?: number
-  spend?: number
+  impressions: number
+  clicks: number
+  conversions: number
+  revenue: number
+  spend: number
 }
 
 export interface PlacementData {
@@ -117,11 +140,11 @@ export interface PlacementData {
   video_starts: number
   skipped_impressions: number
   rank: number
-  goal_impressions?: number
-  budget_spent?: number
-  total_budget?: number
-  advertiser?: string
-  campaign_name?: string
+  goal_impressions: number
+  budget_spent: number
+  total_budget: number
+  advertiser: string
+  campaign_name: string
 }
 
 export interface FootTrafficData {
@@ -129,17 +152,55 @@ export interface FootTrafficData {
   city_name: string
   region_name: string
   device_type: string
-  site_domain: string
-  app_name: string
-  verified_visits: number
-  verified_unique_visits: number
-  projected_visits: number
-  projected_unique_visits: number
+  poi_name: string
+  poi_category: string
+  visits: number
+  unique_visitors: number
   dwell_time: number
-  average_dwell_time?: number
-  median_dwell_time?: number
-  advertiser?: string
-  campaign_name?: string
+  distance_traveled: number
+  time_of_day: string
+  day_of_week: string
+  weather_condition: string
+  traffic_source: string
+  conversion_rate: number
+  revenue_per_visit: number
+  advertiser: string
+  campaign_name: string
+}
+
+// New audience segment interfaces
+export interface AudienceSegment {
+  id: string
+  name: string
+  definition: string
+  category: string
+  subcategory: string
+  segment: string
+  impressions: number
+  clicks: number
+  conversions: number
+  revenue: number
+  spend: number
+  ctr: number
+  cpa: number
+  roi: number
+  viewability: number
+  vcr: number
+  confidence: number
+  color: string
+  discrepancy?: number;
+}
+
+export interface AudiencePerformanceData extends AudienceSegment {
+  advertiser: string
+  campaign_name: string
+  strategy_name: string
+  creative_name: string
+  channel: string
+  device_type: string
+  poi: string
+  completed_views: number
+  discrepancy: number
 }
 
 export interface ChartData {
@@ -148,100 +209,91 @@ export interface ChartData {
     label: string
     data: number[]
     backgroundColor?: string | string[]
-    borderColor?: string | string[]
+    borderColor?: string
     borderWidth?: number
-    fill?: boolean
   }[]
 }
 
-export interface MetricCard {
-  title: string
-  value: string | number
-  change: number
-  changeType: 'increase' | 'decrease' | 'neutral'
-  icon: string
+export interface BadgeCondition {
+  label: string
+  value: string
   color: string
-}
-
-export interface Badge {
-  id: string
-  name: string
-  description: string
-  icon: string
-  color: string
-  achieved: boolean
-  progress: number
-  maxProgress: number
 }
 
 export interface LeaderboardEntry {
-  rank: number
-  name: string
-  value: number
-  metric: string
-  change: number
+  name: string;
+  value: number;
+  change: number;
+  rank: number;
+  metric: string;
 }
 
-export interface ProgressBar {
+export interface ProgressData {
   label: string
-  current: number
+  value: number
   target: number
-  unit: string
   color: string
 }
 
-export interface Notification {
-  id: string
-  type: 'info' | 'warning' | 'error' | 'success'
+export interface MetricCardData {
   title: string
-  message: string
-  timestamp: Date
-  read: boolean
+  value: number | string
+  change: number
+  changeType: 'increase' | 'decrease'
+  icon: string
+  trend?: number[]
+  color?: string
 }
 
-export interface AudienceSegment {
-  id: string
-  name: string
-  advertiser: string
-  campaign: string
-  strategy: string
-  creative: string
-  channel: 'Video' | 'Display'
-  device_type: 'CTV' | 'Desktop' | 'Mobile'
-  poi: string
-  impressions: number
-  clicks: number
-  completed_views: number
-  vcr: number
-  ctr: number
-  conversions: number
-  roi: number
-  discrepancy: number
-  confidence: number
-  viewability: number
-  color: string
-  description: string
+export interface ChartOptions {
+  plugins?: {
+    title?: {
+      display?: boolean
+      text?: string
+      color?: string
+      font?: {
+        size?: number
+        weight?: string
+      }
+    }
+  }
+  scales?: {
+    x?: {
+      title?: {
+        display?: boolean
+        text?: string
+        color?: string
+      }
+      grid?: {
+        color?: string
+      }
+      ticks?: {
+        color?: string
+      }
+    }
+    y?: {
+      title?: {
+        display?: boolean
+        text?: string
+        color?: string
+      }
+      grid?: {
+        color?: string
+      }
+      ticks?: {
+        color?: string
+      }
+      beginAtZero?: boolean
+    }
+  }
 }
 
-export interface AudienceFilter {
-  segmentType?: 'demographic' | 'behavioral' | 'custom'
-  segmentName?: string[]
-  minConfidence?: number
-  maxDiscrepancy?: number
-}
-
-export interface AudienceFilterParams {
-  segment_type?: 'demographic' | 'behavioral' | 'custom'
-  segment_names?: string[]
-  date_range?: string
-  aggregation?: string
-  [key: string]: any
-}
-
-export interface AudienceLeaderboardEntry {
-  id: string
-  name: string
-  roi: number
-  conversions: number
-  impressions: number
+export interface Badge {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  achieved: boolean;
+  progress: number;
+  maxProgress: number;
 } 

@@ -1,8 +1,16 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { MetricCard as MetricCardType } from '@/types'
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
+
+interface MetricCardType {
+  title: string
+  value: string | number
+  change: number
+  changeType: 'increase' | 'decrease'
+  icon: string
+  color?: string
+}
 
 interface MetricCardProps {
   metric: MetricCardType
@@ -17,7 +25,7 @@ export function MetricCard({ metric, className = '' }: MetricCardProps) {
       } else if (value >= 1000) {
         return `${(value / 1000).toFixed(1)}K`
       }
-      return value.toLocaleString()
+      return (value || 0).toLocaleString()
     }
     return value
   }
@@ -130,7 +138,7 @@ export function CompactMetricCard({ title, value, change, icon, color }: Compact
       } else if (value >= 1000) {
         return `${(value / 1000).toFixed(1)}K`
       }
-      return value.toLocaleString()
+      return (value || 0).toLocaleString()
     }
     return value
   }

@@ -50,16 +50,16 @@ export async function POST(request: NextRequest) {
     }
     
     // Filter by advertiser
-    if (body.advertiser_id) {
+    if (body.advertisers && body.advertisers.length > 0) {
       filteredData = filteredData.filter(item => 
-        item.campaign_id.includes(body.advertiser_id!)
+        body.advertisers!.includes(item.advertiser)
       )
     }
     
     // Filter by campaign
-    if (body.campaign_id) {
+    if (body.campaigns && body.campaigns.length > 0) {
       filteredData = filteredData.filter(item => 
-        item.campaign_id === body.campaign_id
+        body.campaigns!.includes(item.campaign_name)
       )
     }
     

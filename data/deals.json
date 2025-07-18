@@ -1,0 +1,23 @@
+[
+  {
+    "id": "TENT123",
+    "name": "Holiday Shoppers",
+    "type": "Tentpole",
+    "scale": "Large",
+    "ssp_sources": ["Nexxen", "OpenX"]
+  },
+  {
+    "id": "EVER456",
+    "name": "Luxury Shoppers",
+    "type": "Evergreen",
+    "scale": "Medium",
+    "ssp_sources": ["Index", "Magnite"]
+  },
+  {
+    "id": "CUST789",
+    "name": "Sneakerheads",
+    "type": "Custom",
+    "scale": "Niche",
+    "ssp_sources": ["Beachfront"]
+  }
+] 

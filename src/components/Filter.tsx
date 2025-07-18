@@ -1,14 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { FilterParams, AudienceFilterParams } from '@/types'
+import { FilterParams } from '@/types'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, Filter as FilterIcon, Play, Save, RotateCcw, Calendar, Target, Users, Globe, Monitor } from 'lucide-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
 interface FilterProps {
-  filters: FilterParams | AudienceFilterParams
+  filters: FilterParams | FilterParams
   onFiltersChange: (filters: any) => void
   userRole: 'admin' | 'advertiser' | 'agency'
   reportType?: string
@@ -60,7 +60,7 @@ export function Filter({
 }: FilterProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [localFilters, setLocalFilters] = useState<any>(filters)
-  const [showCustomDatePicker, setShowCustomDatePicker] = useState(false)
+  const [showDatePicker, setShowDatePicker] = useState(false)
 
   // Load saved filters from localStorage on mount
   useEffect(() => {
@@ -177,53 +177,63 @@ export function Filter({
             className="overflow-hidden"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-8 px-6">
-              {/* Date Range */}
+              {/* Date Range Selection */}
               <div className="flex flex-col space-y-2">
                 <label className="block text-sm font-medium text-gray-300 mb-1 flex items-center">
                   <Calendar className="w-4 h-4 mr-2" />
                   Date Range
                 </label>
-                <DatePicker
-                  selected={localFilters.start_date ? new Date(localFilters.start_date) : null}
-                  onChange={([start, end]: [Date | null, Date | null]) => {
-                    handleFilterChange('start_date', start ? start.toISOString().split('T')[0] : '')
-                    handleFilterChange('end_date', end ? end.toISOString().split('T')[0] : '')
+                <select
+                  value={localFilters.date_range || 'last_30_days'}
+                  onChange={(e) => {
+                    const value = e.target.value
+                    handleFilterChange('date_range', value)
+                    if (value === 'custom') {
+                      setShowDatePicker(true)
+                    } else {
+                      setShowDatePicker(false)
+                      // Clear custom dates when selecting preset
+                      handleFilterChange('start_date', '')
+                      handleFilterChange('end_date', '')
+                    }
                   }}
-                  startDate={localFilters.start_date ? new Date(localFilters.start_date) : null}
-                  endDate={localFilters.end_date ? new Date(localFilters.end_date) : null}
-                  selectsRange
-                  inline
-                  calendarClassName="bg-dark-200 text-white neon-glow"
-                  dayClassName={date => 'bg-dark-300 text-white hover:bg-neon-blue/30'}
-                />
+                  className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
+                >
+                  {dateRangeOptions.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
               </div>
 
-              {/* Custom Date Picker */}
-              {showCustomDatePicker && (
-                <>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Start Date
-                    </label>
-                    <input
-                      type="date"
-                      value={localFilters.start_date || ''}
-                      onChange={(e) => handleFilterChange('start_date', e.target.value)}
-                      className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
-                    />
+              {/* Custom Date Picker - Only show when custom is selected */}
+              {showDatePicker && (
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Custom Date Range
+                  </label>
+                  <div className="flex space-x-4">
+                    <div className="flex-1">
+                      <input
+                        type="date"
+                        value={localFilters.start_date || ''}
+                        onChange={(e) => handleFilterChange('start_date', e.target.value)}
+                        className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
+                        placeholder="Start Date"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <input
+                        type="date"
+                        value={localFilters.end_date || ''}
+                        onChange={(e) => handleFilterChange('end_date', e.target.value)}
+                        className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
+                        placeholder="End Date"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      End Date
-                    </label>
-                    <input
-                      type="date"
-                      value={localFilters.end_date || ''}
-                      onChange={(e) => handleFilterChange('end_date', e.target.value)}
-                      className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
-                    />
-                  </div>
-                </>
+                </div>
               )}
 
               {/* Aggregation */}
@@ -594,6 +604,13 @@ export function Filter({
               </div>
               
               <div className="flex items-center space-x-4">
+                <button
+                  onClick={handleApply}
+                  className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-neon-blue to-cyan-500 text-white rounded-lg font-medium hover:from-cyan-500 hover:to-neon-blue transition-all duration-200 shadow-lg"
+                >
+                  <Save className="w-4 h-4" />
+                  <span>Apply Filters</span>
+                </button>
                 <button
                   onClick={handleRun}
                   className="flex items-center space-x-2 px-8 py-3 bg-gradient-to-r from-neon-green to-emerald-500 text-white rounded-lg font-medium hover:from-emerald-500 hover:to-neon-green transition-all duration-200 shadow-lg"

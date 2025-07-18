@@ -1,6 +1,16 @@
 'use client'
-import React from 'react'
-import { AudienceLeaderboardEntry } from '@/types'
+
+import { motion } from 'framer-motion'
+
+interface AudienceLeaderboardEntry {
+  id: string
+  name: string
+  roi: number
+  conversions: number
+  impressions: number
+  ctr: number
+  confidence: number
+}
 
 interface AudienceLeaderboardProps {
   entries: AudienceLeaderboardEntry[]
@@ -17,7 +27,7 @@ export function AudienceLeaderboard({ entries }: AudienceLeaderboardProps) {
             <span className="flex-1 text-white font-medium">{entry.name}</span>
             <span className="text-neon-pink font-bold">{entry.roi.toFixed(2)}x</span>
             <span className="text-neon-green">{entry.conversions} conv.</span>
-            <span className="text-neon-yellow">{entry.impressions.toLocaleString()} imp.</span>
+            <span className="text-neon-yellow">{(entry.impressions || 0).toLocaleString()} imp.</span>
           </li>
         ))}
       </ol>

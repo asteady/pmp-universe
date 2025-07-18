@@ -33,12 +33,12 @@ export function AudienceTable({ segments }: AudienceTableProps) {
             {segments.map(seg => (
               <tr key={seg.id} className="border-b border-gray-700 hover:bg-gray-800/50 transition-colors">
                 <td className="py-3 px-4 text-white">{seg.name}</td>
-                <td className="py-3 px-4 text-gray-300 capitalize">{seg.type}</td>
-                <td className="py-3 px-4 text-neon-blue">{seg.impressions.toLocaleString()}</td>
-                <td className="py-3 px-4 text-neon-green">{seg.clicks.toLocaleString()}</td>
-                <td className="py-3 px-4 text-neon-purple">{seg.conversions.toLocaleString()}</td>
-                <td className="py-3 px-4 text-neon-pink">{seg.roi.toFixed(2)}x</td>
-                <td className="py-3 px-4"><DiscrepancyBadge value={seg.discrepancy} /></td>
+                <td className="py-3 px-4 text-gray-300 capitalize">{seg.category}</td>
+                <td className="py-3 px-4 text-neon-blue">{(seg.impressions ?? 0).toLocaleString()}</td>
+                <td className="py-3 px-4 text-neon-green">{(seg.clicks ?? 0).toLocaleString()}</td>
+                <td className="py-3 px-4 text-neon-purple">{(seg.conversions ?? 0).toLocaleString()}</td>
+                <td className="py-3 px-4 text-neon-pink">{(seg.roi ?? 0).toFixed(2)}x</td>
+                <td className="py-3 px-4"><DiscrepancyBadge value={seg.discrepancy ?? 0} /></td>
                 <td className="py-3 px-4 text-neon-yellow">{(seg.confidence * 100).toFixed(1)}%</td>
               </tr>
             ))}

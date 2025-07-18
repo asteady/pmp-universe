@@ -1,7 +1,16 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ProgressBar as ProgressBarType } from '@/types'
+import { TrendingUp, TrendingDown } from 'lucide-react'
+
+interface ProgressBarType {
+  label: string
+  value: number
+  maxValue: number
+  color: string
+  change?: number
+  unit?: string
+}
 
 interface ProgressBarProps {
   progress: ProgressBarType
@@ -9,7 +18,7 @@ interface ProgressBarProps {
 }
 
 export function ProgressBar({ progress, className = '' }: ProgressBarProps) {
-  const percentage = Math.min((progress.current / progress.target) * 100, 100)
+  const percentage = Math.min((progress.value / progress.maxValue) * 100, 100)
   const isComplete = percentage >= 100
 
   const formatValue = (value: number) => {
@@ -18,7 +27,7 @@ export function ProgressBar({ progress, className = '' }: ProgressBarProps) {
     } else if (value >= 1000) {
       return `${(value / 1000).toFixed(1)}K`
     }
-    return value.toLocaleString()
+    return (value || 0).toLocaleString()
   }
 
   return (
@@ -32,7 +41,7 @@ export function ProgressBar({ progress, className = '' }: ProgressBarProps) {
         <h4 className="text-white font-medium">{progress.label}</h4>
         <div className="text-right">
           <p className="text-white font-semibold">
-            {formatValue(progress.current)} / {formatValue(progress.target)}
+            {formatValue(progress.value)} / {formatValue(progress.maxValue)}
           </p>
           <p className="text-sm text-gray-400">{progress.unit}</p>
         </div>

@@ -327,7 +327,7 @@ export function CampaignPacing({ className = '' }: CampaignPacingProps) {
                 <div className="flex justify-between text-sm mb-2">
                   <span className="text-gray-400">Conversions</span>
                   <span className="text-white">
-                    {campaign.conversions.toLocaleString()} / {campaign.conversionsGoal.toLocaleString()}
+                    {(campaign.conversions || 0).toLocaleString()} / {(campaign.conversionsGoal || 0).toLocaleString()}
                   </span>
                 </div>
                 <div className="w-full bg-gray-700 rounded-full h-2">
