@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST="{\"app/dashboard/page.tsx -> @/components/GeographicMap\":{\"id\":\"app/dashboard/page.tsx -> @/components/GeographicMap\",\"files\":[\"static/chunks/_app-pages-browser_src_components_GeographicMap_tsx.js\"]}}"
+self.__REACT_LOADABLE_MANIFEST="{}"

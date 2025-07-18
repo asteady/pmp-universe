@@ -1,1 +1,5 @@
-// This file ensures the /public/brand directory exists for storing Infillion logos and visuals. 
+// This file ensures the /public/brand directory exists for storing Infillion logos and visuals.
+// This file is used in the PMP Universe project, which should be run from its own, clean directory.
+// Do not run the app from the Analytics Dashboard directory.
+// Access the PMP Universe app at: http://localhost:3000/pmp-universe
+// Ensure you are in the correct directory: /Users/alex.steady/PMP-Universe
