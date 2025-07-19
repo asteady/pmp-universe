@@ -1,73 +1,299 @@
-# PMP Universe
+# 🪐 PMP Universe
 
-Self-serve portal for Infillion Private Marketplace (PMP) deals across SSPs.
+> **Infillion's Next-Generation Self-Service PMP Portal**
 
-## Features
-- PMP Deal Catalog: Evergreen, Tentpole, and Custom Deal creation
-- RFP Generator: Smart, multi-step form for Deal ID, RFP Slides, or Both
-- Reporting: Visualize deal performance and metrics
-- LaunchDarkly feature flags for safe rollout
-- Asana integration for automated RFP/Deal requests
-- Beautiful, branded UI with Infillion style guide
+PMP Universe is Infillion's next-generation, self-service portal that brings Private Marketplace (PMP) deals to life. Whether you're a seasoned programmatic vet or new to the world of Deal IDs, this platform empowers sellers, marketers, and partners to:
 
-## UI/UX Polish & QA Checklist
-- [x] Sidebar navigation is clear, grouped, and branded
-- [x] All modals (Custom Deal Creation, RFP Generator, Reporting) are visually consistent and responsive
-- [x] Forms use Infillion color tokens, font, and accessible labels
-- [x] Subtle transitions/hover states for premium feel
-- [x] Accessibility: focus states, keyboard navigation, ARIA labels
-- [x] LaunchDarkly flags wrap all new features
-- [x] RFP Generator supports Deal ID, RFP Slides, or Both, with Asana integration (client/server)
-- [x] README and docs are up to date
+* **Explore curated Evergreen, Tentpole, and Custom PMP deals**
+* **Generate smart RFPs or instant Deal IDs**
+* **Preview creatives and audience insights**
+* **Navigate with ease in a premium, branded interface**
+* **Glide across DSPs/SSPs** (MediaMath, Nexxen, Magnite, OpenX, Index, Beachfront, AdsWizz, Nativo)
+* **Automate workflows** via Asana, LaunchDarkly, and beyond
 
-## Sidebar Navigation & Modal Triggers
-- **PMP Universe**
-  - Evergreen
-  - Tentpole
-  - Custom Deal Creation *(opens modal)*
-- **RFP Generator** *(opens modal)*
-- **Reporting** *(opens modal)*
+This README and design system sets the foundation for a smooth dev experience, a polished UI/UX, and a delightful end-user journey.
 
-## Running Locally
-```bash
-npm install
-npm run dev
-# Visit http://localhost:3000
+## 🌈 Features
+
+* ✨ **PMP Deal Catalog** — Filterable by season, format, creative types, and goals
+* 📊 **Performance Reporting** — Impressions, Clicks, CTR%, VCR%, ROI by Segment
+* 🛠️ **RFP Generator** — Modular form flow for Deal ID, RFP deck, or both
+* 🔁 **Asana Integration** — Instant task creation for RFPs & custom deals
+* 🔐 **Feature Flagged** — All beta features behind LaunchDarkly toggles
+* 🎨 **Creative & Audience Galleries** — Curated preview by PMP + use cases
+* 📥 **Downloadable Assets** — From survey templates to polygon geo-fencing previews
+* 🌑 **Dark Mode / Light Mode** — Seamless toggling with Infillion-inspired palettes
+* 🪄 **Easter Eggs** — Try the Konami code to unlock a secret PMP
+
+## 🗂️ Folder Structure
+
 ```
-- All features are behind LaunchDarkly flags for safe rollout
-- RFP Generator and Asana integration require `.env.local` setup (see below)
+pmp-universe/
+├── components/          # UI elements (Cards, Filters, Tabs, Sidebar)
+│   ├── DealCard.tsx
+│   ├── FilterBar.tsx
+│   ├── CustomDealCreationModal.tsx
+│   ├── ReportingModal.tsx
+│   ├── RFPGeneratorModal.tsx
+│   ├── SidebarNav.tsx
+│   └── UserProfile.tsx
+├── data/               # Demo data (audiences, creatives, taxonomy)
+│   ├── pmpData.ts      # Evergreen PMPs
+│   ├── seasonalPMPs.ts # Tentpole PMPs
+│   ├── customPMPs.ts   # Custom PMPs
+│   ├── deals.json
+│   └── audienceTaxonomy.json
+├── public/
+│   ├── brand/          # Logos, brand assets
+│   └── photography/    # Lifestyle photography, visual examples
+├── docs/               # Style guide, animation references
+│   ├── STYLE_GUIDE.md
+│   └── ANIMATION_GUIDE.md
+├── app/
+│   └── pmp-universe/   # Main application page
+└── lib/
+    ├── featureFlags.ts # LaunchDarkly integration
+    └── asana.ts        # Asana API integration
+```
 
-## Asana Integration (RFP Generator)
-- RFP Generator can submit requests to Asana as cards/tasks.
-- Requires environment variables in `.env.local`:
-  - `ASANA_TOKEN` (Personal Access Token)
-  - `ASANA_PROJECT_ID` (Project to create cards in)
-- By default, submission is via the `/api/rfp-to-asana` API route (server-side, secure).
-- Optionally, you can submit directly from the client (not recommended for production).
-- See `lib/asana.ts` and `app/api/rfp-to-asana/route.ts` for details.
+## 🎨 PMP Universe Style Guide (Excerpt)
 
-## Brand & Style Guide
-- See [`/docs/BRAND_GUIDE.md`](docs/BRAND_GUIDE.md) for all Infillion brand standards, color palette, font, and logo usage.
-- Logos and product marks: `/public/brand/`
-- Brand photography: `/public/photography/`
+### Brand Colors
+- **Primary**: `#3B82F6` (Blue), `#8B5CF6` (Purple), `#10B981` (Green)
+- **Background**: `#0F172A` (Dark), `#F9FAFB` (Light)
+- **Text**: `#FFFFFF` (Primary), `#94A3B8` (Secondary)
+- **Status**: Green = Success, Amber = Caution, Red = Error
 
-## Logos
-- Infillion logo: `/public/brand/infillion-logo-dark.svg`
-- PMP Universe logo: `/public/brand/pmp-universe-logo.svg`
+### Typography
+- **Font**: Inter (Primary), JetBrains Mono (Code)
+- **Headings**: `.text-5xl` (Main), `.text-3xl` (Subhead)
+- **Body**: `.text-base`, `.text-sm`
 
-## Project Structure
-- `/components` – UI components (SidebarNav, FilterBar, DealCard, PMPGrid, etc.)
-- `/data` – Sample data (deals.json, creativePreviews.json, audienceTaxonomy.json)
-- `/public/brand` – Logos and brand assets
-- `/public/photography` – Brand photography
+### Component Guidelines
+```css
+/* Primary Button */
+.btn-primary {
+  @apply px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 
+         hover:from-blue-700 hover:to-blue-800 
+         text-white font-semibold rounded-lg 
+         transition-all duration-200;
+}
 
-## Troubleshooting
-- If you see a 500 error, check your terminal for type or runtime errors.
-- If you see "missing required error components, refreshing...", wait a few seconds or try a hard refresh.
-- For persistent issues, run:
-  - `rm -rf .next node_modules`
-  - `npm install`
-  - `npm run dev`
+/* Interactive Card */
+.card-interactive {
+  @apply bg-gradient-to-br from-slate-800 to-slate-900 
+         rounded-xl p-6 border border-slate-700 
+         shadow-lg hover:shadow-xl hover:scale-105 
+         transition-all duration-300 cursor-pointer;
+}
+```
 
-## Contact
-For support, contact the PMP Universe team. 
+## 🎬 Animation Guide (Overview)
+
+### Core Animation Patterns
+- **`hover:scale-105`**: Cards expand on hover
+- **`ease-bounce`**: Used for success pings
+- **`animate-fade-in`, `animate-slide-up`**: For modals, sections
+- **`transition-all duration-300 ease-in-out`**: Universal animation baseline
+
+### Interactive Elements
+- **Cards**: Glow + bounce effects
+- **Buttons**: Ripple effect on click
+- **Search bar**: Subtle zoom-in on focus
+- **Tabs**: Sliding indicator animations
+
+### Accessibility
+- **ARIA labels** on all nav and form elements
+- **Keyboard navigation** across tabs, forms, filters
+- **Motion respects** `prefers-reduced-motion`
+
+### Animation Timing
+```css
+/* Duration Scale */
+.duration-75   { transition-duration: 75ms; }   /* Ultra Fast */
+.duration-150  { transition-duration: 150ms; }  /* Fast */
+.duration-200  { transition-duration: 200ms; }  /* Normal */
+.duration-300  { transition-duration: 300ms; }  /* Slow */
+.duration-500  { transition-duration: 500ms; }  /* Slower */
+```
+
+## 🚀 Design Goals
+
+* **Frictionless**: Whether you're Joy (don't know shit) or Alan (know fucking everything) navigation should feel intuitive
+* **Playful but Professional**: A sprinkle of glow, movement, personality, just enough to say "THIS IS ME ALEX" and to delight others
+* **Composable**: Future-ready to plug into TrueSSP, IDVx, Reporting Dashboard, Omni DSP (Meta DSP concepts), MediaMath, and beyond as a product in our component marketplace
+* **Clean Hand-off**: All files, animations, and logic neatly organized for Devs, Designers, PMs
+
+## 🛠️ Quick Start
+
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+
+### Installation
+```bash
+# Clone the repository
+git clone https://github.com/asteady/pmp-universe.git
+cd pmp-universe
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+### Environment Setup
+```bash
+# Copy environment template
+cp env.example .env.local
+
+# Configure your environment variables
+NEXT_PUBLIC_LAUNCHDARKLY_CLIENT_ID=your_client_id
+ASANA_ACCESS_TOKEN=your_asana_token
+```
+
+## 🎯 Key Components
+
+### PMP Deal Cards
+Interactive cards showcasing each PMP with:
+- Performance metrics (VCR, CTR, Scale)
+- Creative previews
+- Targeting information
+- One-click Deal ID generation
+
+### Custom Deal Creation
+Multi-step wizard for creating custom PMPs:
+1. **SSP Selection** (Nexxen, Magnite, OpenX, etc.)
+2. **DSP Selection** (MediaMath, Index, etc.)
+3. **Deal Parameters** (Budget, targeting, formats)
+4. **Automatic Deal ID Generation**
+
+### Advanced Filtering
+Multi-category filtering system:
+- **Type**: Evergreen, Seasonal, Custom
+- **Category**: Sports, Entertainment, Finance, etc.
+- **Format**: Video, Display, Audio, Native
+- **Performance**: High VCR, High CTR, etc.
+
+## 🔧 Technical Stack
+
+- **Framework**: Next.js 15.0.0
+- **Styling**: Tailwind CSS
+- **Language**: TypeScript
+- **State Management**: React Hooks
+- **Feature Flags**: LaunchDarkly (simulated)
+- **Integration**: Asana API
+- **Deployment**: Vercel-ready
+
+## 📊 Performance Metrics
+
+### Current PMP Inventory
+- **28 Evergreen PMPs** - Year-round performance
+- **15 Seasonal/Tentpole PMPs** - Event-driven campaigns
+- **8 Custom PMPs** - Tailored solutions
+
+### Performance Benchmarks
+- **Average VCR**: 85%+
+- **Average CTR**: 0.8%+
+- **Scale**: 1M+ impressions monthly
+- **ROI**: 3.2x average return
+
+## 🎨 Brand Integration
+
+### Infillion Brand Elements
+- **Logo**: Integrated throughout the interface
+- **Color Palette**: Consistent with brand guidelines
+- **Typography**: Inter font family for readability
+- **Voice**: Professional yet approachable
+
+### Custom Branding
+- **PMP Universe Logo**: Custom designed for the platform
+- **Icon System**: Consistent iconography
+- **Animation Style**: Smooth, purposeful movements
+
+## 🔐 Security & Compliance
+
+- **Feature Flags**: All beta features behind LaunchDarkly
+- **Data Privacy**: No sensitive data stored locally
+- **API Security**: Secure token-based authentication
+- **Compliance**: GDPR and CCPA ready
+
+## 📱 Responsive Design
+
+- **Mobile-First**: Optimized for all screen sizes
+- **Touch-Friendly**: 44px minimum touch targets
+- **Progressive Enhancement**: Works without JavaScript
+- **Cross-Browser**: Chrome, Safari, Firefox, Edge
+
+## 🚀 Deployment
+
+### Production Build
+```bash
+# Build for production
+npm run build
+
+# Start production server
+npm start
+```
+
+### Environment Variables
+```bash
+# Required for production
+NEXT_PUBLIC_LAUNCHDARKLY_CLIENT_ID=
+ASANA_ACCESS_TOKEN=
+NEXT_PUBLIC_API_URL=
+```
+
+## 🤝 Contributing
+
+### Development Workflow
+1. **Feature Branch**: Create from `main`
+2. **Development**: Follow style and animation guides
+3. **Testing**: Ensure accessibility and performance
+4. **Review**: Submit PR for review
+5. **Merge**: Squash and merge to `main`
+
+### Code Standards
+- **TypeScript**: Strict mode enabled
+- **ESLint**: Airbnb configuration
+- **Prettier**: Consistent formatting
+- **Husky**: Pre-commit hooks
+
+## 📚 Documentation
+
+- **[Style Guide](./docs/STYLE_GUIDE.md)**: Complete design system
+- **[Animation Guide](./docs/ANIMATION_GUIDE.md)**: Animation patterns and timing
+- **[API Documentation](./docs/API.md)**: Integration endpoints
+- **[Component Library](./docs/COMPONENTS.md)**: Reusable UI components
+
+## 🎯 Roadmap
+
+### Q1 2025
+- [ ] **TrueSSP Integration** - Direct SSP connectivity
+- [ ] **IDVx Integration** - Identity verification
+- [ ] **Enhanced Reporting** - Real-time dashboards
+
+### Q2 2025
+- [ ] **Omni DSP** - Meta DSP concepts
+- [ ] **MediaMath Deep Integration** - Advanced targeting
+- [ ] **Mobile App** - Native iOS/Android
+
+### Q3 2025
+- [ ] **AI-Powered Recommendations** - Smart PMP suggestions
+- [ ] **Advanced Analytics** - Predictive performance
+- [ ] **Enterprise Features** - Multi-tenant support
+
+## 📣 Support
+
+**Questions? Glitches? Killer PMP feature ideas or feedback?**
+
+- **Email**: alex.steady@infillion.com
+- **In-App**: Use the Feedback Button inside the app
+- **GitHub**: Create an issue for bugs or feature requests
+
+---
+
+**Built with ❤️ by the Infillion Team**
+
+*PMP Universe - Where Premium Meets Programmatic* 
