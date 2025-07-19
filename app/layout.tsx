@@ -1,26 +1,34 @@
-import React from 'react'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
+'use client';
 
-const inter = Inter({ subsets: ['latin'] })
-
-export const metadata: Metadata = {
-  title: 'Infillion Analytics Dashboard',
-  description: 'Advanced advertising analytics dashboard for Infillion clients and internal stakeholders',
-  keywords: 'analytics, advertising, dashboard, infillion, mediamath',
-}
+import './globals.css';
+import { useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import SidebarNav from '../components/SidebarNav';
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const [currentPath, setCurrentPath] = useState(pathname);
+
+  const handleNavigate = (path: string) => {
+    setCurrentPath(path);
+    router.push(path);
+  };
+
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.className} bg-gradient-to-br from-dark-400 via-dark-300 to-dark-200 min-h-screen`}>
-        {children}
+    <html lang="en">
+      <body className="bg-slate-900 text-white">
+        <div className="flex h-screen">
+          <SidebarNav onNavigate={handleNavigate} />
+          <main className="flex-1 overflow-auto">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
-  )
+  );
 } 
