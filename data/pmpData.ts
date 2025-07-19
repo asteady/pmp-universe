@@ -16,6 +16,15 @@ export type Deal = {
     ctr: string;
     ecpm: string;
   };
+  // Enhanced properties for better search and display
+  ssp?: string;
+  dsp?: string;
+  keyBenefits?: string[];
+  devices?: string[];
+  placements?: string[];
+  surveys?: string[];
+  seasonal?: string[];
+  tentpole?: string[];
 };
 
 export const evergreenPMPs: Deal[] = [
@@ -32,7 +41,15 @@ export const evergreenPMPs: Deal[] = [
     formats: ['Video', 'Display', 'Native', 'Audio'],
     creativeExamples: ['Interactive Video', 'Shoppable Ads', 'QR Codes'],
     targeting: ['High-attention inventory', 'Real-time optimization'],
-    performance: { vcr: '80%+', ctr: '0.4%+', ecpm: '$15-25' }
+    performance: { vcr: '80%+', ctr: '0.4%+', ecpm: '$15-25' },
+    ssp: 'Nexxen, Magnite, OpenX',
+    dsp: 'MediaMath, The Trade Desk, DV360',
+    keyBenefits: ['150MM monthly active devices for scale', '80%+ VCR guarantee', '0.4%+ CTR performance', 'Real-time optimization', 'High-attention inventory'],
+    devices: ['Smart TV', 'Desktop', 'Mobile Phone', 'Tablet'],
+    placements: ['Premium Video', 'CTV/OTT', 'Display Banners', 'Native Ads'],
+    surveys: ['Brand Awareness', 'Purchase Intent', 'Ad Recall'],
+    seasonal: ['Year-round', 'All Seasons'],
+    tentpole: ['Sports Events', 'Entertainment', 'News']
   },
   {
     id: 'infil-ctr-xxx',
@@ -47,7 +64,15 @@ export const evergreenPMPs: Deal[] = [
     formats: ['Display', 'Video', 'Rich Media', 'Native'],
     creativeExamples: ['Interactive Banners', 'Shoppable Units', 'Lead Forms'],
     targeting: ['Mid-funnel audiences', 'Conversion-focused'],
-    performance: { vcr: '75%+', ctr: '0.4%+', ecpm: '$12-20' }
+    performance: { vcr: '75%+', ctr: '0.4%+', ecpm: '$12-20' },
+    ssp: 'Index Exchange, Beachfront, AdsWizz',
+    dsp: 'Xandr, MediaMath, The Trade Desk',
+    keyBenefits: ['200MM monthly impressions for scale', '75%+ VCR guarantee', '0.4%+ CTR performance', 'Mid-funnel optimization', 'Conversion tracking'],
+    devices: ['Desktop', 'Mobile Phone', 'Tablet', 'Connected Device'],
+    placements: ['Display Banners', 'Rich Media', 'Native Ads', 'Video'],
+    surveys: ['Conversion Intent', 'Brand Consideration', 'Purchase Behavior'],
+    seasonal: ['Year-round', 'All Seasons'],
+    tentpole: ['E-commerce', 'Retail', 'Technology']
   },
   {
     id: 'infil-arts-xxx',

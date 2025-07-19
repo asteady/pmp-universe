@@ -1,5 +1,4 @@
 {
   "/pmp-universe/page": "app/pmp-universe/page.js",
-  "/rfp-generator/page": "app/rfp-generator/page.js",
-  "/_not-found/page": "app/_not-found/page.js"
+  "/rfp-generator/page": "app/rfp-generator/page.js"
 }

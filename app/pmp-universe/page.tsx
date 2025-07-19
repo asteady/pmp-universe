@@ -22,12 +22,20 @@ const pmpData = {
 
 const PMPUniversePage = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState('All Deals');
   const [filteredDeals, setFilteredDeals] = useState(allPMPs);
 
-  // Enhanced search functionality
+  // Enhanced search and filter functionality
   useEffect(() => {
     let filtered = allPMPs;
 
+    // Apply category filter
+    if (selectedFilter !== 'All Deals') {
+      const filterType = selectedFilter.replace(' PMPs', '');
+      filtered = filtered.filter(deal => deal.type === filterType);
+    }
+
+    // Apply search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(deal => {
@@ -56,7 +64,11 @@ const PMPUniversePage = () => {
         if (deal.dsp && deal.dsp.toLowerCase().includes(query)) return true;
         
         // Search in performance metrics
-        if (deal.performance && deal.performance.toLowerCase().includes(query)) return true;
+        if (deal.performance && (
+          deal.performance.vcr.toLowerCase().includes(query) ||
+          deal.performance.ctr.toLowerCase().includes(query) ||
+          deal.performance.ecpm.toLowerCase().includes(query)
+        )) return true;
         
         // Search in key benefits
         if (deal.keyBenefits && deal.keyBenefits.some((benefit: string) => benefit.toLowerCase().includes(query))) return true;
@@ -70,12 +82,25 @@ const PMPUniversePage = () => {
         // Search in placements
         if (deal.placements && deal.placements.some((placement: string) => placement.toLowerCase().includes(query))) return true;
         
+        // Search in surveys
+        if (deal.surveys && deal.surveys.some((survey: string) => survey.toLowerCase().includes(query))) return true;
+        
+        // Search in seasonal keywords
+        if (deal.seasonal && deal.seasonal.some((season: string) => season.toLowerCase().includes(query))) return true;
+        
+        // Search in tentpole keywords
+        if (deal.tentpole && deal.tentpole.some((tent: string) => tent.toLowerCase().includes(query))) return true;
+        
         return false;
       });
     }
     
     setFilteredDeals(filtered);
-  }, [searchQuery, allPMPs]);
+  }, [searchQuery, selectedFilter, allPMPs]);
+
+  const handleFilterChange = (filter: string) => {
+    setSelectedFilter(filter);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
@@ -120,7 +145,7 @@ const PMPUniversePage = () => {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
               </svg>
-              All Deals
+              {selectedFilter}
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
@@ -129,16 +154,28 @@ const PMPUniversePage = () => {
               <div className="p-4">
                 <div className="text-sm text-slate-400 mb-3">Quick Filters</div>
                 <div className="space-y-2">
-                  <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700 text-sm text-white transition-colors">
+                  <button 
+                    onClick={() => handleFilterChange('All Deals')}
+                    className={`w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700 text-sm text-white transition-colors ${selectedFilter === 'All Deals' ? 'bg-blue-600 text-white' : ''}`}
+                  >
                     All Deals ({allPMPs.length})
                   </button>
-                  <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700 text-sm text-white transition-colors">
+                  <button 
+                    onClick={() => handleFilterChange('Seasonal PMPs')}
+                    className={`w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700 text-sm text-white transition-colors ${selectedFilter === 'Seasonal PMPs' ? 'bg-blue-600 text-white' : ''}`}
+                  >
                     Seasonal ({seasonalPMPs.length})
                   </button>
-                  <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700 text-sm text-white transition-colors">
+                  <button 
+                    onClick={() => handleFilterChange('Evergreen PMPs')}
+                    className={`w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700 text-sm text-white transition-colors ${selectedFilter === 'Evergreen PMPs' ? 'bg-blue-600 text-white' : ''}`}
+                  >
                     Evergreen ({evergreenPMPs.length})
                   </button>
-                  <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700 text-sm text-white transition-colors">
+                  <button 
+                    onClick={() => handleFilterChange('Custom PMPs')}
+                    className={`w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700 text-sm text-white transition-colors ${selectedFilter === 'Custom PMPs' ? 'bg-blue-600 text-white' : ''}`}
+                  >
                     Custom ({customPMPs.length})
                   </button>
                 </div>

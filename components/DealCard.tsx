@@ -20,6 +20,15 @@ type Deal = {
     ctr: string;
     ecpm: string;
   };
+  // Enhanced properties for better search and display
+  ssp?: string;
+  dsp?: string;
+  keyBenefits?: string[];
+  devices?: string[];
+  placements?: string[];
+  surveys?: string[];
+  seasonal?: string[];
+  tentpole?: string[];
 };
 
 const tabList = [
