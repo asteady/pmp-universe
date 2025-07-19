@@ -1,8 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import SidebarNav from '../../components/SidebarNav';
-import FilterBar from '../../components/FilterBar';
 import PMPGrid from '../../components/PMPGrid';
 import UserProfile from '../../components/UserProfile';
 import { evergreenPMPs } from '../../data/pmpData';
@@ -23,63 +21,65 @@ const pmpData = {
 };
 
 const PMPUniversePage = () => {
-  const [activeTab, setActiveTab] = useState('PMP Universe');
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
   const [filteredDeals, setFilteredDeals] = useState(allPMPs);
 
-  // Filter deals based on search query and filters
+  // Enhanced search functionality
   useEffect(() => {
     let filtered = allPMPs;
 
-    // Apply search filter
     if (searchQuery.trim()) {
-      filtered = filtered.filter(deal => 
-        deal.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        deal.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        deal.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        deal.targeting.some((target: string) => target.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        deal.formats.some((format: string) => format.toLowerCase().includes(searchQuery.toLowerCase()))
-      );
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(deal => {
+        // Search in deal name
+        if (deal.name.toLowerCase().includes(query)) return true;
+        
+        // Search in description
+        if (deal.description.toLowerCase().includes(query)) return true;
+        
+        // Search in category
+        if (deal.category.toLowerCase().includes(query)) return true;
+        
+        // Search in deal type (Seasonal, Evergreen, Custom)
+        if (deal.type.toLowerCase().includes(query)) return true;
+        
+        // Search in targeting
+        if (deal.targeting.some((target: string) => target.toLowerCase().includes(query))) return true;
+        
+        // Search in formats
+        if (deal.formats.some((format: string) => format.toLowerCase().includes(query))) return true;
+        
+        // Search in SSP compatibility
+        if (deal.ssp && deal.ssp.toLowerCase().includes(query)) return true;
+        
+        // Search in DSP compatibility
+        if (deal.dsp && deal.dsp.toLowerCase().includes(query)) return true;
+        
+        // Search in performance metrics
+        if (deal.performance && deal.performance.toLowerCase().includes(query)) return true;
+        
+        // Search in key benefits
+        if (deal.keyBenefits && deal.keyBenefits.some((benefit: string) => benefit.toLowerCase().includes(query))) return true;
+        
+        // Search in creative examples
+        if (deal.creativeExamples && deal.creativeExamples.some((example: string) => example.toLowerCase().includes(query))) return true;
+        
+        // Search in device types
+        if (deal.devices && deal.devices.some((device: string) => device.toLowerCase().includes(query))) return true;
+        
+        // Search in placements
+        if (deal.placements && deal.placements.some((placement: string) => placement.toLowerCase().includes(query))) return true;
+        
+        return false;
+      });
     }
-
-    // Apply category filters
-    Object.entries(activeFilters).forEach(([category, values]) => {
-      if (values.length > 0) {
-        filtered = filtered.filter(deal => {
-          switch (category) {
-            case 'Seasonality':
-              return values.includes(deal.type);
-            case 'Channel':
-              return values.some(value => deal.formats.includes(value));
-            case 'Audience':
-              return values.some(value => deal.category.includes(value));
-            case 'Brand':
-              return values.some(value => deal.name.includes(value));
-            case 'Format':
-              return values.some(value => deal.formats.includes(value));
-            case 'SSP':
-              return true; // All deals are compatible with all SSPs
-            case 'DSP':
-              return true; // All deals are compatible with all DSPs
-            default:
-              return true;
-          }
-        });
-      }
-    });
     
     setFilteredDeals(filtered);
-  }, [searchQuery, activeFilters, allPMPs]);
-
-  const handleFilterChange = (filters: Record<string, string[]>) => {
-    setActiveFilters(filters);
-  };
+  }, [searchQuery, allPMPs]);
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-      <SidebarNav />
-      <main className="flex-1 p-8 min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+      <main className="p-8 min-h-screen">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -106,7 +106,7 @@ const PMPUniversePage = () => {
           <div className="flex-1 relative">
             <input
               type="text"
-              placeholder="Search deals, targeting, or descriptions..."
+              placeholder="Search by deal name, category, targeting, formats, SSP, DSP, performance, benefits, creative examples, devices, placements, or seasonal keywords..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full px-4 py-4 pl-12 bg-slate-800/80 text-white rounded-xl border border-slate-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-200"
@@ -115,15 +115,36 @@ const PMPUniversePage = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
-          <button className="px-6 py-4 bg-slate-800/80 text-white rounded-xl border border-slate-700 hover:bg-slate-700 hover:border-blue-500 transition-all duration-200 flex items-center gap-2">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
-            </svg>
-            All Deals
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
+          <div className="relative group">
+            <button className="px-6 py-4 bg-slate-800/80 text-white rounded-xl border border-slate-700 hover:bg-slate-700 hover:border-blue-500 transition-all duration-200 flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
+              </svg>
+              All Deals
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div className="absolute right-0 mt-2 w-64 bg-slate-800 rounded-xl border border-slate-700 shadow-xl z-10 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200">
+              <div className="p-4">
+                <div className="text-sm text-slate-400 mb-3">Quick Filters</div>
+                <div className="space-y-2">
+                  <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700 text-sm text-white transition-colors">
+                    All Deals ({allPMPs.length})
+                  </button>
+                  <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700 text-sm text-white transition-colors">
+                    Seasonal ({seasonalPMPs.length})
+                  </button>
+                  <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700 text-sm text-white transition-colors">
+                    Evergreen ({evergreenPMPs.length})
+                  </button>
+                  <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700 text-sm text-white transition-colors">
+                    Custom ({customPMPs.length})
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Summary Cards */}
@@ -153,9 +174,6 @@ const PMPUniversePage = () => {
             <p className="text-purple-100">{pmpData.summary.custom.period}</p>
           </div>
         </div>
-
-        {/* Filter Bar */}
-        <FilterBar onFilterChange={handleFilterChange} />
 
         {/* PMP Grid */}
         <PMPGrid deals={filteredDeals} />
