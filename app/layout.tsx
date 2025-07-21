@@ -65,21 +65,17 @@ export default function RootLayout({
     const html = document.documentElement;
     
     if (isDarkMode) {
-      body.className = 'bg-gradient-to-br from-[#121B30] via-[#69101A] to-[#121B30] text-white transition-all duration-500';
+      body.className = 'bg-background text-foreground transition-all duration-500';
       html.className = 'dark';
     } else {
-      body.className = 'bg-gradient-to-br from-[#F8F8FF] via-[#C8BCD1] to-[#F8F8FF] text-[#121B30] transition-all duration-500';
+      body.className = 'bg-background text-foreground transition-all duration-500';
       html.className = 'light';
     }
   }, [isDarkMode]);
 
   return (
     <html lang="en" className={isDarkMode ? 'dark' : 'light'}>
-      <body className={`transition-all duration-500 ${
-        isDarkMode 
-          ? 'bg-gradient-to-br from-[#121B30] via-[#69101A] to-[#121B30] text-white' 
-          : 'bg-gradient-to-br from-[#F8F8FF] via-[#C8BCD1] to-[#F8F8FF] text-[#121B30]'
-      }`}>
+      <body className="bg-background text-foreground transition-all duration-500">
         <div className="flex h-screen">
           <SidebarNav 
             onNavigate={handleNavigate} 
@@ -87,11 +83,7 @@ export default function RootLayout({
             currentUser={currentUser}
             isClientView={isClientView}
           />
-          <main className={`flex-1 overflow-auto relative transition-all duration-500 ${
-            isDarkMode 
-              ? 'bg-gradient-to-br from-[#121B30] via-[#69101A] to-[#121B30]' 
-              : 'bg-gradient-to-br from-[#F8F8FF] via-[#C8BCD1] to-[#F8F8FF]'
-          }`}>
+          <main className="flex-1 overflow-auto relative transition-all duration-500 bg-background text-foreground">
             {/* Header with User Profile */}
             <div className="absolute top-4 right-4 z-40">
               <UserProfile

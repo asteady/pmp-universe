@@ -31,13 +31,6 @@ export default function SidebarNav({
 
   const navItems = [
     {
-      name: 'Dashboard',
-      path: '/',
-      icon: '📊',
-      description: 'Overview & Analytics',
-      showForClient: false // Hidden for clients
-    },
-    {
       name: 'PMP Universe',
       path: '/pmp-universe',
       icon: '🪐',
@@ -65,6 +58,13 @@ export default function SidebarNav({
       description: 'Knowledge Hub & Resources',
       showForClient: true,
       isSpecial: true // Special handling for Guru
+    },
+    {
+      name: 'Dashboard',
+      path: '/',
+      icon: '📊',
+      description: 'Overview & Analytics',
+      showForClient: false // Hidden for clients
     }
   ];
 

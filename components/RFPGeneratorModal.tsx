@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { createAsanaTask } from '../lib/asana';
 import ChipSelect from '../src/components/ChipSelect';
+import audienceTaxonomy from '../data/audienceTaxonomy.json';
 
 const requestTypes = [
   { value: 'deal-id', label: 'Deal ID Only' },
@@ -42,7 +43,6 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
-  const [useApi, setUseApi] = useState(true); // Toggle for API vs direct
   const [resultMsg, setResultMsg] = useState<string | null>(null);
   // Add error state and helper text for all required fields
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -51,14 +51,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
   // Add state for multi-selects and single-selects
-  const audienceTaxonomyOptions = [
-    { value: 'a1', label: 'Tech Enthusiasts' },
-    { value: 'a2', label: 'Travelers' },
-    { value: 'a3', label: 'Parents' },
-    { value: 'a4', label: 'Gamers' },
-    { value: 'a5', label: 'Health & Wellness' },
-    // ...add all real options from your taxonomy
-  ];
+  const audienceTaxonomyOptions = audienceTaxonomy.map(aud => ({ value: aud.id, label: aud.name }));
   const creativeTypes = [
     'IDV', 'Rich Media', 'Display', 'Video', 'Native', 'Audio'
   ];
@@ -135,7 +128,9 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
         <div className="bg-background rounded-lg shadow-lg p-8 w-full max-w-lg relative">
           <button className="absolute top-2 right-2 text-muted" onClick={onClose}>&times;</button>
           <h2 className="text-xl font-bold mb-4 text-foreground font-sans">RFP Submitted!</h2>
-          <div className="text-foreground">Thank you for your submission. Our team will follow up soon.</div>
+          <div className="text-foreground mb-2">Thank you for your submission. Our team will follow up soon.</div>
+          <div className="text-foreground mb-2">Asana Link: <a href="#" className="underline text-blue-400">View Task</a></div>
+          <div className="text-foreground">Google Slides Link: <span className="italic text-muted">(Coming soon)</span></div>
         </div>
       </div>
     );
@@ -153,7 +148,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
               <span className="font-semibold text-foreground">Audiences:</span>
               <div className="flex flex-wrap gap-2 mt-1">
                 {selectedAudiences.map(aud => (
-                  <span key={aud} className="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium">{audienceTaxonomyOptions.find(o => o.value === aud)?.label || aud}</span>
+                  <span key={aud} className="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium">{audienceTaxonomy.find(o => o.id === aud)?.name || aud}</span>
                 ))}
               </div>
             </div>
@@ -185,10 +180,6 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
               <span className="font-semibold text-foreground">Custom Reporting:</span>
               <div className="bg-slate-100 text-foreground px-3 py-2 rounded text-xs font-mono mt-1">{customReporting}</div>
             </div>
-          </div>
-          <div className="flex items-center gap-2 mb-4">
-            <input type="checkbox" id="useApi" checked={useApi} onChange={() => setUseApi(v => !v)} />
-            <label htmlFor="useApi" className="text-foreground">Submit via API (recommended)</label>
           </div>
           <div className="flex gap-2">
             <button className="bg-card text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleBack}>Back</button>
@@ -239,7 +230,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
           {currentStep.label === 'Deal Settings' && (
             <>
               <ChipSelect
-                options={audienceTaxonomyOptions}
+                options={audienceTaxonomy.map(aud => ({ value: aud.id, label: aud.name }))}
                 selected={selectedAudiences}
                 onChange={setSelectedAudiences}
                 label="Select Audiences"
