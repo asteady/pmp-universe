@@ -89,23 +89,23 @@ export function DailyDigestModal({ isOpen, onClose }: DailyDigestModalProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-4xl bg-dark-200 border border-neon-blue/30 rounded-2xl shadow-2xl glow-ring overflow-hidden"
+            className="relative w-full max-w-4xl bg-card border border-accent/30 rounded-2xl shadow-2xl glow-ring overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-neon-blue/20 bg-gradient-to-r from-dark-300 to-dark-200">
+            <div className="flex items-center justify-between p-6 border-b border-accent/20 bg-gradient-to-r from-muted to-card">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-neon-blue to-cyan-500 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-accent to-primary flex items-center justify-center">
                   <Calendar className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-white">Daily Digest</h2>
-                  <p className="text-gray-400">Your campaign performance summary</p>
+                  <h2 className="text-2xl font-bold text-foreground">Daily Digest</h2>
+                  <p className="text-muted">Your campaign performance summary</p>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-gray-700/50"
+                className="p-2 text-muted hover:text-foreground transition-colors rounded-lg hover:bg-muted/50"
               >
                 <X className="w-6 h-6" />
               </button>

@@ -123,18 +123,18 @@ export function PerformancePulse({ className = '' }: PerformancePulseProps) {
   }
 
   return (
-    <div className={`futuristic-card p-6 ${className}`}>
+    <div className={`futuristic-card p-6 ${className} bg-card text-foreground`}>
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-neon-blue to-cyan-500 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-accent to-primary flex items-center justify-center">
             <Zap className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-white">Performance Pulse</h3>
-            <p className="text-sm text-gray-400">Real-time KPI monitoring and insights</p>
+            <h3 className="text-xl font-bold text-foreground">Performance Pulse</h3>
+            <p className="text-sm text-muted">Real-time KPI monitoring and insights</p>
           </div>
         </div>
-        <div className="flex items-center space-x-2 text-sm text-gray-400">
+        <div className="flex items-center space-x-2 text-sm text-muted">
           <div className="flex items-center space-x-1">
             <div className="w-3 h-3 rounded-full bg-neon-green"></div>
             <span>Exceeding</span>

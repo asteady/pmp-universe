@@ -26,6 +26,7 @@ export type Deal = {
   surveys?: string[];
   seasonal?: string[];
   tentpole?: string[];
+  pois?: string[];
 };
 
 export const evergreenPMPs: Deal[] = [

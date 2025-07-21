@@ -169,7 +169,7 @@ const GuruPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#121B30] via-[#69101A] to-[#121B30]">
+    <div className="min-h-screen bg-background text-foreground">
       <main className="p-8 min-h-screen">
         {/* Header */}
         <motion.div
@@ -178,13 +178,13 @@ const GuruPage = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-8"
         >
-          <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-[#FF3CAC] via-[#00FFB7] to-[#FFEF00] bg-clip-text text-transparent">
+          <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
             GURU
           </h1>
-          <h2 className="text-2xl font-semibold text-[#F8F8FF] mb-6">
+          <h2 className="text-2xl font-semibold text-foreground mb-6">
             Knowledge Hub & Resources
           </h2>
-          <p className="text-[#C8BCD1] max-w-2xl mx-auto">
+          <p className="text-muted max-w-2xl mx-auto">
             Your comprehensive guide to the PMP Universe platform. Find answers to frequently asked questions, 
             access documentation, and discover resources to maximize your success.
           </p>

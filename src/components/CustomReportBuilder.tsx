@@ -119,7 +119,7 @@ export function CustomReportBuilder({ className = '' }: CustomReportBuilderProps
         animate={{ opacity: 1, scale: 1 }}
         className={`absolute border-2 rounded-lg p-4 cursor-pointer transition-all duration-200 ${
           isSelected 
-            ? 'border-neon-blue bg-neon-blue/10' 
+            ? 'border-accent bg-accent/10' 
             : 'border-gray-600 bg-dark-200 hover:border-gray-500'
         }`}
         style={{
@@ -157,25 +157,25 @@ export function CustomReportBuilder({ className = '' }: CustomReportBuilderProps
         <div className="flex-1 flex items-center justify-center">
           {component.type === 'metric' && (
             <div className="text-center">
-              <div className="text-2xl font-bold text-neon-blue">26.4M</div>
+              <div className="text-2xl font-bold text-accent">26.4M</div>
               <div className="text-xs text-gray-400">Impressions</div>
             </div>
           )}
           {component.type === 'chart' && (
             <div className="text-center">
-              <BarChart3 className="w-8 h-8 text-neon-green mx-auto mb-2" />
+              <BarChart3 className="w-8 h-8 text-primary mx-auto mb-2" />
               <div className="text-xs text-gray-400">Chart Component</div>
             </div>
           )}
           {component.type === 'table' && (
             <div className="text-center">
-              <TrendingUp className="w-8 h-8 text-neon-purple mx-auto mb-2" />
+              <TrendingUp className="w-8 h-8 text-purple mx-auto mb-2" />
               <div className="text-xs text-gray-400">Data Table</div>
             </div>
           )}
           {component.type === 'map' && (
             <div className="text-center">
-              <Map className="w-8 h-8 text-neon-pink mx-auto mb-2" />
+              <Map className="w-8 h-8 text-pink mx-auto mb-2" />
               <div className="text-xs text-gray-400">Interactive Map</div>
             </div>
           )}
@@ -194,7 +194,7 @@ export function CustomReportBuilder({ className = '' }: CustomReportBuilderProps
     <div className={`futuristic-card p-6 ${className}`}>
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-neon-purple to-pink-500 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-purple to-pink-500 flex items-center justify-center">
             <BarChart3 className="w-5 h-5 text-white" />
           </div>
           <div>
@@ -202,7 +202,7 @@ export function CustomReportBuilder({ className = '' }: CustomReportBuilderProps
               type="text"
               value={reportName}
               onChange={(e) => setReportName(e.target.value)}
-              className="text-xl font-bold text-white bg-transparent border-none outline-none focus:ring-2 focus:ring-neon-blue rounded px-2"
+              className="text-xl font-bold text-white bg-transparent border-none outline-none focus:ring-2 focus:ring-accent rounded px-2"
             />
             <p className="text-sm text-gray-400">Custom report builder</p>
           </div>
@@ -210,14 +210,14 @@ export function CustomReportBuilder({ className = '' }: CustomReportBuilderProps
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setShowComponentPanel(!showComponentPanel)}
-            className="px-4 py-2 bg-neon-blue text-white rounded-lg font-medium hover:bg-neon-green transition-all flex items-center space-x-2"
+            className="px-4 py-2 bg-accent text-white rounded-lg font-medium hover:bg-primary transition-all flex items-center space-x-2"
           >
             <Plus className="w-4 h-4" />
             <span>Add Component</span>
           </button>
           <button
             onClick={exportReport}
-            className="px-4 py-2 bg-neon-green text-white rounded-lg font-medium hover:bg-neon-blue transition-all flex items-center space-x-2"
+            className="px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-accent transition-all flex items-center space-x-2"
           >
             <Download className="w-4 h-4" />
             <span>Export</span>
@@ -226,7 +226,7 @@ export function CustomReportBuilder({ className = '' }: CustomReportBuilderProps
       </div>
 
       {showMaxAlert && (
-        <div className="mb-4 p-3 rounded-lg bg-neon-pink/20 border border-neon-pink text-neon-pink text-center font-semibold shadow-lg">
+        <div className="mb-4 p-3 rounded-lg bg-pink/20 border border-pink text-pink text-center font-semibold shadow-lg">
           Maximum visible components reached. Please remove a component to add more.
         </div>
       )}
@@ -242,10 +242,10 @@ export function CustomReportBuilder({ className = '' }: CustomReportBuilderProps
                   <button
                     key={comp.type}
                     onClick={() => addComponent(comp.type as ReportComponent['type'])}
-                    className="w-full p-3 text-left bg-dark-200 hover:bg-dark-300 rounded-lg transition-colors border border-gray-600 hover:border-neon-blue"
+                    className="w-full p-3 text-left bg-dark-200 hover:bg-dark-300 rounded-lg transition-colors border border-gray-600 hover:border-accent"
                   >
                     <div className="flex items-center space-x-3">
-                      <comp.icon className="w-5 h-5 text-neon-blue" />
+                      <comp.icon className="w-5 h-5 text-accent" />
                       <div>
                         <div className="font-medium text-white">{comp.label}</div>
                         <div className="text-xs text-gray-400">{comp.description}</div>
@@ -263,12 +263,12 @@ export function CustomReportBuilder({ className = '' }: CustomReportBuilderProps
           {components.length === 0 ? (
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
-                <BarChart3 className="w-16 h-16 text-gray-500 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-400 mb-2">Empty Report</h3>
-                <p className="text-sm text-gray-500 mb-4">Add components to build your custom report</p>
+                <BarChart3 className="w-16 h-16 text-muted mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-muted mb-2">Empty Report</h3>
+                <p className="text-sm text-muted mb-4">Add components to build your custom report</p>
                 <button
                   onClick={() => setShowComponentPanel(true)}
-                  className="px-4 py-2 bg-neon-blue text-white rounded-lg font-medium hover:bg-neon-green transition-all flex items-center space-x-2 mx-auto"
+                  className="px-4 py-2 bg-accent text-white rounded-lg font-medium hover:bg-primary transition-all flex items-center space-x-2 mx-auto"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Add First Component</span>
@@ -298,7 +298,7 @@ export function CustomReportBuilder({ className = '' }: CustomReportBuilderProps
                 type="text"
                 value={components.find(c => c.id === selectedComponent)?.title || ''}
                 onChange={(e) => updateComponent(selectedComponent, { title: e.target.value })}
-                className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
+                className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
               />
             </div>
             <div>
@@ -312,7 +312,7 @@ export function CustomReportBuilder({ className = '' }: CustomReportBuilderProps
                     width: parseInt(e.target.value)
                   }
                 })}
-                className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
+                className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
               />
             </div>
             <div>
@@ -326,7 +326,7 @@ export function CustomReportBuilder({ className = '' }: CustomReportBuilderProps
                     height: parseInt(e.target.value)
                   }
                 })}
-                className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-neon-blue focus:ring-1 focus:ring-neon-blue transition-colors"
+                className="w-full bg-dark-200 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
               />
             </div>
           </div>
@@ -337,19 +337,19 @@ export function CustomReportBuilder({ className = '' }: CustomReportBuilderProps
       <div className="mt-6 pt-6 border-t border-gray-600">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="text-center">
-            <div className="text-2xl font-bold text-neon-blue">
+            <div className="text-2xl font-bold text-accent">
               {components.length}
             </div>
             <div className="text-sm text-gray-400">Components</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-neon-green">
+            <div className="text-2xl font-bold text-primary">
               {components.filter(c => c.type === 'chart').length}
             </div>
             <div className="text-sm text-gray-400">Charts</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-neon-purple">
+            <div className="text-2xl font-bold text-purple">
               {components.filter(c => c.type === 'metric').length}
             </div>
             <div className="text-sm text-gray-400">Metrics</div>

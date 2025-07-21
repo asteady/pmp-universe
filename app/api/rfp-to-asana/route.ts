@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createAsanaTask } from '@/lib/asana';
+import { createAsanaTask } from '../../../lib/asana';
 
 export async function POST(request: NextRequest) {
   try {

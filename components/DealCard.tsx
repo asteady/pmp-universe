@@ -31,6 +31,7 @@ type Deal = {
   surveys?: string[];
   seasonal?: string[];
   tentpole?: string[];
+  pois?: string[]; // Added for POIs
 };
 
 const tabList = [
@@ -258,37 +259,51 @@ const DealCard = ({ deal }: { deal: Deal }) => {
       {/* Compact Front Card */}
       <motion.div 
         whileHover={{ scale: 1.02, y: -5 }}
-        className="bg-gradient-to-br from-[#121B30] to-[#69101A] rounded-xl p-4 border border-[#1B6CA8]/30 hover:border-[#00FFB7]/50 transition-all duration-300 hover:shadow-2xl hover:shadow-[#00FFB7]/20 group"
+        className="bg-card rounded-xl p-4 border border-border transition-all duration-300 hover:shadow-2xl group"
       >
         {/* Type Badge */}
         <div className="flex items-center justify-between mb-3">
-          <span className={`px-3 py-1 rounded-full text-xs font-semibold text-[#121B30] bg-gradient-to-r ${getTypeColor(deal.type)}`}>
+          <span className={`px-3 py-1 rounded-full text-xs font-semibold text-primary bg-gradient-to-r ${getTypeColor(deal.type)}`}>
             {deal.type}
           </span>
         </div>
 
         {/* Deal Name */}
-        <h3 className="text-lg font-bold text-[#F8F8FF] mb-3 group-hover:text-[#00FFB7] transition-colors">
+        <h3 className="text-lg font-bold text-foreground mb-3 group-hover:text-accent transition-colors">
           {deal.name}
         </h3>
 
         {/* Category Box */}
-        <div className="bg-gradient-to-r from-[#1B6CA8]/20 to-[#00FFF7]/20 rounded-lg p-3 mb-4 border border-[#1B6CA8]/30">
+        <div className="bg-muted rounded-lg p-3 mb-4 border border-border">
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-sm font-semibold text-[#F8F8FF]">{deal.category}</span>
+            <span className="text-sm font-semibold text-foreground">{deal.category}</span>
             {deal.subCategory && (
-              <span className="text-xs text-[#A239CA] bg-[#A239CA]/20 px-2 py-1 rounded">
+              <span className="text-xs text-accent bg-accent/20 px-2 py-1 rounded">
                 {deal.subCategory}
               </span>
             )}
           </div>
-          <p className="text-[#C8BCD1] text-sm mb-2">
+          <p className="text-muted text-sm mb-2">
             {deal.description.length > 100 ? `${deal.description.substring(0, 100)}...` : deal.description}
           </p>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-[#A239CA]">{deal.scale}</span>
+            <span className="text-xs text-accent">{deal.scale}</span>
           </div>
         </div>
+
+        {/* POIs/Benefits Checkmarks - keep on one line, allow horizontal scroll if needed */}
+        <div className="flex gap-2 mb-4 overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-accent/40 scrollbar-track-muted/20">
+          {deal.pois?.map((poi, idx) => (
+            <span key={idx} className="flex items-center gap-1 px-2 py-1 rounded-full bg-accent/10 text-accent text-xs font-medium">
+              ✓ {poi}
+            </span>
+          ))}
+        </div>
+
+        {/* Tooltip improvements: make tooltips wider and more readable */}
+        {/* TODO: Refactor tooltip component to use min-w-[200px] max-w-[320px] text-sm p-2 rounded bg-muted text-foreground shadow-lg */}
+
+        {/* TODO: Refactor to provide unique POIs, survey questions, creative examples, and performance metrics for each deal */}
 
         {/* View Details Button */}
         <button 
@@ -363,11 +378,11 @@ const DealCard = ({ deal }: { deal: Deal }) => {
                 {tab === 'Overview' && (
                   <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="bg-[#1B6CA8]/10 rounded-lg p-4 border border-[#1B6CA8]/30">
+                      <div className="bg-muted/10 rounded-lg p-4 border border-border">
                         <h4 className="text-lg font-semibold text-[#F8F8FF] mb-3">Scale & Reach</h4>
                         <p className="text-[#C8BCD1]">{deal.scale}</p>
                       </div>
-                      <div className="bg-[#1B6CA8]/10 rounded-lg p-4 border border-[#1B6CA8]/30">
+                      <div className="bg-muted/10 rounded-lg p-4 border border-border">
                         <h4 className="text-lg font-semibold text-[#F8F8FF] mb-3">Performance</h4>
                         <div className="space-y-2">
                           <div className="flex justify-between">
@@ -385,7 +400,7 @@ const DealCard = ({ deal }: { deal: Deal }) => {
                         </div>
                       </div>
                     </div>
-                    <div className="bg-[#1B6CA8]/10 rounded-lg p-4 border border-[#1B6CA8]/30">
+                    <div className="bg-muted/10 rounded-lg p-4 border border-border">
                       <h4 className="text-lg font-semibold text-[#F8F8FF] mb-3">Use Cases</h4>
                       <p className="text-[#C8BCD1]">Ideal for brands looking to {deal.category.toLowerCase()} with {deal.type.toLowerCase()} performance and {deal.scale.toLowerCase()} scale.</p>
                     </div>
@@ -394,7 +409,7 @@ const DealCard = ({ deal }: { deal: Deal }) => {
 
                 {tab === 'Data' && (
                   <div className="space-y-6">
-                    <div className="bg-[#1B6CA8]/10 rounded-lg p-4 border border-[#1B6CA8]/30">
+                    <div className="bg-muted/10 rounded-lg p-4 border border-border">
                       <h4 className="text-lg font-semibold text-[#F8F8FF] mb-3">Targeting Signals</h4>
                       <p className="text-[#C8BCD1] mb-3">Polygonal Geofencing Technology of POIs (Gimbal Location SDK)</p>
                       <div className="flex flex-wrap gap-2 mb-4">
@@ -408,7 +423,7 @@ const DealCard = ({ deal }: { deal: Deal }) => {
                       {/* Dynamic POI Examples */}
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
                         {dynamicContent.poiExamples.map((poi, index) => (
-                          <div key={index} className="bg-[#1B6CA8]/20 rounded p-3 border border-[#1B6CA8]/30">
+                          <div key={index} className="bg-muted/20 rounded p-3 border border-border">
                             <h5 className="text-[#F8F8FF] font-semibold mb-2">{poi.title}</h5>
                             <p className="text-[#C8BCD1] text-sm">{poi.description}</p>
                           </div>
@@ -416,12 +431,12 @@ const DealCard = ({ deal }: { deal: Deal }) => {
                       </div>
                     </div>
                     
-                    <div className="bg-[#1B6CA8]/10 rounded-lg p-4 border border-[#1B6CA8]/30">
+                    <div className="bg-muted/10 rounded-lg p-4 border border-border">
                       <h4 className="text-lg font-semibold text-[#F8F8FF] mb-3">Survey Questions</h4>
                       <p className="text-[#C8BCD1] mb-3">TrueX Ads SDK</p>
                       <div className="space-y-3">
                         {dynamicContent.surveyQuestions.map((question, index) => (
-                          <div key={index} className="bg-[#1B6CA8]/20 rounded p-3 border border-[#1B6CA8]/30">
+                          <div key={index} className="bg-muted/20 rounded p-3 border border-border">
                             <span className="text-[#00FFB7] font-semibold">{index + 1}.</span>
                             <span className="text-[#C8BCD1] ml-2">{question}</span>
                           </div>
@@ -435,7 +450,7 @@ const DealCard = ({ deal }: { deal: Deal }) => {
                   <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {dynamicContent.creativeExamples.slice(0, 2).map((creative, index) => (
-                        <div key={index} className="bg-[#1B6CA8]/10 rounded-lg p-4 border border-[#1B6CA8]/30">
+                        <div key={index} className="bg-muted/10 rounded-lg p-4 border border-border">
                           <h4 className="text-lg font-semibold text-[#F8F8FF] mb-3">{creative.title}</h4>
                           <p className="text-[#C8BCD1] text-sm mb-3">{creative.description}</p>
                           <div className="bg-gradient-to-r from-[#FF3CAC]/20 to-[#C77DFF]/20 rounded p-3 border border-[#FF3CAC]/30">
@@ -446,11 +461,11 @@ const DealCard = ({ deal }: { deal: Deal }) => {
                     </div>
                     
                     {/* Additional Creative Examples */}
-                    <div className="bg-[#1B6CA8]/10 rounded-lg p-4 border border-[#1B6CA8]/30">
+                    <div className="bg-muted/10 rounded-lg p-4 border border-border">
                       <h4 className="text-lg font-semibold text-[#F8F8FF] mb-3">Creative Formats</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {dynamicContent.creativeExamples.slice(2).map((creative, index) => (
-                          <div key={index} className="bg-[#1B6CA8]/20 rounded p-3 border border-[#1B6CA8]/30">
+                          <div key={index} className="bg-muted/20 rounded p-3 border border-border">
                             <h5 className="text-[#F8F8FF] font-semibold mb-2">{creative.title}</h5>
                             <p className="text-[#C8BCD1] text-sm mb-2">{creative.description}</p>
                             <p className="text-[#A239CA] text-xs">{creative.preview}</p>
@@ -463,7 +478,7 @@ const DealCard = ({ deal }: { deal: Deal }) => {
 
                 {tab === 'Performance' && (
                   <div className="space-y-6">
-                    <div className="bg-[#1B6CA8]/10 rounded-lg p-4 border border-[#1B6CA8]/30">
+                    <div className="bg-muted/10 rounded-lg p-4 border border-border">
                       <h4 className="text-lg font-semibold text-[#F8F8FF] mb-3">Channel & Device Mix</h4>
                       <p className="text-[#C8BCD1] mb-4">Optimized across Video, Display, Audio, dOOH, and Native with device-specific dynamic creative adaptations for CTV, Mobile, Digital Signage, Desktop, and more.</p>
                       
@@ -521,43 +536,43 @@ const DealCard = ({ deal }: { deal: Deal }) => {
                       
                       {/* Dynamic Performance Metrics with Slider Charts */}
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div className="bg-[#1B6CA8]/20 rounded-lg p-4 text-center border border-[#1B6CA8]/30">
+                        <div className="bg-muted/20 rounded-lg p-4 text-center border border-border">
                           <div className="text-2xl font-bold text-[#00FFB7]">{vcr}%</div>
                           <div className="text-[#C8BCD1] text-sm">Video Completion Rate</div>
-                          <div className="w-full bg-[#1B6CA8]/30 rounded-full h-2 mt-2">
+                          <div className="w-full bg-muted/30 rounded-full h-2 mt-2">
                             <div className="bg-[#00FFB7] h-2 rounded-full" style={{ width: `${vcr}%` }}></div>
                           </div>
                         </div>
-                        <div className="bg-[#1B6CA8]/20 rounded-lg p-4 text-center border border-[#1B6CA8]/30">
+                        <div className="bg-muted/20 rounded-lg p-4 text-center border border-border">
                           <div className="text-2xl font-bold text-[#FF3CAC]">{ctr}%</div>
                           <div className="text-[#C8BCD1] text-sm">Click-Through Rate</div>
-                          <div className="w-full bg-[#1B6CA8]/30 rounded-full h-2 mt-2">
+                          <div className="w-full bg-muted/30 rounded-full h-2 mt-2">
                             <div className="bg-[#FF3CAC] h-2 rounded-full" style={{ width: `${ctr * 100}%` }}></div>
                           </div>
                         </div>
                         {selectedChannels.includes('Audio') && (
-                          <div className="bg-[#1B6CA8]/20 rounded-lg p-4 text-center border border-[#1B6CA8]/30">
+                          <div className="bg-muted/20 rounded-lg p-4 text-center border border-border">
                             <div className="text-2xl font-bold text-[#FFEF00]">{acr}%</div>
                             <div className="text-[#C8BCD1] text-sm">Audio Completion Rate</div>
-                            <div className="w-full bg-[#1B6CA8]/30 rounded-full h-2 mt-2">
+                            <div className="w-full bg-muted/30 rounded-full h-2 mt-2">
                               <div className="bg-[#FFEF00] h-2 rounded-full" style={{ width: `${acr}%` }}></div>
                             </div>
                           </div>
                         )}
                         {selectedChannels.includes('dOOH') && (
-                          <div className="bg-[#1B6CA8]/20 rounded-lg p-4 text-center border border-[#1B6CA8]/30">
+                          <div className="bg-muted/20 rounded-lg p-4 text-center border border-border">
                             <div className="text-2xl font-bold text-[#A239CA]">{viewShed}%</div>
                             <div className="text-[#C8BCD1] text-sm">View Shed Viewability</div>
-                            <div className="w-full bg-[#1B6CA8]/30 rounded-full h-2 mt-2">
+                            <div className="w-full bg-muted/30 rounded-full h-2 mt-2">
                               <div className="bg-[#A239CA] h-2 rounded-full" style={{ width: `${viewShed}%` }}></div>
                             </div>
                           </div>
                         )}
-                        <div className="bg-[#1B6CA8]/20 rounded-lg p-4 text-center border border-[#1B6CA8]/30">
+                        <div className="bg-muted/20 rounded-lg p-4 text-center border border-border">
                           <div className="text-2xl font-bold text-[#FFEF00]">{minBidRange}</div>
                           <div className="text-[#C8BCD1] text-sm">Min Bid Range ($CPM)</div>
                         </div>
-                        <div className="bg-[#1B6CA8]/20 rounded-lg p-4 text-center border border-[#1B6CA8]/30">
+                        <div className="bg-muted/20 rounded-lg p-4 text-center border border-border">
                           <div className="text-2xl font-bold text-[#A239CA]">{avgECPM}</div>
                           <div className="text-[#C8BCD1] text-sm">Avg Effective $CPM</div>
                         </div>
@@ -571,7 +586,7 @@ const DealCard = ({ deal }: { deal: Deal }) => {
               <div className="p-6 border-t border-[#1B6CA8]/30 bg-[#1B6CA8]/5">
                 <div className="flex flex-wrap gap-2 mb-4 justify-center">
                   {valueProps.map((vp) => (
-                    <span key={vp} className="bg-gradient-to-r from-[#00FFB7]/10 to-[#00FFF7]/10 text-[#00FFB7] px-3 py-1 rounded-full text-sm font-semibold border border-[#00FFB7]/30 whitespace-nowrap">
+                    <span key={vp} className="bg-accent/10 text-accent px-3 py-1 rounded-full text-sm font-semibold border border-accent/30 whitespace-nowrap">
                       ✅ {vp}
                     </span>
                   ))}

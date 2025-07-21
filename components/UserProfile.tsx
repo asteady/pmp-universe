@@ -109,8 +109,8 @@ const UserProfile: React.FC<UserProfileProps> = ({
         {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
       </motion.button>
 
-      {/* Return to Super Admin View Toggle (only for Super Admin in client view) */}
-      {currentUser.permission === 'Super Admin' && isClientView && onToggleClientView && (
+      {/* Return to Super Admin View Toggle (always show in client view) */}
+      {isClientView && onToggleClientView && (
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}

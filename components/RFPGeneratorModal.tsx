@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createAsanaTask } from '../lib/asana';
 
 const requestTypes = [
   { value: 'deal-id', label: 'Deal ID Only' },
@@ -7,31 +8,24 @@ const requestTypes = [
 ];
 
 const steps = [
-  { label: 'Request Type', fields: ['requestType'] },
-  { label: 'Contact Info', fields: ['name', 'email', 'agency'] },
-  { label: 'Brands & Description', fields: ['brands', 'description'] },
-  { label: 'Channels & Creative', fields: ['channels', 'creativeTypes'] },
-  { label: 'Audiences', fields: ['audiences'] },
-  { label: 'Lists & Geos', fields: ['inclusionList', 'exclusionList', 'geos'] },
-  { label: 'Measurement & Reporting', fields: ['measurement', 'customReporting'] },
+  { label: 'Agency Name, Advertiser/Brand Name, Description', fields: ['agencyName', 'advertiserName', 'description'] },
+  { label: 'Audience Taxonomy, Custom Audience, Creatives, Device Type(s), Reporting & Measurement', fields: ['audienceTaxonomy', 'customAudience', 'creatives', 'deviceTypes', 'measurement', 'customReporting'] },
+  { label: 'Review & Submit', fields: [''] },
 ];
 
 const fieldLabels: Record<string, string> = {
-  requestType: 'What do you need?',
-  name: 'Name',
-  email: 'Email',
-  agency: 'Agency',
-  brands: 'Brand(s)',
+  agencyName: 'Agency Name',
+  advertiserName: 'Advertiser/Brand Name',
   description: 'Description',
-  channels: 'Channel(s)',
-  creativeTypes: 'Creative Type(s)',
-  audiences: 'Audience(s)',
-  inclusionList: 'Inclusion List',
-  exclusionList: 'Exclusion List',
-  geos: 'Geos',
+  audienceTaxonomy: 'Audience Taxonomy',
+  customAudience: 'Custom Audience',
+  creatives: 'Creatives',
+  deviceTypes: 'Device Type(s)',
   measurement: 'Measurement (Arrival, etc.)',
   customReporting: 'Custom Reporting',
 };
+
+const RFP_PROPOSAL_SECTION_GID = process.env.ASANA_RFP_PROPOSAL_SECTION_GID || '1209264958990943';
 
 const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
   const [step, setStep] = useState(0);
@@ -39,6 +33,11 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
   const [submitted, setSubmitted] = useState(false);
   const [useApi, setUseApi] = useState(true); // Toggle for API vs direct
   const [resultMsg, setResultMsg] = useState<string | null>(null);
+  // Add error state and helper text for all required fields
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   // Conditional logic: Only show relevant steps based on requestType
   const getVisibleSteps = () => {
@@ -55,37 +54,44 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
   };
   const visibleSteps = getVisibleSteps();
 
+  const validateStep = () => {
+    const currentStepFields = visibleSteps[step]?.fields || [];
+    const newErrors: Record<string, string> = {};
+    currentStepFields.forEach(field => {
+      if (["agencyName", "advertiserName", "description", "audienceTaxonomy", "customAudience", "creatives", "deviceTypes"].includes(field)) {
+        if (!form[field] || (Array.isArray(form[field]) && form[field].length === 0)) {
+          newErrors[field] = 'This field is required.';
+        }
+      }
+    });
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleNext = () => setStep(s => Math.min(s + 1, visibleSteps.length));
+  const handleNext = () => {
+    if (validateStep()) {
+      setStep(s => Math.min(s + 1, visibleSteps.length));
+    }
+  };
   const handleBack = () => setStep(s => Math.max(s - 1, 0));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    let resultMsg = '';
+    setSubmitting(true);
+    setSubmitError('');
+    setSubmitSuccess(false);
     try {
-      if (useApi) {
-        // Submit via server-side API
-        const res = await fetch('/api/rfp-to-asana', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(form),
-        });
-        const data = await res.json();
-        resultMsg = data.success ? 'RFP submitted to Asana!' : `Error: ${data.error}`;
-      } else {
-        // Direct client-side Asana call
-        const { createAsanaTask } = await import('@/lib/asana');
-        await createAsanaTask(form);
-        resultMsg = 'RFP submitted to Asana (client-side)!';
-      }
+      await createAsanaTask(form, { sectionGid: RFP_PROPOSAL_SECTION_GID });
+      setSubmitSuccess(true);
     } catch (err: any) {
-      resultMsg = `Error: ${err.message}`;
+      setSubmitError(err.message || 'Failed to submit to Asana.');
+    } finally {
+      setSubmitting(false);
     }
-    setResultMsg(resultMsg);
   };
 
   if (!open) return null;
@@ -144,17 +150,29 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
           <div className="mb-2 text-infillion-dark font-semibold">Step {step + 1} of {visibleSteps.length + 1}: {currentStep.label}</div>
           {currentStep.fields.map(field => (
             <div key={field} className="flex flex-col">
-              <label className="mb-1 text-infillion-dark font-sans">{fieldLabels[field]}</label>
+              <label htmlFor={field} className="mb-1 text-infillion-dark font-sans">
+                {fieldLabels[field]}
+                {field === 'requestType' ? (
+                  <span className="ml-1 text-xs text-gray-500" aria-label="Select the type of RFP you need"> (Select)</span>
+                ) : field === 'description' || field === 'customReporting' ? (
+                  <span className="ml-1 text-xs text-gray-500" aria-label="Enter a description for the RFP"> (Optional)</span>
+                ) : (
+                  <span className="ml-1 text-xs text-gray-500" aria-label="Enter a value for the field"> (Required)</span>
+                )}
+              </label>
               {field === 'requestType' ? (
-                <select name="requestType" value={form.requestType || ''} onChange={handleChange} className="p-2 border rounded text-infillion-dark" required>
+                <select name="requestType" value={form.requestType || ''} onChange={handleChange} className="p-2 border rounded text-infillion-dark" required aria-required="true" aria-invalid={submitted && !form.requestType}>
                   <option value="">Select...</option>
-                  {requestTypes.map(rt => <option key={rt.value} value={rt.value}>{rt.label}</option>)}
+                  {requestTypes.map(rt => (
+                    <option key={rt.value} value={rt.value} aria-label={rt.label}>{rt.label}</option>
+                  ))}
                 </select>
               ) : field === 'description' || field === 'customReporting' ? (
-                <textarea name={field} value={form[field] || ''} onChange={handleChange} className="p-2 border rounded text-infillion-dark" />
+                <textarea name={field} value={form[field] || ''} onChange={handleChange} className="p-2 border rounded text-infillion-dark" aria-label={`Enter ${fieldLabels[field]}`} />
               ) : (
-                <input name={field} value={form[field] || ''} onChange={handleChange} className="p-2 border rounded text-infillion-dark" />
+                <input name={field} value={form[field] || ''} onChange={handleChange} aria-label={`Enter ${fieldLabels[field]}`} aria-required={true} aria-invalid={!!errors[field]} className={`p-2 border rounded text-infillion-dark ${errors[field] ? 'border-red-500' : ''}`} />
               )}
+              {errors[field] && <span className="text-red-500 text-xs mt-1">{errors[field]}</span>}
             </div>
           ))}
           <div className="flex gap-2 mt-4">

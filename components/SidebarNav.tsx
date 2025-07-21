@@ -76,14 +76,6 @@ export default function SidebarNav({
     return true;
   });
 
-  const handleNavClick = (path: string, isSpecial?: boolean) => {
-    if (isSpecial) {
-      setIsGuruOpen(!isGuruOpen);
-    } else {
-      onNavigate(path);
-    }
-  };
-
   const guruSections = [
     {
       title: 'FAQ',
@@ -119,33 +111,35 @@ export default function SidebarNav({
     }
   ];
 
+  // Filter Guru/Seismic links for clients and client view
+  const filteredGuruSections = guruSections.map(section => ({
+    ...section,
+    links: (currentUser?.permission === 'Client' || isClientView)
+      ? section.links.filter(link => !link.internal)
+      : section.links
+  }));
+
+  const handleNavClick = (path: string, isSpecial?: boolean) => {
+    if (isSpecial) {
+      setIsGuruOpen(!isGuruOpen);
+    } else {
+      onNavigate(path);
+    }
+  };
+
   return (
-    <div className={`h-screen transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-64'} border-r transition-colors duration-500 ${
-      isDarkMode 
-        ? 'bg-gradient-to-b from-[#121B30] to-[#69101A] text-white border-[#1B6CA8]/30' 
-        : 'bg-gradient-to-b from-[#F8F8FF] to-[#C8BCD1] text-[#121B30] border-[#A239CA]/30'
-    }`}>
+    <div className={`h-screen transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-64'} border-r transition-colors duration-500 bg-background text-foreground border-border`}>
       {/* Header */}
-      <div className={`p-4 border-b transition-colors duration-500 ${
-        isDarkMode ? 'border-[#1B6CA8]/30' : 'border-[#A239CA]/30'
-      }`}>
+      <div className={`p-4 border-b transition-colors duration-500 border-border`}>
         <div className="flex items-center justify-between">
           {!isCollapsed && (
             <div className="flex items-center space-x-3">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${
-                isDarkMode 
-                  ? 'bg-gradient-to-r from-[#FF3CAC] to-[#C77DFF]' 
-                  : 'bg-gradient-to-r from-[#00FFB7] to-[#00FFF7]'
-              }`}>
-                <span className={`font-bold text-sm ${isDarkMode ? 'text-white' : 'text-[#121B30]'}`}>I</span>
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 bg-primary`}>
+                <span className={`font-bold text-sm text-foreground`}>I</span>
               </div>
               <div>
-                <h2 className={`font-bold text-lg transition-colors duration-300 ${
-                  isDarkMode ? 'text-white' : 'text-[#121B30]'
-                }`}>Infillion</h2>
-                <p className={`text-xs transition-colors duration-300 ${
-                  isDarkMode ? 'text-[#C8BCD1]' : 'text-[#69101A]'
-                }`}>PMP Universe</p>
+                <h2 className={`font-bold text-lg transition-colors duration-300 text-foreground`}>Infillion</h2>
+                <p className={`text-xs transition-colors duration-300 text-muted`}>PMP Universe</p>
               </div>
             </div>
           )}
@@ -209,13 +203,13 @@ export default function SidebarNav({
               {/* Guru Dropdown */}
               {item.isSpecial && isGuruOpen && !isCollapsed && (
                 <div className="mt-2 ml-4 space-y-2">
-                  {guruSections.map((section, index) => (
-                    <div key={index} className="bg-[#1B6CA8]/10 rounded-lg p-3 border border-[#1B6CA8]/30">
+                  {filteredGuruSections.map((section, index) => (
+                    <div key={index} className="bg-muted/10 rounded-lg p-3 border border-border">
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-sm">{section.icon}</span>
-                        <h4 className="text-sm font-semibold text-[#F8F8FF]">{section.title}</h4>
+                        <h4 className="text-sm font-semibold text-foreground">{section.title}</h4>
                       </div>
-                      <p className="text-xs text-[#C8BCD1] mb-2">{section.description}</p>
+                      <p className="text-xs text-muted mb-2">{section.description}</p>
                       <div className="space-y-1">
                         {section.links.map((link, linkIndex) => (
                           <a
@@ -223,14 +217,14 @@ export default function SidebarNav({
                             href={link.url}
                             target={link.internal ? "_blank" : "_self"}
                             rel={link.internal ? "noopener noreferrer" : ""}
-                            className={`block text-xs px-2 py-1 rounded hover:bg-[#1B6CA8]/20 transition-colors ${
+                            className={`block text-xs px-2 py-1 rounded hover:bg-accent/20 transition-colors ${
                               link.internal 
-                                ? 'text-[#00FFB7] hover:text-[#00FFF7]' 
-                                : 'text-[#C8BCD1] hover:text-[#F8F8FF]'
+                                ? 'text-accent hover:text-accent' 
+                                : 'text-muted hover:text-foreground'
                             }`}
                           >
                             {link.name}
-                            {link.internal && <span className="ml-1 text-[#A239CA]">🔗</span>}
+                            {link.internal && <span className="ml-1 text-accent">🔗</span>}
                           </a>
                         ))}
                       </div>

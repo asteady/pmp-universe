@@ -7,6 +7,7 @@ import { seasonalPMPs } from '../../data/seasonalPMPs';
 import { customPMPs } from '../../data/customPMPs';
 import { filterPMPsByFlags } from '../../lib/featureFlags';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRef } from 'react';
 
 // Combine all PMP data and filter based on feature flags
 const allPMPs = filterPMPsByFlags([...evergreenPMPs, ...seasonalPMPs, ...customPMPs]);
@@ -23,11 +24,22 @@ const pmpData = {
   deals: sortedPMPs
 };
 
+const typewriterPhrases = [
+  'Curated PMPs for every campaign.',
+  'Activate across any DSP or SSP.',
+  'Audience insights, creative, and performance.',
+  'Your universe of premium programmatic.'];
+
 const PMPUniversePage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('All Deals');
   const [filteredDeals, setFilteredDeals] = useState(sortedPMPs);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [typewriterIndex, setTypewriterIndex] = useState(0);
+  const [typewriterText, setTypewriterText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [typingSpeed, setTypingSpeed] = useState(80);
+  const typewriterTimeout = useRef<NodeJS.Timeout | null>(null);
 
   // Enhanced search and filter functionality
   useEffect(() => {
@@ -102,6 +114,34 @@ const PMPUniversePage = () => {
     setFilteredDeals(filtered);
   }, [searchQuery, selectedFilter, sortedPMPs]);
 
+  useEffect(() => {
+    const handleType = () => {
+      const currentPhrase = typewriterPhrases[typewriterIndex % typewriterPhrases.length];
+      if (!isDeleting) {
+        setTypewriterText(currentPhrase.substring(0, typewriterText.length + 1));
+        if (typewriterText.length + 1 === currentPhrase.length) {
+          setTimeout(() => setIsDeleting(true), 1200);
+        } else {
+          setTypingSpeed(80);
+        }
+      } else {
+        setTypewriterText(currentPhrase.substring(0, typewriterText.length - 1));
+        if (typewriterText.length === 0) {
+          setIsDeleting(false);
+          setTypewriterIndex((prev) => prev + 1);
+        } else {
+          setTypingSpeed(40);
+        }
+      }
+    };
+    typewriterTimeout.current = setTimeout(handleType, typingSpeed);
+    return () => {
+      if (typewriterTimeout.current) {
+        clearTimeout(typewriterTimeout.current);
+      }
+    };
+  }, [typewriterText, isDeleting, typewriterIndex]);
+
   const handleFilterChange = (filter: string) => {
     setSelectedFilter(filter);
   };
@@ -145,7 +185,7 @@ const PMPUniversePage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#121B30] via-[#69101A] to-[#121B30]">
+    <div className="min-h-screen bg-background text-foreground">
       <main className="p-8 min-h-screen">
         {/* Enhanced Header */}
         <div className="mb-12">
@@ -155,43 +195,15 @@ const PMPUniversePage = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-8"
           >
-            <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-[#FF3CAC] via-[#00FFB7] to-[#FFEF00] bg-clip-text text-transparent">
+            <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
               THE PMP UNIVERSE
             </h1>
-            <h2 className="text-2xl font-semibold text-[#F8F8FF] mb-6">
-              by INFILLION DIFFERENCE
+            <h2 className="text-xl italic font-semibold text-foreground mb-2">
+              by Infillion
             </h2>
-            
-            {/* Value Proposition Icons */}
-            <div className="flex flex-wrap justify-center gap-4 mb-8">
-              {valueProps.map((prop, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  className="group relative"
-                >
-                  <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${prop.color} flex items-center justify-center text-2xl shadow-lg hover:shadow-2xl transition-all duration-300`}>
-                    {prop.icon}
-                  </div>
-                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none z-50">
-                    <motion.div 
-                      initial={{ scale: 0.8, opacity: 0, y: 10 }}
-                      whileHover={{ scale: 1.02, y: 0 }}
-                      animate={{ scale: 1, opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, ease: "easeOut" }}
-                      className="bg-[#121B30] text-[#F8F8FF] p-6 rounded-2xl shadow-2xl max-w-md text-sm border-2 border-[#1B6CA8]/50 backdrop-blur-sm transform-gpu"
-                    >
-                      <div className="font-semibold mb-3 text-[#00FFB7] text-base leading-tight">{prop.title}</div>
-                      <div className="text-sm text-[#C8BCD1] leading-relaxed">
-                        {prop.title}
-                      </div>
-                    </motion.div>
-                  </div>
-                </motion.div>
-              ))}
+            {/* Animated typewriter text */}
+            <div className="flex justify-center min-h-[2.5rem]">
+              <span className="typewriter-text text-lg font-medium transition-colors duration-300" style={{ color: ['#00FFB7', '#FF3CAC', '#FFEF00', '#A239CA'][typewriterIndex % 4] }}>{typewriterText}&nbsp;</span>
             </div>
           </motion.div>
         </div>
@@ -213,16 +225,16 @@ const PMPUniversePage = () => {
               onBlur={() => setIsSearchFocused(false)}
               className={`w-full px-4 py-4 pl-12 rounded-xl border transition-all duration-300 ${
                 isSearchFocused 
-                  ? 'bg-[#1B6CA8]/20 border-[#00FFB7] shadow-lg shadow-[#00FFB7]/20' 
-                  : 'bg-[#1B6CA8]/10 border-[#1B6CA8]/30'
-              } text-[#F8F8FF] placeholder-[#C8BCD1] focus:outline-none`}
+                  ? 'bg-muted/20 border-primary shadow-lg shadow-primary/20' 
+                  : 'bg-muted/10 border-border'
+              } text-foreground placeholder-muted-foreground focus:outline-none`}
             />
-            <svg className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#C8BCD1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
           <div className="relative group">
-            <button className="px-6 py-4 bg-[#1B6CA8]/20 text-[#F8F8FF] rounded-xl border border-[#1B6CA8]/30 hover:bg-[#1B6CA8]/30 hover:border-[#00FFB7] transition-all duration-300 flex items-center gap-2">
+            <button className="px-6 py-4 bg-muted/20 text-foreground rounded-xl border border-border hover:bg-muted/30 hover:border-primary transition-all duration-300 flex items-center gap-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
               </svg>
@@ -231,36 +243,36 @@ const PMPUniversePage = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
-            <div className="absolute right-0 mt-2 w-64 bg-[#121B30] rounded-xl border border-[#1B6CA8]/30 shadow-xl z-10 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200">
+            <div className="absolute right-0 mt-2 w-64 bg-muted rounded-xl border border-border shadow-xl z-10 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200">
               <div className="p-4">
-                <div className="text-sm text-[#C8BCD1] mb-3">Quick Filters</div>
+                <div className="text-sm text-muted-foreground mb-3">Quick Filters</div>
                 <div className="space-y-2">
                   <button 
                     onClick={() => handleFilterChange('All Deals')}
-                    className={`w-full text-left px-3 py-2 rounded-lg hover:bg-[#1B6CA8]/20 text-sm transition-colors ${
+                    className={`w-full text-left px-3 py-2 rounded-lg hover:bg-muted/20 text-sm transition-colors ${
                       selectedFilter === 'All Deals' 
-                        ? 'bg-gradient-to-r from-[#00FFB7] to-[#00FFF7] text-[#121B30]' 
-                        : 'text-[#F8F8FF]'
+                        ? 'bg-gradient-to-r from-primary to-accent text-foreground' 
+                        : 'text-foreground'
                     }`}
                   >
                     All Deals ({sortedPMPs.length})
                   </button>
                   <button 
                     onClick={() => handleFilterChange('Seasonal PMPs')}
-                    className={`w-full text-left px-3 py-2 rounded-lg hover:bg-[#1B6CA8]/20 text-sm transition-colors ${
+                    className={`w-full text-left px-3 py-2 rounded-lg hover:bg-muted/20 text-sm transition-colors ${
                       selectedFilter === 'Seasonal PMPs' 
-                        ? 'bg-gradient-to-r from-[#00FFB7] to-[#00FFF7] text-[#121B30]' 
-                        : 'text-[#F8F8FF]'
+                        ? 'bg-gradient-to-r from-primary to-accent text-foreground' 
+                        : 'text-foreground'
                     }`}
                   >
                     Seasonal ({seasonalPMPs.length})
                   </button>
                   <button 
                     onClick={() => handleFilterChange('Evergreen PMPs')}
-                    className={`w-full text-left px-3 py-2 rounded-lg hover:bg-[#1B6CA8]/20 text-sm transition-colors ${
+                    className={`w-full text-left px-3 py-2 rounded-lg hover:bg-muted/20 text-sm transition-colors ${
                       selectedFilter === 'Evergreen PMPs' 
-                        ? 'bg-gradient-to-r from-[#00FFB7] to-[#00FFF7] text-[#121B30]' 
-                        : 'text-[#F8F8FF]'
+                        ? 'bg-gradient-to-r from-primary to-accent text-foreground' 
+                        : 'text-foreground'
                     }`}
                   >
                     Evergreen ({evergreenPMPs.length})
@@ -285,8 +297,8 @@ const PMPUniversePage = () => {
             onClick={() => handleCategoryClick('Seasonal PMPs')}
             className={`bg-gradient-to-br rounded-xl p-6 text-white transform transition-all duration-300 hover:shadow-2xl border-2 ${
               selectedFilter === 'Seasonal PMPs'
-                ? 'from-[#FF3CAC] to-[#C77DFF] border-[#FF3CAC] shadow-[#FF3CAC]/30'
-                : 'from-[#1B6CA8] to-[#00FFF7] border-[#1B6CA8]/30 hover:border-[#00FFB7] hover:shadow-[#00FFB7]/25'
+                ? 'from-primary to-accent border-primary shadow-primary/30'
+                : 'from-muted to-primary border-muted/30 hover:border-primary hover:shadow-primary/25'
             }`}
           >
             <div className="flex items-center justify-between mb-4">
@@ -294,7 +306,7 @@ const PMPUniversePage = () => {
               <span className="text-2xl animate-bounce">{pmpData.summary.seasonal.icon}</span>
             </div>
             <h3 className="text-2xl font-semibold mb-1">Seasonal PMPs</h3>
-            <p className="text-blue-100">{pmpData.summary.seasonal.period}</p>
+            <p className="text-primary">{pmpData.summary.seasonal.period}</p>
           </motion.button>
           
           <motion.button
@@ -303,8 +315,8 @@ const PMPUniversePage = () => {
             onClick={() => handleCategoryClick('Evergreen PMPs')}
             className={`bg-gradient-to-br rounded-xl p-6 text-white transform transition-all duration-300 hover:shadow-2xl border-2 ${
               selectedFilter === 'Evergreen PMPs'
-                ? 'from-[#00FFB7] to-[#00FFF7] border-[#00FFB7] shadow-[#00FFB7]/30'
-                : 'from-[#1B6CA8] to-[#00FFF7] border-[#1B6CA8]/30 hover:border-[#00FFB7] hover:shadow-[#00FFB7]/25'
+                ? 'from-primary to-accent border-primary shadow-primary/30'
+                : 'from-muted to-primary border-muted/30 hover:border-primary hover:shadow-primary/25'
             }`}
           >
             <div className="flex items-center justify-between mb-4">
