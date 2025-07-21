@@ -1,3 +1,4 @@
 {
+  "/rfp-generator/page": "app/rfp-generator/page.js",
   "/pmp-universe/page": "app/pmp-universe/page.js"
 }

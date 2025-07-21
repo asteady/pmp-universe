@@ -3,8 +3,21 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// Simple LaunchDarkly simulation
+const isSuperAdmin = () => {
+  // In a real implementation, this would check LaunchDarkly flags
+  // For now, we'll simulate based on URL parameter or localStorage
+  if (typeof window !== 'undefined') {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userRole = urlParams.get('role') || localStorage.getItem('userRole') || 'Super Admin';
+    return userRole === 'Super Admin';
+  }
+  return true; // Default to Super Admin for development
+};
+
 const GuruPage = () => {
   const [activeSection, setActiveSection] = useState('faq');
+  const isAdmin = isSuperAdmin();
 
   const sections = [
     {
@@ -122,6 +135,11 @@ const GuruPage = () => {
     }
   ];
 
+  // Filter documentation data based on user permissions
+  const filteredDocumentationData = isAdmin 
+    ? documentationData 
+    : documentationData.filter(item => !item.internal);
+
   const resourcesData = [
     {
       title: 'PMP Universe Alpha Slides',
@@ -142,7 +160,7 @@ const GuruPage = () => {
       case 'faq':
         return faqData;
       case 'documentation':
-        return documentationData;
+        return filteredDocumentationData;
       case 'resources':
         return resourcesData;
       default:
@@ -236,7 +254,7 @@ const GuruPage = () => {
 
           {activeSection === 'documentation' && (
             <div className="space-y-4">
-              {documentationData.map((doc, index) => (
+              {filteredDocumentationData.map((doc, index) => (
                 <motion.div
                   key={doc.title}
                   initial={{ opacity: 0, y: 20 }}

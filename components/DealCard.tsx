@@ -569,9 +569,9 @@ const DealCard = ({ deal }: { deal: Deal }) => {
 
               {/* Value Props - All on one line */}
               <div className="p-6 border-t border-[#1B6CA8]/30 bg-[#1B6CA8]/5">
-                <div className="flex flex-wrap gap-2 mb-4">
+                <div className="flex flex-wrap gap-2 mb-4 justify-center">
                   {valueProps.map((vp) => (
-                    <span key={vp} className="bg-gradient-to-r from-[#00FFB7]/10 to-[#00FFF7]/10 text-[#00FFB7] px-3 py-1 rounded-full text-sm font-semibold border border-[#00FFB7]/30">
+                    <span key={vp} className="bg-gradient-to-r from-[#00FFB7]/10 to-[#00FFF7]/10 text-[#00FFB7] px-3 py-1 rounded-full text-sm font-semibold border border-[#00FFB7]/30 whitespace-nowrap">
                       ✅ {vp}
                     </span>
                   ))}

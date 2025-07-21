@@ -176,14 +176,16 @@ const PMPUniversePage = () => {
                   <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${prop.color} flex items-center justify-center text-2xl shadow-lg hover:shadow-2xl transition-all duration-300`}>
                     {prop.icon}
                   </div>
-                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-50">
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none z-50">
                     <motion.div 
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      whileHover={{ scale: 1.05 }}
-                      className="bg-[#121B30] text-[#F8F8FF] p-4 rounded-xl shadow-2xl max-w-sm text-sm border-2 border-[#1B6CA8]/50 backdrop-blur-sm"
+                      initial={{ scale: 0.8, opacity: 0, y: 10 }}
+                      whileHover={{ scale: 1.02, y: 0 }}
+                      animate={{ scale: 1, opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, ease: "easeOut" }}
+                      className="bg-[#121B30] text-[#F8F8FF] p-6 rounded-2xl shadow-2xl max-w-md text-sm border-2 border-[#1B6CA8]/50 backdrop-blur-sm transform-gpu"
                     >
-                      <div className="font-semibold mb-2 text-[#00FFB7]">{prop.title}</div>
-                      <div className="text-xs text-[#C8BCD1] leading-relaxed">
+                      <div className="font-semibold mb-3 text-[#00FFB7] text-base leading-tight">{prop.title}</div>
+                      <div className="text-sm text-[#C8BCD1] leading-relaxed">
                         {prop.title}
                       </div>
                     </motion.div>
@@ -263,16 +265,7 @@ const PMPUniversePage = () => {
                   >
                     Evergreen ({evergreenPMPs.length})
                   </button>
-                  <button 
-                    onClick={() => handleFilterChange('Custom PMPs')}
-                    className={`w-full text-left px-3 py-2 rounded-lg hover:bg-[#1B6CA8]/20 text-sm transition-colors ${
-                      selectedFilter === 'Custom PMPs' 
-                        ? 'bg-gradient-to-r from-[#00FFB7] to-[#00FFF7] text-[#121B30]' 
-                        : 'text-[#F8F8FF]'
-                    }`}
-                  >
-                    Custom ({customPMPs.length})
-                  </button>
+
                 </div>
               </div>
             </div>
@@ -284,7 +277,7 @@ const PMPUniversePage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
         >
           <motion.button
             whileHover={{ scale: 1.05, y: -5 }}
@@ -300,7 +293,7 @@ const PMPUniversePage = () => {
               <span className="text-4xl font-bold">{pmpData.summary.seasonal.count}</span>
               <span className="text-2xl animate-bounce">{pmpData.summary.seasonal.icon}</span>
             </div>
-            <h3 className="text-xl font-semibold mb-1">Seasonal PMPs</h3>
+            <h3 className="text-2xl font-semibold mb-1">Seasonal PMPs</h3>
             <p className="text-blue-100">{pmpData.summary.seasonal.period}</p>
           </motion.button>
           
@@ -318,26 +311,8 @@ const PMPUniversePage = () => {
               <span className="text-4xl font-bold">{pmpData.summary.evergreen.count}</span>
               <span className="text-2xl animate-pulse">{pmpData.summary.evergreen.icon}</span>
             </div>
-            <h3 className="text-xl font-semibold mb-1">Evergreen PMPs</h3>
+            <h3 className="text-2xl font-semibold mb-1">Evergreen PMPs</h3>
             <p className="text-green-100">{pmpData.summary.evergreen.period}</p>
-          </motion.button>
-          
-          <motion.button
-            whileHover={{ scale: 1.05, y: -5 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => handleCategoryClick('Custom PMPs')}
-            className={`bg-gradient-to-br rounded-xl p-6 text-white transform transition-all duration-300 hover:shadow-2xl border-2 ${
-              selectedFilter === 'Custom PMPs'
-                ? 'from-[#A239CA] to-[#C77DFF] border-[#A239CA] shadow-[#A239CA]/30'
-                : 'from-[#1B6CA8] to-[#00FFF7] border-[#1B6CA8]/30 hover:border-[#00FFB7] hover:shadow-[#00FFB7]/25'
-            }`}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-4xl font-bold">{pmpData.summary.custom.count}</span>
-              <span className="text-2xl animate-spin">{pmpData.summary.custom.icon}</span>
-            </div>
-            <h3 className="text-xl font-semibold mb-1">Custom PMPs</h3>
-            <p className="text-purple-100">{pmpData.summary.custom.period}</p>
           </motion.button>
         </motion.div>
 

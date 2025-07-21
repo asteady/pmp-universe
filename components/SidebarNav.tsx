@@ -185,7 +185,9 @@ export default function SidebarNav({
                       ? 'group-hover:bg-[#1B6CA8]/30'
                       : 'group-hover:bg-[#A239CA]/30'
                 }`}>
-                  <span className="text-lg leading-none">{item.icon}</span>
+                  <div className="flex items-center justify-center w-full h-full">
+                    <span className="text-lg leading-none flex items-center justify-center">{item.icon}</span>
+                  </div>
                 </div>
                 {!isCollapsed && (
                   <div className="flex-1 text-left">
