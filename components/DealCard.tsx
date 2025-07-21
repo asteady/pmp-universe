@@ -367,6 +367,8 @@ const DealCard = ({ deal }: { deal: Deal }) => {
                         ? 'border-[#00FFB7] text-[#00FFB7]'
                         : 'border-transparent text-[#C8BCD1] hover:text-[#F8F8FF]'
                     }`}
+                    title={tabName}
+                    aria-label={`${tabName} tab`}
                   >
                     {tabName}
                   </button>

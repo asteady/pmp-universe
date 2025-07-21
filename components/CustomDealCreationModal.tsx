@@ -233,14 +233,14 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
             <div className="space-y-6">
               {/* Agency Name */}
               <div>
-                <label htmlFor="agencyName" className="block text-sm font-semibold text-white mb-2">Agency Name</label>
+                <label htmlFor="agencyName" className="block text-sm font-semibold text-foreground mb-2">Agency Name</label>
                 <input
                   type="text"
                   id="agencyName"
                   value={agencyName}
                   onChange={e => setAgencyName(e.target.value)}
                   placeholder="Enter agency name..."
-                  className="w-full px-4 py-3 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
+                  className="w-full px-4 py-3 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
                   aria-required="true"
                   aria-label="Agency Name"
                 />
@@ -250,14 +250,14 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
               </div>
               {/* Advertiser Name(s) */}
               <div>
-                <label htmlFor="advertiserName" className="block text-sm font-semibold text-white mb-2">Advertiser Name(s)?</label>
+                <label htmlFor="advertiserName" className="block text-sm font-semibold text-foreground mb-2">Advertiser Name(s)?</label>
                 <input
                   type="text"
                   id="advertiserName"
                   value={advertiserName}
                   onChange={e => setAdvertiserName(e.target.value)}
                   placeholder="Enter advertiser name(s)..."
-                  className="w-full px-4 py-3 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
+                  className="w-full px-4 py-3 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
                   aria-label="Advertiser Name(s)"
                 />
                 {advertiserName === '' && (
@@ -266,14 +266,14 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
               </div>
               {/* Deal Name */}
               <div>
-                <label htmlFor="dealName" className="block text-sm font-semibold text-white mb-2">Please name this Deal</label>
+                <label htmlFor="dealName" className="block text-sm font-semibold text-foreground mb-2">Please name this Deal</label>
                 <input
                   type="text"
                   id="dealName"
                   value={dealName}
                   onChange={(e) => setDealName(e.target.value)}
                   placeholder="I.e., The Best Deal Ever Launch Q3 2025, Agentic Pokémon Nintendo Anthropic Collab, etc."
-                  className="w-full px-4 py-3 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
+                  className="w-full px-4 py-3 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
                   aria-required="true"
                   aria-label="Deal Name"
                 />
@@ -283,16 +283,17 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
               </div>
               {/* Flighting */}
               <div>
-                <label htmlFor="flighting" className="block text-sm font-semibold text-white mb-2">Flighting</label>
+                <label htmlFor="flighting" className="block text-sm font-semibold text-foreground mb-2">Flighting</label>
                 <input
                   type="text"
                   id="flighting"
                   value={flighting}
                   onChange={e => setFlighting(e.target.value)}
                   placeholder="To ensure we keep the Deal activated & consistently refreshed"
-                  className="w-full px-4 py-3 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
+                  className="w-full px-4 py-3 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
                   aria-required="true"
                   aria-label="Flighting"
+                  title="This field is required to ensure the deal is kept active and consistently refreshed."
                 />
                 {flighting === '' && (
                   <p className="text-red-500 text-xs mt-1" role="alert">Flighting is required.</p>
@@ -303,7 +304,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                 <div className="space-y-4">
                   {/* Audience Taxonomy Multi-Select */}
                   <div>
-                    <label htmlFor="selectedAudiences" className="block text-sm font-semibold text-white mb-2">Select Infillion Audiences</label>
+                    <label htmlFor="selectedAudiences" className="block text-sm font-semibold text-foreground mb-2">Select Infillion Audiences</label>
                     <ChipSelect
                       options={audienceTaxonomy.map(aud => ({ value: aud.id, label: aud.name }))}
                       selected={selectedAudiences}
@@ -318,15 +319,16 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                   </div>
                   {/* Custom Audience Input */}
                   <div>
-                    <label htmlFor="customAudience" className="block text-sm font-semibold text-white mb-2">Custom Audience (optional)</label>
+                    <label htmlFor="customAudience" className="block text-sm font-semibold text-foreground mb-2">Custom Audience (optional)</label>
                     <textarea
                       id="customAudience"
                       value={customAudience}
                       onChange={e => setCustomAudience(e.target.value)}
                       placeholder="Describe custom audiences, POIs, dwell time, frequency, survey questions, custom metrics, retargeting, etc."
                       rows={2}
-                      className="w-full px-4 py-2 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
+                      className="w-full px-4 py-2 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
                       aria-label="Custom Audience Description"
+                      title="This field is required if custom audiences are selected."
                     />
                     {customAudience === '' && (
                       <p className="text-red-500 text-xs mt-1" role="alert">Custom Audience Description is required if custom audiences are selected.</p>
@@ -334,12 +336,12 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                   </div>
                   
                   <div>
-                    <label htmlFor="dealType" className="block text-sm font-semibold text-white mb-2">Deal Type</label>
+                    <label htmlFor="dealType" className="block text-sm font-semibold text-foreground mb-2">Deal Type</label>
                     <select
                       id="dealType"
                       value={dealType}
                       onChange={(e) => setDealType(e.target.value)}
-                      className="w-full px-4 py-3 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
+                      className="w-full px-4 py-3 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
                       aria-required="true"
                       aria-label="Deal Type"
                     >
@@ -355,15 +357,16 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                   </div>
 
                   <div>
-                    <label htmlFor="targeting" className="block text-sm font-semibold text-white mb-2">Targeting Description</label>
+                    <label htmlFor="targeting" className="block text-sm font-semibold text-foreground mb-2">Targeting Description</label>
                     <textarea
                       id="targeting"
                       value={targeting}
                       onChange={(e) => setTargeting(e.target.value)}
                       placeholder="Describe your targeting requirements..."
                       rows={3}
-                      className="w-full px-4 py-3 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
+                      className="w-full px-4 py-3 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
                       aria-label="Targeting Description"
+                      title="This field is required to describe your targeting requirements."
                     />
                     {targeting === '' && (
                       <p className="text-red-500 text-xs mt-1" role="alert">Targeting Description is required.</p>
@@ -373,7 +376,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
 
                 {/* Move SSP selection here (Execution Preferences) */}
                 <div className="space-y-4 mt-8">
-                  <label htmlFor="selectedSSPs" className="block text-sm font-semibold text-white mb-2">Select your SSP(s)</label>
+                  <label htmlFor="selectedSSPs" className="block text-sm font-semibold text-foreground mb-2">Select your SSP(s)</label>
                   <ChipSelect
                     options={ssps.map(ssp => ({ value: ssp.name, label: `${ssp.icon} ${ssp.name}` }))}
                     selected={selectedSSPs}
@@ -389,7 +392,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
 
                 {/* DSP Selection */}
                 <div>
-                  <label htmlFor="selectedDSP" className="block text-sm font-semibold text-white mb-4">Select DSP for Activation</label>
+                  <label htmlFor="selectedDSP" className="block text-sm font-semibold text-foreground mb-4">Select DSP for Activation</label>
                   {/* Replace DSP ChipSelect with a single-select pill button group: */}
                   <div className="flex flex-wrap gap-2 mb-4">
                     {dsps.map(dsp => (
@@ -400,7 +403,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                         className={`px-3 py-1 rounded-full border text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                           selectedDSP === dsp.name
                             ? 'bg-blue-500 text-white border-blue-500 shadow'
-                            : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                            : 'bg-slate-800 text-foreground border-slate-700 hover:bg-slate-700'
                         }`}
                         aria-pressed={selectedDSP === dsp.name}
                         aria-label={dsp.name}
@@ -415,15 +418,16 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                   {/* DSP Seat ID input (conditional) */}
                   {selectedDSP && (
                     <div className="mt-3">
-                      <label htmlFor="dspSeatId" className="block text-xs font-semibold text-white mb-1">DSP Seat ID</label>
+                      <label htmlFor="dspSeatId" className="block text-xs font-semibold text-foreground mb-1">DSP Seat ID</label>
                       <input
                         type="text"
                         id="dspSeatId"
                         value={dspSeatId}
                         onChange={e => setDspSeatId(e.target.value)}
                         placeholder="Enter DSP Seat ID..."
-                        className="w-full px-4 py-2 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-purple-500 focus:outline-none"
+                        className="w-full px-4 py-2 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-purple-500 focus:outline-none"
                         aria-label="DSP Seat ID"
+                        title="This field is required if a DSP is selected."
                       />
                       {dspSeatId === '' && (
                         <p className="text-red-500 text-xs mt-1" role="alert">DSP Seat ID is required if a DSP is selected.</p>
@@ -434,7 +438,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
 
                 {/* Creative Type */}
                 <div>
-                  <label htmlFor="selectedCreative" className="block text-sm font-semibold text-white mb-2">Infillion Curated Creative</label>
+                  <label htmlFor="selectedCreative" className="block text-sm font-semibold text-foreground mb-2">Infillion Curated Creative</label>
                   {/* Replace Creative Type ChipSelect with a single-select pill button group: */}
                   <div className="flex flex-wrap gap-2 mb-4">
                     {creativeTypes.map(type => (
@@ -445,7 +449,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                         className={`px-3 py-1 rounded-full border text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                           selectedCreative === type
                             ? 'bg-blue-500 text-white border-blue-500 shadow'
-                            : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                            : 'bg-slate-800 text-foreground border-slate-700 hover:bg-slate-700'
                         }`}
                         aria-pressed={selectedCreative === type}
                         aria-label={type}
@@ -461,7 +465,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
 
                 {/* Viewability */}
                 <div>
-                  <label htmlFor="selectedViewability" className="block text-sm font-semibold text-white mb-2">Viewability</label>
+                  <label htmlFor="selectedViewability" className="block text-sm font-semibold text-foreground mb-2">Viewability</label>
                   {/* Replace Viewability ChipSelect with a single-select pill button group: */}
                   <div className="flex flex-wrap gap-2 mb-4">
                     {viewabilityOptions.map(opt => (
@@ -472,7 +476,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                         className={`px-3 py-1 rounded-full border text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                           selectedViewability === opt
                             ? 'bg-blue-500 text-white border-blue-500 shadow'
-                            : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                            : 'bg-slate-800 text-foreground border-slate-700 hover:bg-slate-700'
                         }`}
                         aria-pressed={selectedViewability === opt}
                         aria-label={opt}
@@ -488,7 +492,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
 
                 {/* Reporting & Measurement */}
                 <div>
-                  <label htmlFor="selectedReporting" className="block text-sm font-semibold text-white mb-2">Reporting & Measurement</label>
+                  <label htmlFor="selectedReporting" className="block text-sm font-semibold text-foreground mb-2">Reporting & Measurement</label>
                   <div className="flex flex-wrap gap-2">
                     {reportingOptions.map(opt => (
                       <label key={opt} className="flex items-center gap-2 cursor-pointer">
@@ -499,7 +503,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                           className="accent-blue-500"
                           aria-label={`Select ${opt}`}
                         />
-                        <span className="text-slate-300 text-sm">{opt}</span>
+                        <span className="text-foreground text-sm">{opt}</span>
                       </label>
                     ))}
                   </div>
@@ -511,26 +515,26 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                 {/* Publisher Inclusion/Exclusion */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="publisherInclusion" className="block text-sm font-semibold text-white mb-2">Publisher Inclusion (optional)</label>
+                    <label htmlFor="publisherInclusion" className="block text-sm font-semibold text-foreground mb-2">Publisher Inclusion (optional)</label>
                     <input
                       type="text"
                       id="publisherInclusion"
                       value={publisherInclusion}
                       onChange={e => setPublisherInclusion(e.target.value)}
                       placeholder="List publishers to include..."
-                      className="w-full px-4 py-2 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
+                      className="w-full px-4 py-2 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
                       aria-label="Publisher Inclusion"
                     />
                   </div>
                   <div>
-                    <label htmlFor="publisherExclusion" className="block text-sm font-semibold text-white mb-2">Publisher Exclusion (optional)</label>
+                    <label htmlFor="publisherExclusion" className="block text-sm font-semibold text-foreground mb-2">Publisher Exclusion (optional)</label>
                     <input
                       type="text"
                       id="publisherExclusion"
                       value={publisherExclusion}
                       onChange={e => setPublisherExclusion(e.target.value)}
                       placeholder="List publishers to exclude..."
-                      className="w-full px-4 py-2 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
+                      className="w-full px-4 py-2 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
                       aria-label="Publisher Exclusion"
                     />
                   </div>
@@ -539,7 +543,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
 
               <div className="bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg p-4 border border-purple-500/30">
                 <h4 className="text-purple-400 font-semibold mb-2">⚡ Instant Activation</h4>
-                <p className="text-slate-300 text-sm">
+                <p className="text-foreground text-sm">
                   Your deal will be automatically configured for {selectedDSP || 'selected DSP'} 
                   with all necessary parameters and targeting options.
                 </p>
@@ -550,23 +554,24 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
           {step === 2 && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-xl font-semibold text-white mb-4">Step 2: Configure Your Deal</h3>
-                <p className="text-slate-300 mb-6">Set up your deal parameters and select your preferred DSP for activation.</p>
+                <h3 className="text-xl font-semibold text-foreground mb-4">Step 2: Configure Your Deal</h3>
+                <p className="text-foreground mb-6">Set up your deal parameters and select your preferred DSP for activation.</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   {/* Custom Audience, Infillion Audience Taxonomy, Evergreen & Seasonal */}
                   {/* Custom Audience Input */}
                   <div>
-                    <label htmlFor="customAudienceStep2" className="block text-sm font-semibold text-white mb-2">Custom Audience (optional)</label>
+                    <label htmlFor="customAudienceStep2" className="block text-sm font-semibold text-foreground mb-2">Custom Audience (optional)</label>
                     <textarea
                       id="customAudienceStep2"
                       value={customAudience}
                       onChange={e => setCustomAudience(e.target.value)}
                       placeholder="Describe custom audiences, POIs, dwell time, frequency, survey questions, custom metrics, retargeting, etc."
                       rows={2}
-                      className="w-full px-4 py-2 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
+                      className="w-full px-4 py-2 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
                       aria-label="Custom Audience Description for Step 2"
+                      title="This field is required if custom audiences are selected."
                     />
                     {customAudience === '' && (
                       <p className="text-red-500 text-xs mt-1" role="alert">Custom Audience Description is required if custom audiences are selected.</p>
@@ -574,7 +579,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                   </div>
                   {/* Audience Taxonomy Multi-Select */}
                   <div>
-                    <label htmlFor="selectedAudiencesStep2" className="block text-sm font-semibold text-white mb-2">Select Infillion Audiences</label>
+                    <label htmlFor="selectedAudiencesStep2" className="block text-sm font-semibold text-foreground mb-2">Select Infillion Audiences</label>
                     <ChipSelect
                       options={audienceTaxonomy.map(aud => ({ value: aud.id, label: aud.name }))}
                       selected={selectedAudiences}
@@ -589,7 +594,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                   </div>
                   {/* Evergreen & Seasonal */}
                   <div>
-                    <label htmlFor="evergreenSeasonal" className="block text-sm font-semibold text-white mb-2">Evergreen & Seasonal</label>
+                    <label htmlFor="evergreenSeasonal" className="block text-sm font-semibold text-foreground mb-2">Evergreen & Seasonal</label>
                     <ChipSelect
                       options={['Evergreen Example', 'Seasonal Example'].map(deal => ({ value: deal, label: deal }))}
                       selected={evergreenSeasonal}
@@ -606,7 +611,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
 
                 {/* Move SSP selection here (Execution Preferences) */}
                 <div className="space-y-4 mt-8">
-                  <label htmlFor="selectedSSPsStep2" className="block text-sm font-semibold text-white mb-2">Select your SSP(s)</label>
+                  <label htmlFor="selectedSSPsStep2" className="block text-sm font-semibold text-foreground mb-2">Select your SSP(s)</label>
                   <ChipSelect
                     options={ssps.map(ssp => ({ value: ssp.name, label: `${ssp.icon} ${ssp.name}` }))}
                     selected={selectedSSPs}
@@ -622,7 +627,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
 
                 {/* DSP Selection */}
                 <div>
-                  <label htmlFor="selectedDSPStep2" className="block text-sm font-semibold text-white mb-4">Select DSP for Activation</label>
+                  <label htmlFor="selectedDSPStep2" className="block text-sm font-semibold text-foreground mb-4">Select DSP for Activation</label>
                   {/* Replace DSP ChipSelect with a single-select pill button group: */}
                   <div className="flex flex-wrap gap-2 mb-4">
                     {dsps.map(dsp => (
@@ -633,7 +638,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                         className={`px-3 py-1 rounded-full border text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                           selectedDSP === dsp.name
                             ? 'bg-blue-500 text-white border-blue-500 shadow'
-                            : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                            : 'bg-slate-800 text-foreground border-slate-700 hover:bg-slate-700'
                         }`}
                         aria-pressed={selectedDSP === dsp.name}
                         aria-label={dsp.name}
@@ -648,15 +653,16 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                   {/* DSP Seat ID input (conditional) */}
                   {selectedDSP && (
                     <div className="mt-3">
-                      <label htmlFor="dspSeatIdStep2" className="block text-xs font-semibold text-white mb-1">DSP Seat ID</label>
+                      <label htmlFor="dspSeatIdStep2" className="block text-xs font-semibold text-foreground mb-1">DSP Seat ID</label>
                       <input
                         type="text"
                         id="dspSeatIdStep2"
                         value={dspSeatId}
                         onChange={e => setDspSeatId(e.target.value)}
                         placeholder="Enter DSP Seat ID..."
-                        className="w-full px-4 py-2 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-purple-500 focus:outline-none"
+                        className="w-full px-4 py-2 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-purple-500 focus:outline-none"
                         aria-label="DSP Seat ID"
+                        title="This field is required if a DSP is selected."
                       />
                       {dspSeatId === '' && (
                         <p className="text-red-500 text-xs mt-1" role="alert">DSP Seat ID is required if a DSP is selected.</p>
@@ -667,7 +673,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
 
                 {/* Creative Type */}
                 <div>
-                  <label htmlFor="selectedCreativeStep2" className="block text-sm font-semibold text-white mb-2">Infillion Curated Creative</label>
+                  <label htmlFor="selectedCreativeStep2" className="block text-sm font-semibold text-foreground mb-2">Infillion Curated Creative</label>
                   {/* Replace Creative Type ChipSelect with a single-select pill button group: */}
                   <div className="flex flex-wrap gap-2 mb-4">
                     {creativeTypes.map(type => (
@@ -678,7 +684,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                         className={`px-3 py-1 rounded-full border text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                           selectedCreative === type
                             ? 'bg-blue-500 text-white border-blue-500 shadow'
-                            : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                            : 'bg-slate-800 text-foreground border-slate-700 hover:bg-slate-700'
                         }`}
                         aria-pressed={selectedCreative === type}
                         aria-label={type}
@@ -694,7 +700,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
 
                 {/* Viewability */}
                 <div>
-                  <label htmlFor="selectedViewabilityStep2" className="block text-sm font-semibold text-white mb-2">Viewability</label>
+                  <label htmlFor="selectedViewabilityStep2" className="block text-sm font-semibold text-foreground mb-2">Viewability</label>
                   {/* Replace Viewability ChipSelect with a single-select pill button group: */}
                   <div className="flex flex-wrap gap-2 mb-4">
                     {viewabilityOptions.map(opt => (
@@ -705,7 +711,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                         className={`px-3 py-1 rounded-full border text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                           selectedViewability === opt
                             ? 'bg-blue-500 text-white border-blue-500 shadow'
-                            : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                            : 'bg-slate-800 text-foreground border-slate-700 hover:bg-slate-700'
                         }`}
                         aria-pressed={selectedViewability === opt}
                         aria-label={opt}
@@ -721,7 +727,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
 
                 {/* Reporting & Measurement */}
                 <div>
-                  <label htmlFor="selectedReportingStep2" className="block text-sm font-semibold text-white mb-2">Reporting & Measurement</label>
+                  <label htmlFor="selectedReportingStep2" className="block text-sm font-semibold text-foreground mb-2">Reporting & Measurement</label>
                   <div className="flex flex-wrap gap-2">
                     {reportingOptions.map(opt => (
                       <label key={opt} className="flex items-center gap-2 cursor-pointer">
@@ -732,7 +738,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                           className="accent-blue-500"
                           aria-label={`Select ${opt}`}
                         />
-                        <span className="text-slate-300 text-sm">{opt}</span>
+                        <span className="text-foreground text-sm">{opt}</span>
                       </label>
                     ))}
                   </div>
@@ -744,26 +750,26 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                 {/* Publisher Inclusion/Exclusion */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="publisherInclusionStep2" className="block text-sm font-semibold text-white mb-2">Publisher Inclusion (optional)</label>
+                    <label htmlFor="publisherInclusionStep2" className="block text-sm font-semibold text-foreground mb-2">Publisher Inclusion (optional)</label>
                     <input
                       type="text"
                       id="publisherInclusionStep2"
                       value={publisherInclusion}
                       onChange={e => setPublisherInclusion(e.target.value)}
                       placeholder="List publishers to include..."
-                      className="w-full px-4 py-2 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
+                      className="w-full px-4 py-2 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
                       aria-label="Publisher Inclusion"
                     />
                   </div>
                   <div>
-                    <label htmlFor="publisherExclusionStep2" className="block text-sm font-semibold text-white mb-2">Publisher Exclusion (optional)</label>
+                    <label htmlFor="publisherExclusionStep2" className="block text-sm font-semibold text-foreground mb-2">Publisher Exclusion (optional)</label>
                     <input
                       type="text"
                       id="publisherExclusionStep2"
                       value={publisherExclusion}
                       onChange={e => setPublisherExclusion(e.target.value)}
                       placeholder="List publishers to exclude..."
-                      className="w-full px-4 py-2 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
+                      className="w-full px-4 py-2 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
                       aria-label="Publisher Exclusion"
                     />
                   </div>
@@ -772,7 +778,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
 
               <div className="bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg p-4 border border-purple-500/30">
                 <h4 className="text-purple-400 font-semibold mb-2">⚡ Instant Activation</h4>
-                <p className="text-slate-300 text-sm">
+                <p className="text-foreground text-sm">
                   Your deal will be automatically configured for {selectedDSP || 'selected DSP'} 
                   with all necessary parameters and targeting options.
                 </p>
@@ -783,8 +789,8 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
           {step === 3 && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-xl font-semibold text-white mb-4">Step 3: Your Deal is Ready!</h3>
-                <p className="text-slate-300 mb-6">Your custom PMP deal has been created and is ready for activation across all selected platforms.</p>
+                <h3 className="text-xl font-semibold text-foreground mb-4">Step 3: Your Deal is Ready!</h3>
+                <p className="text-foreground mb-6">Your custom PMP deal has been created and is ready for activation across all selected platforms.</p>
               </div>
 
               <div className="bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-xl p-6 border border-green-500/30">
@@ -807,8 +813,8 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-slate-800 rounded-lg p-4">
-                  <h5 className="text-white font-semibold mb-3">✅ SSP Integration Complete</h5>
-                  <ul className="text-slate-300 text-sm space-y-2">
+                  <h5 className="text-foreground font-semibold mb-3">✅ SSP Integration Complete</h5>
+                  <ul className="text-foreground text-sm space-y-2">
                     {selectedSSPs.map(ssp => (
                       <li key={ssp} className="flex items-center gap-2">
                         <span className="text-green-400">✓</span>
@@ -819,8 +825,8 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                 </div>
 
                 <div className="bg-slate-800 rounded-lg p-4">
-                  <h5 className="text-white font-semibold mb-3">🎯 DSP Ready</h5>
-                  <div className="text-slate-300 text-sm">
+                  <h5 className="text-foreground font-semibold mb-3">🎯 DSP Ready</h5>
+                  <div className="text-foreground text-sm">
                     <p className="mb-2"><strong>DSP:</strong> {selectedDSP}</p>
                     <p className="mb-2"><strong>Deal Type:</strong> {dealType}</p>
                     <p><strong>Status:</strong> Ready for activation</p>
@@ -830,7 +836,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
 
               <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg p-4 border border-blue-500/30">
                 <h4 className="text-blue-400 font-semibold mb-2">🚀 Next Steps</h4>
-                <ul className="text-slate-300 text-sm space-y-1">
+                <ul className="text-foreground text-sm space-y-1">
                   <li>• Copy the Deal ID above</li>
                   <li>• Paste into your {selectedDSP} campaign</li>
                   <li>• Your deal is automatically optimized across all selected SSPs</li>

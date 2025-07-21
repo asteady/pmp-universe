@@ -132,10 +132,10 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
   if (submitted) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-        <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg relative">
-          <button className="absolute top-2 right-2 text-infillion-dark" onClick={onClose}>&times;</button>
-          <h2 className="text-xl font-bold mb-4 text-infillion-dark font-sans">RFP Submitted!</h2>
-          <div className="text-infillion-dark">Thank you for your submission. Our team will follow up soon.</div>
+        <div className="bg-background rounded-lg shadow-lg p-8 w-full max-w-lg relative">
+          <button className="absolute top-2 right-2 text-muted" onClick={onClose}>&times;</button>
+          <h2 className="text-xl font-bold mb-4 text-foreground font-sans">RFP Submitted!</h2>
+          <div className="text-foreground">Thank you for your submission. Our team will follow up soon.</div>
         </div>
       </div>
     );
@@ -145,12 +145,12 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
     // Summary/confirmation step
     return (
       <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-        <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg relative">
-          <button className="absolute top-2 right-2 text-infillion-dark" onClick={onClose}>&times;</button>
-          <h2 className="text-xl font-bold mb-4 text-infillion-dark font-sans">Review & Submit</h2>
+        <div className="bg-background rounded-lg shadow-lg p-8 w-full max-w-lg relative">
+          <button className="absolute top-2 right-2 text-muted" onClick={onClose}>&times;</button>
+          <h2 className="text-xl font-bold mb-4 text-foreground font-sans">Review & Submit</h2>
           <div className="mb-4">
             <div className="mb-2">
-              <span className="font-semibold text-infillion-dark">Audiences:</span>
+              <span className="font-semibold text-foreground">Audiences:</span>
               <div className="flex flex-wrap gap-2 mt-1">
                 {selectedAudiences.map(aud => (
                   <span key={aud} className="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium">{audienceTaxonomyOptions.find(o => o.value === aud)?.label || aud}</span>
@@ -158,7 +158,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
               </div>
             </div>
             <div className="mb-2">
-              <span className="font-semibold text-infillion-dark">Creatives:</span>
+              <span className="font-semibold text-foreground">Creatives:</span>
               <div className="flex flex-wrap gap-2 mt-1">
                 {selectedCreatives.map(c => (
                   <span key={c} className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-medium">{c}</span>
@@ -166,7 +166,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
               </div>
             </div>
             <div className="mb-2">
-              <span className="font-semibold text-infillion-dark">Device Types:</span>
+              <span className="font-semibold text-foreground">Device Types:</span>
               <div className="flex flex-wrap gap-2 mt-1">
                 {selectedDeviceTypes.map(d => (
                   <span key={d} className="bg-purple-500 text-white px-3 py-1 rounded-full text-xs font-medium">{d}</span>
@@ -174,27 +174,27 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
               </div>
             </div>
             <div className="mb-2">
-              <span className="font-semibold text-infillion-dark">Custom Audience:</span>
-              <div className="bg-slate-100 text-infillion-dark px-3 py-2 rounded text-xs font-mono mt-1">{customAudience}</div>
+              <span className="font-semibold text-foreground">Custom Audience:</span>
+              <div className="bg-slate-100 text-foreground px-3 py-2 rounded text-xs font-mono mt-1">{customAudience}</div>
             </div>
             <div className="mb-2">
-              <span className="font-semibold text-infillion-dark">Measurement:</span>
+              <span className="font-semibold text-foreground">Measurement:</span>
               <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-medium ml-2">{measurement}</span>
             </div>
             <div className="mb-2">
-              <span className="font-semibold text-infillion-dark">Custom Reporting:</span>
-              <div className="bg-slate-100 text-infillion-dark px-3 py-2 rounded text-xs font-mono mt-1">{customReporting}</div>
+              <span className="font-semibold text-foreground">Custom Reporting:</span>
+              <div className="bg-slate-100 text-foreground px-3 py-2 rounded text-xs font-mono mt-1">{customReporting}</div>
             </div>
           </div>
           <div className="flex items-center gap-2 mb-4">
             <input type="checkbox" id="useApi" checked={useApi} onChange={() => setUseApi(v => !v)} />
-            <label htmlFor="useApi" className="text-infillion-dark">Submit via API (recommended)</label>
+            <label htmlFor="useApi" className="text-foreground">Submit via API (recommended)</label>
           </div>
           <div className="flex gap-2">
-            <button className="bg-infillion-light text-white px-4 py-2 rounded font-bold hover:bg-infillion-dark transition" onClick={handleBack}>Back</button>
-            <button className="bg-infillion-green text-white px-4 py-2 rounded font-bold hover:bg-infillion-dark transition" onClick={handleSubmit}>Submit</button>
+            <button className="bg-card text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleBack}>Back</button>
+            <button className="bg-green text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleSubmit}>Submit</button>
           </div>
-          {resultMsg && <div className="mt-4 text-infillion-dark">{resultMsg}</div>}
+          {resultMsg && <div className="mt-4 text-foreground">{resultMsg}</div>}
         </div>
       </div>
     );
@@ -204,34 +204,34 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg relative">
-        <button className="absolute top-2 right-2 text-infillion-dark" onClick={onClose}>&times;</button>
-        <h2 className="text-xl font-bold mb-4 text-infillion-dark font-sans">RFP Generator</h2>
+      <div className="bg-background rounded-lg shadow-lg p-8 w-full max-w-lg relative">
+        <button className="absolute top-2 right-2 text-muted" onClick={onClose}>&times;</button>
+        <h2 className="text-xl font-bold mb-4 text-foreground font-sans">RFP Generator</h2>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div className="mb-2 text-infillion-dark font-semibold">Step {step + 1} of {visibleSteps.length + 1}: {currentStep.label}</div>
+          <div className="mb-2 text-foreground font-semibold">Step {step + 1} of {visibleSteps.length + 1}: {currentStep.label}</div>
           {currentStep.fields.map(field => (
             <div key={field} className="flex flex-col">
-              <label htmlFor={field} className="mb-1 text-infillion-dark font-sans">
+              <label htmlFor={field} className="mb-1 text-foreground font-sans">
                 {fieldLabels[field]}
                 {field === 'requestType' ? (
-                  <span className="ml-1 text-xs text-gray-500" aria-label="Select the type of RFP you need"> (Select)</span>
+                  <span className="ml-1 text-xs text-muted" aria-label="Select the type of RFP you need"> (Select)</span>
                 ) : field === 'description' || field === 'customReporting' ? (
-                  <span className="ml-1 text-xs text-gray-500" aria-label="Enter a description for the RFP"> (Optional)</span>
+                  <span className="ml-1 text-xs text-muted" aria-label="Enter a description for the RFP"> (Optional)</span>
                 ) : (
-                  <span className="ml-1 text-xs text-gray-500" aria-label="Enter a value for the field"> (Required)</span>
+                  <span className="ml-1 text-xs text-muted" aria-label="Enter a value for the field"> (Required)</span>
                 )}
               </label>
               {field === 'requestType' ? (
-                <select name="requestType" value={form.requestType || ''} onChange={handleChange} className="p-2 border rounded text-infillion-dark" required aria-required="true" aria-invalid={submitted && !form.requestType}>
+                <select name="requestType" value={form.requestType || ''} onChange={handleChange} className="p-2 border rounded text-foreground" required aria-required="true" aria-invalid={submitted && !form.requestType}>
                   <option value="">Select...</option>
                   {requestTypes.map(rt => (
                     <option key={rt.value} value={rt.value} aria-label={rt.label}>{rt.label}</option>
                   ))}
                 </select>
               ) : field === 'description' || field === 'customReporting' ? (
-                <textarea name={field} value={form[field] || ''} onChange={handleChange} className="p-2 border rounded text-infillion-dark" aria-label={`Enter ${fieldLabels[field]}`} />
+                <textarea name={field} value={form[field] || ''} onChange={handleChange} className="p-2 border rounded text-foreground" aria-label={`Enter ${fieldLabels[field]}`} />
               ) : (
-                <input name={field} value={form[field] || ''} onChange={handleChange} aria-label={`Enter ${fieldLabels[field]}`} aria-required={true} aria-invalid={!!errors[field]} className={`p-2 border rounded text-infillion-dark ${errors[field] ? 'border-red-500' : ''}`} />
+                <input name={field} value={form[field] || ''} onChange={handleChange} aria-label={`Enter ${fieldLabels[field]}`} aria-required={true} aria-invalid={!!errors[field]} className={`p-2 border rounded text-foreground ${errors[field] ? 'border-red-500' : ''}`} />
               )}
               {errors[field] && <span className="text-red-500 text-xs mt-1">{errors[field]}</span>}
             </div>
@@ -265,7 +265,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
               <textarea
                 value={customAudience}
                 onChange={e => setCustomAudience(e.target.value)}
-                className="p-2 border rounded text-infillion-dark w-full mt-2"
+                className="p-2 border rounded text-foreground w-full mt-2"
                 aria-label="Custom Audience"
                 placeholder="Describe custom audiences, POIs, etc."
               />
@@ -273,22 +273,22 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                 type="text"
                 value={measurement}
                 onChange={e => setMeasurement(e.target.value)}
-                className="p-2 border rounded text-infillion-dark w-full mt-2"
+                className="p-2 border rounded text-foreground w-full mt-2"
                 aria-label="Measurement"
                 placeholder="e.g. Arrival, Online Conversion, etc."
               />
               <textarea
                 value={customReporting}
                 onChange={e => setCustomReporting(e.target.value)}
-                className="p-2 border rounded text-infillion-dark w-full mt-2"
+                className="p-2 border rounded text-foreground w-full mt-2"
                 aria-label="Custom Reporting"
                 placeholder="Describe custom reporting needs"
               />
             </>
           )}
           <div className="flex gap-2 mt-4">
-            {step > 0 && <button type="button" className="bg-infillion-light text-white px-4 py-2 rounded font-bold hover:bg-infillion-dark transition" onClick={handleBack}>Back</button>}
-            <button type="button" className="bg-infillion-green text-white px-4 py-2 rounded font-bold hover:bg-infillion-dark transition" onClick={handleNext} disabled={currentStep.fields.includes('requestType') && !form.requestType}>Next</button>
+            {step > 0 && <button type="button" className="bg-card text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleBack}>Back</button>}
+            <button type="button" className="bg-green text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleNext} disabled={currentStep.fields.includes('requestType') && !form.requestType}>Next</button>
           </div>
         </form>
       </div>
