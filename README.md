@@ -4,11 +4,11 @@
 
 PMP Universe is Infillion's next-generation, self-service portal that brings Private Marketplace (PMP) deals to life. Whether you're a seasoned programmatic vet or new to the world of Deal IDs, this platform empowers sellers, marketers, and partners to:
 
-* **Explore curated Evergreen, Tentpole, and Custom PMP deals**
-* **Generate smart RFPs or instant Deal IDs**
-* **Preview creatives and audience insights**
-* **Navigate with ease in a premium, branded interface**
-* **Glide across DSPs/SSPs** (MediaMath, Nexxen, Magnite, OpenX, Index, Beachfront, AdsWizz, Nativo)
+* **Explore curated Evergreen, Seasonal, and Custom PMP deals**
+* **Generate Smart RFPs and Instant Deals**
+* **Preview dynamic cross-screen adaptable interactive creatives and proprietary audience insights**
+* **Navigate with ease in a premium interface**
+* **Glide across DSPs/SSPs** (DSPs such as MediaMath, The Trade Desk, DV360, Adelphic, StackAdapt and beyond; SSPs such as Nexxen, Magnite, OpenX, Index, Beachfront; future integrations for Audio (AdsWizz) and Native (Nativo))
 * **Automate workflows** via Asana, LaunchDarkly, and beyond
 
 This README and design system sets the foundation for a smooth dev experience, a polished UI/UX, and a delightful end-user journey.
@@ -176,6 +176,64 @@ Multi-category filtering system:
 - **Format**: Video, Display, Audio, Native
 - **Performance**: High VCR, High CTR, etc.
 
+## 📝 Form Flows & Asana Integration (2024 Update)
+
+### Custom Deal Request (Multi-Step)
+1. **Step 1: Client Details**
+   - Agency Name (required)
+   - Advertiser Name(s) (required)
+   - Deal Name (required)
+   - Flighting (required)
+   - DSP(s) (multi-select, required, with "Other" option and conditional "DSP (Other) Name" field)
+   - DSP Seat ID (optional)
+   - Preferred SSP(s) (multi-select, optional, with tooltip)
+   - Infillion Curated Creative (multi-select, required)
+2. **Step 2: Ideal Audience Persona(s)**
+   - Custom Audience (free text, optional)
+   - Infillion Audience Taxonomy (multi-select, optional, with definitions)
+   - Evergreen & Seasonal (multi-select, optional, with brief definitions)
+3. **Step 3: Settings**
+   - Primary Goal (single-select, required)
+   - Primary Goal Benchmark (free text, required)
+   - Secondary KPI (single-select, optional)
+   - Secondary KPI Benchmark (free text, optional)
+   - Device Type(s) (multi-select, required)
+   - Geos (multi-select, required, Americas only)
+   - Other Targeting Details (free text, optional)
+   - Publisher Inclusion/Exclusion (free text, optional)
+   - Reporting & Measurement (multi-select, optional)
+4. **Step 4: Review & Submit**
+   - Review all details, submit to Asana
+
+### RFP Generator (Multi-Step)
+1. **Step 1: Client Details**
+   - Agency Name (required)
+   - Advertiser/Brand Name (required)
+   - Description (required)
+2. **Step 2: Deal Settings**
+   - Audience Taxonomy (multi-select, required, with definitions)
+   - Custom Audiences (free text, required)
+   - Creatives (multi-select, required)
+   - Device Type(s) (multi-select, required)
+   - Reporting & Measurement (multi-select, optional)
+3. **Step 3: Review & Submit**
+   - Review all details, submit to Asana
+
+### Asana Integration
+- **API:** All form submissions POST to Asana using a secure API route.
+- **Task Mapping:** Each field is mapped to a custom field in Asana where possible; fallback is markdown in the task description.
+- **Section Placement:**
+  - Custom Deal: "Deal Request (AUTO)" section
+  - RFP Generator: "RFP Proposal Request (AUTO)" section
+- **Task Title:** Uses Client/Advertiser Name from the form.
+- **Error Handling:** If custom fields fail, all data is included in the notes/description.
+
+### UI/UX Enhancements
+- **Dark/Light Mode:** Theme applied site-wide, all hardcoded colors refactored to use theme classes or CSS variables.
+- **Guru/SidebarNav:** Internal Seismic links hidden for clients; Guru/SidebarNav refactored for theme and permission logic.
+- **DealCard:** Content (Overview, Data, Creatives, Performance) is dynamic and unique per deal; checkmarks fixed to prevent wrapping; tooltips improved for readability.
+- **Header:** "DIFFERENCE" removed, "by Infillion" styled and centered, animated typewriter text block added below title/subtitle.
+
 ## 🔧 Technical Stack
 
 - **Framework**: Next.js 15.0.0
@@ -296,4 +354,4 @@ NEXT_PUBLIC_API_URL=
 
 **Built with ❤️ by the Infillion Team**
 
-*PMP Universe - Where Premium Meets Programmatic* 
+*PMP Universe by Infillion - Where Predictive Programmatic meets Agentic Curation* 
