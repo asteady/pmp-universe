@@ -50,6 +50,28 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
   const [submitError, setSubmitError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
+  // Add state for multi-selects and single-selects
+  const audienceTaxonomyOptions = [
+    { value: 'a1', label: 'Tech Enthusiasts' },
+    { value: 'a2', label: 'Travelers' },
+    { value: 'a3', label: 'Parents' },
+    { value: 'a4', label: 'Gamers' },
+    { value: 'a5', label: 'Health & Wellness' },
+    // ...add all real options from your taxonomy
+  ];
+  const creativeTypes = [
+    'IDV', 'Rich Media', 'Display', 'Video', 'Native', 'Audio'
+  ];
+  const deviceTypes = [
+    'Mobile', 'Desktop', 'Tablet', 'CTV', 'Audio'
+  ];
+  const [selectedAudiences, setSelectedAudiences] = useState<string[]>([]);
+  const [selectedCreatives, setSelectedCreatives] = useState<string[]>([]);
+  const [selectedDeviceTypes, setSelectedDeviceTypes] = useState<string[]>([]);
+  const [measurement, setMeasurement] = useState('');
+  const [customAudience, setCustomAudience] = useState('');
+  const [customReporting, setCustomReporting] = useState('');
+
   // Conditional logic: Only show relevant steps based on requestType
   const getVisibleSteps = () => {
     if (form.requestType === 'deal-id') {
@@ -128,13 +150,41 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
           <h2 className="text-xl font-bold mb-4 text-infillion-dark font-sans">Review & Submit</h2>
           <div className="mb-4">
             <div className="mb-2">
-              <span className="font-semibold text-infillion-dark">Request Type:</span> <span className="text-infillion-dark">{requestTypes.find(rt => rt.value === form.requestType)?.label}</span>
-            </div>
-            {Object.entries(form).filter(([k]) => k !== 'requestType').map(([k, v]) => (
-              <div key={k} className="mb-2">
-                <span className="font-semibold text-infillion-dark">{fieldLabels[k]}:</span> <span className="text-infillion-dark">{v}</span>
+              <span className="font-semibold text-infillion-dark">Audiences:</span>
+              <div className="flex flex-wrap gap-2 mt-1">
+                {selectedAudiences.map(aud => (
+                  <span key={aud} className="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium">{audienceTaxonomyOptions.find(o => o.value === aud)?.label || aud}</span>
+                ))}
               </div>
-            ))}
+            </div>
+            <div className="mb-2">
+              <span className="font-semibold text-infillion-dark">Creatives:</span>
+              <div className="flex flex-wrap gap-2 mt-1">
+                {selectedCreatives.map(c => (
+                  <span key={c} className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-medium">{c}</span>
+                ))}
+              </div>
+            </div>
+            <div className="mb-2">
+              <span className="font-semibold text-infillion-dark">Device Types:</span>
+              <div className="flex flex-wrap gap-2 mt-1">
+                {selectedDeviceTypes.map(d => (
+                  <span key={d} className="bg-purple-500 text-white px-3 py-1 rounded-full text-xs font-medium">{d}</span>
+                ))}
+              </div>
+            </div>
+            <div className="mb-2">
+              <span className="font-semibold text-infillion-dark">Custom Audience:</span>
+              <div className="bg-slate-100 text-infillion-dark px-3 py-2 rounded text-xs font-mono mt-1">{customAudience}</div>
+            </div>
+            <div className="mb-2">
+              <span className="font-semibold text-infillion-dark">Measurement:</span>
+              <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-medium ml-2">{measurement}</span>
+            </div>
+            <div className="mb-2">
+              <span className="font-semibold text-infillion-dark">Custom Reporting:</span>
+              <div className="bg-slate-100 text-infillion-dark px-3 py-2 rounded text-xs font-mono mt-1">{customReporting}</div>
+            </div>
           </div>
           <div className="flex items-center gap-2 mb-4">
             <input type="checkbox" id="useApi" checked={useApi} onChange={() => setUseApi(v => !v)} />
@@ -186,6 +236,56 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
               {errors[field] && <span className="text-red-500 text-xs mt-1">{errors[field]}</span>}
             </div>
           ))}
+          {currentStep.label === 'Deal Settings' && (
+            <>
+              <ChipSelect
+                options={audienceTaxonomyOptions}
+                selected={selectedAudiences}
+                onChange={setSelectedAudiences}
+                label="Select Audiences"
+                placeholder="Search audiences..."
+                ariaLabel="Audience Taxonomy"
+              />
+              <ChipSelect
+                options={creativeTypes.map(type => ({ value: type, label: type }))}
+                selected={selectedCreatives}
+                onChange={setSelectedCreatives}
+                label="Select Creatives"
+                placeholder="Search creatives..."
+                ariaLabel="Creative Types"
+              />
+              <ChipSelect
+                options={deviceTypes.map(type => ({ value: type, label: type }))}
+                selected={selectedDeviceTypes}
+                onChange={setSelectedDeviceTypes}
+                label="Select Device Types"
+                placeholder="Search device types..."
+                ariaLabel="Device Types"
+              />
+              <textarea
+                value={customAudience}
+                onChange={e => setCustomAudience(e.target.value)}
+                className="p-2 border rounded text-infillion-dark w-full mt-2"
+                aria-label="Custom Audience"
+                placeholder="Describe custom audiences, POIs, etc."
+              />
+              <input
+                type="text"
+                value={measurement}
+                onChange={e => setMeasurement(e.target.value)}
+                className="p-2 border rounded text-infillion-dark w-full mt-2"
+                aria-label="Measurement"
+                placeholder="e.g. Arrival, Online Conversion, etc."
+              />
+              <textarea
+                value={customReporting}
+                onChange={e => setCustomReporting(e.target.value)}
+                className="p-2 border rounded text-infillion-dark w-full mt-2"
+                aria-label="Custom Reporting"
+                placeholder="Describe custom reporting needs"
+              />
+            </>
+          )}
           <div className="flex gap-2 mt-4">
             {step > 0 && <button type="button" className="bg-infillion-light text-white px-4 py-2 rounded font-bold hover:bg-infillion-dark transition" onClick={handleBack}>Back</button>}
             <button type="button" className="bg-infillion-green text-white px-4 py-2 rounded font-bold hover:bg-infillion-dark transition" onClick={handleNext} disabled={currentStep.fields.includes('requestType') && !form.requestType}>Next</button>
