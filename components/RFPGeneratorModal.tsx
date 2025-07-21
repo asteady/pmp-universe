@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { createAsanaTask } from '../lib/asana';
+import ChipSelect from '../src/components/ChipSelect';
 
 const requestTypes = [
   { value: 'deal-id', label: 'Deal ID Only' },
@@ -7,10 +8,20 @@ const requestTypes = [
   { value: 'both', label: 'Both (Deal ID + RFP Slides)' },
 ];
 
+// 1. Define the new step structure
 const steps = [
-  { label: 'Agency Name, Advertiser/Brand Name, Description', fields: ['agencyName', 'advertiserName', 'description'] },
-  { label: 'Audience Taxonomy, Custom Audience, Creatives, Device Type(s), Reporting & Measurement', fields: ['audienceTaxonomy', 'customAudience', 'creatives', 'deviceTypes', 'measurement', 'customReporting'] },
-  { label: 'Review & Submit', fields: [''] },
+  {
+    label: 'Client Details',
+    fields: ['agencyName', 'advertiserName', 'description'],
+  },
+  {
+    label: 'Deal Settings',
+    fields: ['audienceTaxonomy', 'customAudience', 'creatives', 'deviceTypes', 'measurement', 'customReporting'],
+  },
+  {
+    label: 'Review & Submit',
+    fields: [],
+  },
 ];
 
 const fieldLabels: Record<string, string> = {

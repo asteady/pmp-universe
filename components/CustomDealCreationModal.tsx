@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import audienceTaxonomy from '../data/audienceTaxonomy.json';
 import { createAsanaTask } from '../lib/asana';
+import ChipSelect from '../src/components/ChipSelect';
 
 const ssps = [
   { name: 'OpenX', icon: '🔵', status: 'Active' },
@@ -45,8 +46,28 @@ const reportingOptions = [
 
 const DEAL_REQUEST_SECTION_GID = process.env.ASANA_DEAL_REQUEST_SECTION_GID || '1209264958990943';
 
+// 1. Define the new step structure
+const steps = [
+  {
+    label: 'Client Details',
+    fields: ['agencyName', 'advertiserName', 'dealName', 'flighting', 'selectedDSP', 'dspSeatId', 'selectedSSPs', 'selectedCreative'],
+  },
+  {
+    label: 'Ideal Audience Persona(s)',
+    fields: ['customAudience', 'selectedAudiences', 'evergreenSeasonal'],
+  },
+  {
+    label: 'Settings',
+    fields: ['primaryGoal', 'primaryGoalBenchmark', 'secondaryKPI', 'secondaryKPIBenchmark', 'deviceTypes', 'selectedGeos', 'targeting', 'publisherInclusion', 'publisherExclusion', 'selectedReporting'],
+  },
+  {
+    label: 'Review & Submit',
+    fields: [],
+  },
+];
+
 const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
   const [selectedSSPs, setSelectedSSPs] = useState<string[]>([]);
   const [selectedDSP, setSelectedDSP] = useState('');
   const [dealName, setDealName] = useState('');
@@ -283,23 +304,14 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                   {/* Audience Taxonomy Multi-Select */}
                   <div>
                     <label htmlFor="selectedAudiences" className="block text-sm font-semibold text-white mb-2">Select Infillion Audiences</label>
-                    <div className="space-y-2">
-                      {audienceTaxonomy.map((aud) => (
-                        <label key={aud.id} className="flex items-start gap-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={selectedAudiences.includes(aud.id)}
-                            onChange={() => setSelectedAudiences(prev => prev.includes(aud.id) ? prev.filter(a => a !== aud.id) : [...prev, aud.id])}
-                            className="mt-1 accent-blue-500"
-                            aria-label={`Select ${aud.name}`}
-                          />
-                          <div>
-                            <span className="font-medium text-white">{aud.name}</span>
-                            <span className="block text-xs text-slate-400">{aud.description}</span>
-                          </div>
-                        </label>
-                      ))}
-                    </div>
+                    <ChipSelect
+                      options={audienceTaxonomy.map(aud => ({ value: aud.id, label: aud.name }))}
+                      selected={selectedAudiences}
+                      onChange={setSelectedAudiences}
+                      label="Select Infillion Audiences"
+                      placeholder="Search audiences..."
+                      ariaLabel="Audience Taxonomy"
+                    />
                     {selectedAudiences.length === 0 && (
                       <p className="text-red-500 text-xs mt-1" role="alert">At least one Infillion Audience is required.</p>
                     )}
@@ -362,32 +374,14 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                 {/* Move SSP selection here (Execution Preferences) */}
                 <div className="space-y-4 mt-8">
                   <label htmlFor="selectedSSPs" className="block text-sm font-semibold text-white mb-2">Select your SSP(s)</label>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {ssps.map((ssp) => (
-                      <div
-                        key={ssp.name}
-                        onClick={() => handleSSPToggle(ssp.name)}
-                        className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 transform hover:scale-105 ${
-                          selectedSSPs.includes(ssp.name)
-                            ? 'border-blue-500 bg-blue-500/10 shadow-lg shadow-blue-500/25'
-                            : 'border-slate-700 bg-slate-800 hover:border-slate-600'
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="text-2xl">{ssp.icon}</span>
-                          <div>
-                            <h4 className="font-semibold text-white">{ssp.name}</h4>
-                            <span className="text-sm text-green-400">{ssp.status}</span>
-                          </div>
-                        </div>
-                        {selectedSSPs.includes(ssp.name) && (
-                          <div className="mt-3 p-2 bg-blue-500/20 rounded-lg">
-                            <p className="text-xs text-blue-300">✓ Auto-configured for optimal performance</p>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
+                  <ChipSelect
+                    options={ssps.map(ssp => ({ value: ssp.name, label: `${ssp.icon} ${ssp.name}` }))}
+                    selected={selectedSSPs}
+                    onChange={setSelectedSSPs}
+                    label="Select your SSP(s)"
+                    placeholder="Search SSPs..."
+                    ariaLabel="SSP Selection"
+                  />
                   {selectedSSPs.length === 0 && (
                     <p className="text-red-500 text-xs mt-1" role="alert">At least one SSP is required.</p>
                   )}
@@ -396,27 +390,14 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                 {/* DSP Selection */}
                 <div>
                   <label htmlFor="selectedDSP" className="block text-sm font-semibold text-white mb-4">Select DSP for Activation</label>
-                  <div className="space-y-3">
-                    {dsps.map((dsp) => (
-                      <div
-                        key={dsp.name}
-                        onClick={() => setSelectedDSP(dsp.name)}
-                        className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-300 ${
-                          selectedDSP === dsp.name
-                            ? 'border-purple-500 bg-purple-500/10 shadow-lg shadow-purple-500/25'
-                            : 'border-slate-700 bg-slate-800 hover:border-slate-600'
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="text-xl">{dsp.icon}</span>
-                          <div>
-                            <h4 className="font-semibold text-white">{dsp.name}</h4>
-                            <span className="text-sm text-green-400">{dsp.status}</span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                  <ChipSelect
+                    options={dsps.map(dsp => ({ value: dsp.name, label: `${dsp.icon} ${dsp.name}` }))}
+                    selected={selectedDSP}
+                    onChange={setSelectedDSP}
+                    label="Select DSP for Activation"
+                    placeholder="Search DSPs..."
+                    ariaLabel="DSP Selection"
+                  />
                   {selectedDSP === '' && (
                     <p className="text-red-500 text-xs mt-1" role="alert">DSP for Activation is required.</p>
                   )}
@@ -443,19 +424,14 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                 {/* Creative Type */}
                 <div>
                   <label htmlFor="selectedCreative" className="block text-sm font-semibold text-white mb-2">Infillion Curated Creative</label>
-                  <select
-                    id="selectedCreative"
-                    value={selectedCreative}
-                    onChange={e => setSelectedCreative(e.target.value)}
-                    className="w-full px-4 py-2 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
-                    aria-required="true"
-                    aria-label="Creative Type"
-                  >
-                    <option value="">Select creative type...</option>
-                    {creativeTypes.map(type => (
-                      <option key={type} value={type}>{type}</option>
-                    ))}
-                  </select>
+                  <ChipSelect
+                    options={creativeTypes.map(type => ({ value: type, label: type }))}
+                    selected={selectedCreative}
+                    onChange={setSelectedCreative}
+                    label="Infillion Curated Creative"
+                    placeholder="Search creative types..."
+                    ariaLabel="Creative Type"
+                  />
                   {selectedCreative === '' && (
                     <p className="text-red-500 text-xs mt-1" role="alert">Creative Type is required.</p>
                   )}
@@ -464,19 +440,14 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                 {/* Viewability */}
                 <div>
                   <label htmlFor="selectedViewability" className="block text-sm font-semibold text-white mb-2">Viewability</label>
-                  <select
-                    id="selectedViewability"
-                    value={selectedViewability}
-                    onChange={e => setSelectedViewability(e.target.value)}
-                    className="w-full px-4 py-2 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
-                    aria-required="true"
-                    aria-label="Viewability"
-                  >
-                    <option value="">Select viewability...</option>
-                    {viewabilityOptions.map(opt => (
-                      <option key={opt} value={opt}>{opt}</option>
-                    ))}
-                  </select>
+                  <ChipSelect
+                    options={viewabilityOptions.map(opt => ({ value: opt, label: opt }))}
+                    selected={selectedViewability}
+                    onChange={setSelectedViewability}
+                    label="Viewability"
+                    placeholder="Search viewability..."
+                    ariaLabel="Viewability"
+                  />
                   {selectedViewability === '' && (
                     <p className="text-red-500 text-xs mt-1" role="alert">Viewability is required.</p>
                   )}
@@ -571,23 +542,14 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                   {/* Audience Taxonomy Multi-Select */}
                   <div>
                     <label htmlFor="selectedAudiencesStep2" className="block text-sm font-semibold text-white mb-2">Select Infillion Audiences</label>
-                    <div className="space-y-2">
-                      {audienceTaxonomy.map((aud) => (
-                        <label key={aud.id} className="flex items-start gap-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={selectedAudiences.includes(aud.id)}
-                            onChange={() => setSelectedAudiences(prev => prev.includes(aud.id) ? prev.filter(a => a !== aud.id) : [...prev, aud.id])}
-                            className="mt-1 accent-blue-500"
-                            aria-label={`Select ${aud.name}`}
-                          />
-                          <div>
-                            <span className="font-medium text-white">{aud.name}</span>
-                            <span className="block text-xs text-slate-400">{aud.description}</span>
-                          </div>
-                        </label>
-                      ))}
-                    </div>
+                    <ChipSelect
+                      options={audienceTaxonomy.map(aud => ({ value: aud.id, label: `${aud.icon} ${aud.name}` }))}
+                      selected={selectedAudiences}
+                      onChange={setSelectedAudiences}
+                      label="Select Infillion Audiences"
+                      placeholder="Search audiences..."
+                      ariaLabel="Audience Taxonomy for Step 2"
+                    />
                     {selectedAudiences.length === 0 && (
                       <p className="text-red-500 text-xs mt-1" role="alert">At least one Infillion Audience is required.</p>
                     )}
@@ -595,18 +557,14 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                   {/* Evergreen & Seasonal */}
                   <div>
                     <label htmlFor="evergreenSeasonal" className="block text-sm font-semibold text-white mb-2">Evergreen & Seasonal</label>
-                    <select
-                      id="evergreenSeasonal"
-                      multiple
-                      value={evergreenSeasonal}
-                      onChange={e => setEvergreenSeasonal(Array.from(e.target.selectedOptions, option => option.value))}
-                      className="w-full px-4 py-2 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
-                      aria-label="Evergreen and Seasonal Deals"
-                    >
-                      {/* TODO: Populate with deals from PMP Universe */}
-                      <option value="Evergreen Example">Evergreen Example</option>
-                      <option value="Seasonal Example">Seasonal Example</option>
-                    </select>
+                    <ChipSelect
+                      options={['Evergreen Example', 'Seasonal Example'].map(deal => ({ value: deal, label: deal }))}
+                      selected={evergreenSeasonal}
+                      onChange={setEvergreenSeasonal}
+                      label="Evergreen and Seasonal Deals"
+                      placeholder="Search deals..."
+                      ariaLabel="Evergreen and Seasonal Deals"
+                    />
                     {evergreenSeasonal.length === 0 && (
                       <p className="text-red-500 text-xs mt-1" role="alert">At least one Evergreen or Seasonal deal is required.</p>
                     )}
@@ -616,32 +574,14 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                 {/* Move SSP selection here (Execution Preferences) */}
                 <div className="space-y-4 mt-8">
                   <label htmlFor="selectedSSPsStep2" className="block text-sm font-semibold text-white mb-2">Select your SSP(s)</label>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {ssps.map((ssp) => (
-                      <div
-                        key={ssp.name}
-                        onClick={() => handleSSPToggle(ssp.name)}
-                        className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 transform hover:scale-105 ${
-                          selectedSSPs.includes(ssp.name)
-                            ? 'border-blue-500 bg-blue-500/10 shadow-lg shadow-blue-500/25'
-                            : 'border-slate-700 bg-slate-800 hover:border-slate-600'
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="text-2xl">{ssp.icon}</span>
-                          <div>
-                            <h4 className="font-semibold text-white">{ssp.name}</h4>
-                            <span className="text-sm text-green-400">{ssp.status}</span>
-                          </div>
-                        </div>
-                        {selectedSSPs.includes(ssp.name) && (
-                          <div className="mt-3 p-2 bg-blue-500/20 rounded-lg">
-                            <p className="text-xs text-blue-300">✓ Auto-configured for optimal performance</p>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
+                  <ChipSelect
+                    options={ssps.map(ssp => ({ value: ssp.name, label: `${ssp.icon} ${ssp.name}` }))}
+                    selected={selectedSSPs}
+                    onChange={setSelectedSSPs}
+                    label="Select your SSP(s)"
+                    placeholder="Search SSPs..."
+                    ariaLabel="SSP Selection for Step 2"
+                  />
                   {selectedSSPs.length === 0 && (
                     <p className="text-red-500 text-xs mt-1" role="alert">At least one SSP is required.</p>
                   )}
@@ -650,27 +590,14 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                 {/* DSP Selection */}
                 <div>
                   <label htmlFor="selectedDSPStep2" className="block text-sm font-semibold text-white mb-4">Select DSP for Activation</label>
-                  <div className="space-y-3">
-                    {dsps.map((dsp) => (
-                      <div
-                        key={dsp.name}
-                        onClick={() => setSelectedDSP(dsp.name)}
-                        className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-300 ${
-                          selectedDSP === dsp.name
-                            ? 'border-purple-500 bg-purple-500/10 shadow-lg shadow-purple-500/25'
-                            : 'border-slate-700 bg-slate-800 hover:border-slate-600'
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="text-xl">{dsp.icon}</span>
-                          <div>
-                            <h4 className="font-semibold text-white">{dsp.name}</h4>
-                            <span className="text-sm text-green-400">{dsp.status}</span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                  <ChipSelect
+                    options={dsps.map(dsp => ({ value: dsp.name, label: `${dsp.icon} ${dsp.name}` }))}
+                    selected={selectedDSP}
+                    onChange={setSelectedDSP}
+                    label="Select DSP for Activation"
+                    placeholder="Search DSPs..."
+                    ariaLabel="DSP Selection for Step 2"
+                  />
                   {selectedDSP === '' && (
                     <p className="text-red-500 text-xs mt-1" role="alert">DSP for Activation is required.</p>
                   )}
@@ -694,47 +621,17 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                   )}
                 </div>
 
-                {/* Geo Multi-Select */}
-                <div>
-                  <label htmlFor="selectedGeos" className="block text-sm font-semibold text-white mb-2">Select Geos (North/Central/South America)</label>
-                  <div className="flex flex-wrap gap-2">
-                    {geoOptions.map(geo => (
-                      <button
-                        key={geo}
-                        type="button"
-                        onClick={() => setSelectedGeos(prev => prev.includes(geo) ? prev.filter(g => g !== geo) : [...prev, geo])}
-                        className={`px-3 py-1 rounded-full border text-sm font-medium transition-colors ${
-                          selectedGeos.includes(geo)
-                            ? 'bg-blue-500 text-white border-blue-500'
-                            : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
-                        }`}
-                        aria-label={`Select ${geo}`}
-                      >
-                        {geo}
-                      </button>
-                    ))}
-                  </div>
-                  {selectedGeos.length === 0 && (
-                    <p className="text-red-500 text-xs mt-1" role="alert">At least one Geo is required.</p>
-                  )}
-                </div>
-
                 {/* Creative Type */}
                 <div>
                   <label htmlFor="selectedCreativeStep2" className="block text-sm font-semibold text-white mb-2">Infillion Curated Creative</label>
-                  <select
-                    id="selectedCreativeStep2"
-                    value={selectedCreative}
-                    onChange={e => setSelectedCreative(e.target.value)}
-                    className="w-full px-4 py-2 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
-                    aria-required="true"
-                    aria-label="Creative Type"
-                  >
-                    <option value="">Select creative type...</option>
-                    {creativeTypes.map(type => (
-                      <option key={type} value={type}>{type}</option>
-                    ))}
-                  </select>
+                  <ChipSelect
+                    options={creativeTypes.map(type => ({ value: type, label: type }))}
+                    selected={selectedCreative}
+                    onChange={setSelectedCreative}
+                    label="Infillion Curated Creative"
+                    placeholder="Search creative types..."
+                    ariaLabel="Creative Type for Step 2"
+                  />
                   {selectedCreative === '' && (
                     <p className="text-red-500 text-xs mt-1" role="alert">Creative Type is required.</p>
                   )}
@@ -743,19 +640,14 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                 {/* Viewability */}
                 <div>
                   <label htmlFor="selectedViewabilityStep2" className="block text-sm font-semibold text-white mb-2">Viewability</label>
-                  <select
-                    id="selectedViewabilityStep2"
-                    value={selectedViewability}
-                    onChange={e => setSelectedViewability(e.target.value)}
-                    className="w-full px-4 py-2 bg-slate-800 text-white rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
-                    aria-required="true"
-                    aria-label="Viewability"
-                  >
-                    <option value="">Select viewability...</option>
-                    {viewabilityOptions.map(opt => (
-                      <option key={opt} value={opt}>{opt}</option>
-                    ))}
-                  </select>
+                  <ChipSelect
+                    options={viewabilityOptions.map(opt => ({ value: opt, label: opt }))}
+                    selected={selectedViewability}
+                    onChange={setSelectedViewability}
+                    label="Viewability"
+                    placeholder="Search viewability..."
+                    ariaLabel="Viewability for Step 2"
+                  />
                   {selectedViewability === '' && (
                     <p className="text-red-500 text-xs mt-1" role="alert">Viewability is required.</p>
                   )}
