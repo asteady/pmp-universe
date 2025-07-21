@@ -279,7 +279,7 @@ const DealCard = ({ deal }: { deal: Deal }) => {
             <span className="text-sm font-semibold text-foreground">{deal.category}</span>
             {deal.subCategory && (
               <span className="text-xs text-accent bg-accent/20 px-2 py-1 rounded">
-                {deal.subCategory}
+                {deal.subCategory === 'Historical Location/Survey Responses/Bid Stream Data' ? 'Location and Survey Data' : deal.subCategory}
               </span>
             )}
           </div>
