@@ -390,14 +390,25 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                 {/* DSP Selection */}
                 <div>
                   <label htmlFor="selectedDSP" className="block text-sm font-semibold text-white mb-4">Select DSP for Activation</label>
-                  <ChipSelect
-                    options={dsps.map(dsp => ({ value: dsp.name, label: `${dsp.icon} ${dsp.name}` }))}
-                    selected={selectedDSP}
-                    onChange={setSelectedDSP}
-                    label="Select DSP for Activation"
-                    placeholder="Search DSPs..."
-                    ariaLabel="DSP Selection"
-                  />
+                  {/* Replace DSP ChipSelect with a single-select pill button group: */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {dsps.map(dsp => (
+                      <button
+                        key={dsp.name}
+                        type="button"
+                        onClick={() => setSelectedDSP(dsp.name)}
+                        className={`px-3 py-1 rounded-full border text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          selectedDSP === dsp.name
+                            ? 'bg-blue-500 text-white border-blue-500 shadow'
+                            : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                        }`}
+                        aria-pressed={selectedDSP === dsp.name}
+                        aria-label={dsp.name}
+                      >
+                        {dsp.icon} {dsp.name}
+                      </button>
+                    ))}
+                  </div>
                   {selectedDSP === '' && (
                     <p className="text-red-500 text-xs mt-1" role="alert">DSP for Activation is required.</p>
                   )}
@@ -424,14 +435,25 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                 {/* Creative Type */}
                 <div>
                   <label htmlFor="selectedCreative" className="block text-sm font-semibold text-white mb-2">Infillion Curated Creative</label>
-                  <ChipSelect
-                    options={creativeTypes.map(type => ({ value: type, label: type }))}
-                    selected={selectedCreative}
-                    onChange={setSelectedCreative}
-                    label="Infillion Curated Creative"
-                    placeholder="Search creative types..."
-                    ariaLabel="Creative Type"
-                  />
+                  {/* Replace Creative Type ChipSelect with a single-select pill button group: */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {creativeTypes.map(type => (
+                      <button
+                        key={type}
+                        type="button"
+                        onClick={() => setSelectedCreative(type)}
+                        className={`px-3 py-1 rounded-full border text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          selectedCreative === type
+                            ? 'bg-blue-500 text-white border-blue-500 shadow'
+                            : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                        }`}
+                        aria-pressed={selectedCreative === type}
+                        aria-label={type}
+                      >
+                        {type}
+                      </button>
+                    ))}
+                  </div>
                   {selectedCreative === '' && (
                     <p className="text-red-500 text-xs mt-1" role="alert">Creative Type is required.</p>
                   )}
@@ -440,14 +462,25 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                 {/* Viewability */}
                 <div>
                   <label htmlFor="selectedViewability" className="block text-sm font-semibold text-white mb-2">Viewability</label>
-                  <ChipSelect
-                    options={viewabilityOptions.map(opt => ({ value: opt, label: opt }))}
-                    selected={selectedViewability}
-                    onChange={setSelectedViewability}
-                    label="Viewability"
-                    placeholder="Search viewability..."
-                    ariaLabel="Viewability"
-                  />
+                  {/* Replace Viewability ChipSelect with a single-select pill button group: */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {viewabilityOptions.map(opt => (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => setSelectedViewability(opt)}
+                        className={`px-3 py-1 rounded-full border text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          selectedViewability === opt
+                            ? 'bg-blue-500 text-white border-blue-500 shadow'
+                            : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                        }`}
+                        aria-pressed={selectedViewability === opt}
+                        aria-label={opt}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
                   {selectedViewability === '' && (
                     <p className="text-red-500 text-xs mt-1" role="alert">Viewability is required.</p>
                   )}
@@ -543,7 +576,7 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                   <div>
                     <label htmlFor="selectedAudiencesStep2" className="block text-sm font-semibold text-white mb-2">Select Infillion Audiences</label>
                     <ChipSelect
-                      options={audienceTaxonomy.map(aud => ({ value: aud.id, label: `${aud.icon} ${aud.name}` }))}
+                      options={audienceTaxonomy.map(aud => ({ value: aud.id, label: aud.name }))}
                       selected={selectedAudiences}
                       onChange={setSelectedAudiences}
                       label="Select Infillion Audiences"
@@ -590,14 +623,25 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                 {/* DSP Selection */}
                 <div>
                   <label htmlFor="selectedDSPStep2" className="block text-sm font-semibold text-white mb-4">Select DSP for Activation</label>
-                  <ChipSelect
-                    options={dsps.map(dsp => ({ value: dsp.name, label: `${dsp.icon} ${dsp.name}` }))}
-                    selected={selectedDSP}
-                    onChange={setSelectedDSP}
-                    label="Select DSP for Activation"
-                    placeholder="Search DSPs..."
-                    ariaLabel="DSP Selection for Step 2"
-                  />
+                  {/* Replace DSP ChipSelect with a single-select pill button group: */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {dsps.map(dsp => (
+                      <button
+                        key={dsp.name}
+                        type="button"
+                        onClick={() => setSelectedDSP(dsp.name)}
+                        className={`px-3 py-1 rounded-full border text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          selectedDSP === dsp.name
+                            ? 'bg-blue-500 text-white border-blue-500 shadow'
+                            : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                        }`}
+                        aria-pressed={selectedDSP === dsp.name}
+                        aria-label={dsp.name}
+                      >
+                        {dsp.icon} {dsp.name}
+                      </button>
+                    ))}
+                  </div>
                   {selectedDSP === '' && (
                     <p className="text-red-500 text-xs mt-1" role="alert">DSP for Activation is required.</p>
                   )}
@@ -624,14 +668,25 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                 {/* Creative Type */}
                 <div>
                   <label htmlFor="selectedCreativeStep2" className="block text-sm font-semibold text-white mb-2">Infillion Curated Creative</label>
-                  <ChipSelect
-                    options={creativeTypes.map(type => ({ value: type, label: type }))}
-                    selected={selectedCreative}
-                    onChange={setSelectedCreative}
-                    label="Infillion Curated Creative"
-                    placeholder="Search creative types..."
-                    ariaLabel="Creative Type for Step 2"
-                  />
+                  {/* Replace Creative Type ChipSelect with a single-select pill button group: */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {creativeTypes.map(type => (
+                      <button
+                        key={type}
+                        type="button"
+                        onClick={() => setSelectedCreative(type)}
+                        className={`px-3 py-1 rounded-full border text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          selectedCreative === type
+                            ? 'bg-blue-500 text-white border-blue-500 shadow'
+                            : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                        }`}
+                        aria-pressed={selectedCreative === type}
+                        aria-label={type}
+                      >
+                        {type}
+                      </button>
+                    ))}
+                  </div>
                   {selectedCreative === '' && (
                     <p className="text-red-500 text-xs mt-1" role="alert">Creative Type is required.</p>
                   )}
@@ -640,14 +695,25 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
                 {/* Viewability */}
                 <div>
                   <label htmlFor="selectedViewabilityStep2" className="block text-sm font-semibold text-white mb-2">Viewability</label>
-                  <ChipSelect
-                    options={viewabilityOptions.map(opt => ({ value: opt, label: opt }))}
-                    selected={selectedViewability}
-                    onChange={setSelectedViewability}
-                    label="Viewability"
-                    placeholder="Search viewability..."
-                    ariaLabel="Viewability for Step 2"
-                  />
+                  {/* Replace Viewability ChipSelect with a single-select pill button group: */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {viewabilityOptions.map(opt => (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => setSelectedViewability(opt)}
+                        className={`px-3 py-1 rounded-full border text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          selectedViewability === opt
+                            ? 'bg-blue-500 text-white border-blue-500 shadow'
+                            : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                        }`}
+                        aria-pressed={selectedViewability === opt}
+                        aria-label={opt}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
                   {selectedViewability === '' && (
                     <p className="text-red-500 text-xs mt-1" role="alert">Viewability is required.</p>
                   )}
