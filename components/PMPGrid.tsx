@@ -1,5 +1,6 @@
 import React from 'react';
 import DealCard from './DealCard';
+import { motion } from 'framer-motion';
 
 type Deal = {
   id: string;
@@ -30,32 +31,27 @@ type Deal = {
   tentpole?: string[];
 };
 
-const groupDeals = (deals: Deal[]) => {
-  return {
-    Evergreen: deals.filter(d => d.type === 'Evergreen'),
-    Seasonal: deals.filter(d => d.type === 'Seasonal'),
-    Custom: deals.filter(d => d.type === 'Custom'),
-  };
-};
-
 const PMPGrid = ({ deals }: { deals: Deal[] }) => {
-  const grouped = groupDeals(deals);
-  
   return (
-    <div className="w-full space-y-12">
-      {Object.entries(grouped).map(([category, categoryDeals]) => (
-        <div key={category}>
-          <h3 className="text-2xl font-bold mb-6 text-white tracking-tight">
-            {category} PMPs
-          </h3>
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {categoryDeals.map((deal: Deal) => (
-              <DealCard key={deal.id} deal={deal} />
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+      className="w-full"
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+        {deals.map((deal: Deal, index: number) => (
+          <motion.div
+            key={deal.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+          >
+            <DealCard deal={deal} />
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
   );
 };
 
