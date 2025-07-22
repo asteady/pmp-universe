@@ -738,6 +738,5 @@ export const mergedAndNewPMPs: Deal[] = [
     seasonal: ['Year-round'],
     tentpole: ['Book Fairs', 'Author Tours', 'Reading Month'],
     pois: ['Bookstores', 'Libraries'],
-  },
-  // ... (continue for all 16 new cards) ... 
+  }
 ]; 
