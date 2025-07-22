@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import PMPGrid from '../../components/PMPGrid';
-import { evergreenPMPs } from '../../data/pmpData';
+import { evergreenPMPs, mergedAndNewPMPs } from '../../data/pmpData';
 import { seasonalPMPs } from '../../data/seasonalPMPs';
 import { customPMPs } from '../../data/customPMPs';
 import { filterPMPsByFlags } from '../../lib/featureFlags';
@@ -10,7 +10,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useRef } from 'react';
 
 // Combine all PMP data and filter based on feature flags
-const allPMPs = filterPMPsByFlags([...evergreenPMPs, ...seasonalPMPs, ...customPMPs]);
+const allPMPs = filterPMPsByFlags([
+  ...evergreenPMPs,
+  ...mergedAndNewPMPs,
+  ...seasonalPMPs,
+  ...customPMPs,
+]);
 
 // Sort PMPs alphabetically by name
 const sortedPMPs = allPMPs.sort((a, b) => a.name.localeCompare(b.name));
@@ -18,7 +23,7 @@ const sortedPMPs = allPMPs.sort((a, b) => a.name.localeCompare(b.name));
 const pmpData = {
   summary: {
     meetingMoments: { count: seasonalPMPs.length, period: 'June-Nov 2025', icon: '🗓️' },
-    evergreen: { count: evergreenPMPs.length, period: 'Year-round Performance', icon: '📈' },
+    evergreen: { count: evergreenPMPs.length + mergedAndNewPMPs.length, period: 'Year-round Performance', icon: '📈' },
     custom: { count: customPMPs.length, period: 'Tailored solutions', icon: '🎯' }
   },
   deals: sortedPMPs
@@ -276,7 +281,7 @@ const PMPUniversePage = () => {
                         : 'text-foreground'
                     }`}
                   >
-                    Evergreen ({evergreenPMPs.length})
+                    Evergreen ({evergreenPMPs.length + mergedAndNewPMPs.length})
                   </button>
 
                 </div>
