@@ -8,7 +8,7 @@ import { createAsanaTask } from '../lib/asana';
 
 // Modular Tooltip component
 const Tooltip = ({ text }: { text: string }) => (
-  <span className="ml-2 cursor-pointer text-accent" tabIndex={0} title={text} aria-label={text}>❓</span>
+  <span className="ml-2 cursor-pointer text-accent" tabIndex={0} title={text || 'Select from the dropdown'} aria-label={text || 'Select from the dropdown'}>❓</span>
 );
 
 const sspOptions = [
@@ -128,11 +128,16 @@ const steps = [
   },
 ];
 
+// Vibrant colors for chips and steps
+const stepColors = ['text-pink-400', 'text-blue-400', 'text-yellow-400', 'text-green-400'];
+const vibrantChipColors = ['bg-pink-500', 'bg-blue-500', 'bg-yellow-400', 'bg-green-500', 'bg-purple-500', 'bg-orange-400'];
+function vibrantChipColor(index: number) { return vibrantChipColors[index % vibrantChipColors.length]; }
+
 // Enhanced react-select styles (same as RFP Generator)
 const selectStyles = {
   control: (base: any) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)', boxShadow: '0 2px 8px rgba(0,0,0,0.12)' }),
-  menu: (base: any) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)', zIndex: 9999 }),
-  multiValue: (base: any) => ({ ...base, backgroundColor: 'var(--accent)', color: 'var(--accent-foreground)' }),
+  menu: (base: any) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)', zIndex: 9999, backdropFilter: 'blur(8px)', backgroundClip: 'padding-box', boxShadow: '0 8px 32px rgba(0,0,0,0.25)' }),
+  multiValue: (base: any, state: any) => ({ ...base, backgroundColor: vibrantChipColor(state.index), color: 'var(--accent-foreground)' }),
   input: (base: any) => ({ ...base, color: 'var(--foreground)' }),
   clearIndicator: (base: any) => ({ ...base, color: 'var(--foreground)' }),
   dropdownIndicator: (base: any) => ({ ...base, color: 'var(--foreground)' }),
@@ -146,7 +151,7 @@ const selectStyles = {
   loadingMessage: (base: any) => ({ ...base, color: 'var(--foreground)' }),
   placeholder: (base: any) => ({ ...base, color: 'var(--foreground)' }),
   singleValue: (base: any) => ({ ...base, color: 'var(--foreground)' }),
-  multiValueLabel: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+  multiValueLabel: (base: any, state: any) => ({ ...base, color: 'var(--foreground)' }),
   multiValueRemove: (base: any) => ({ ...base, color: 'var(--foreground)' }),
 };
 const selectTheme = (theme: any) => ({
@@ -177,6 +182,7 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
     setForm((prev: any) => ({ ...prev, [name]: value }));
   };
 
+  // 1. Fix flighting validation and error clearing
   const validateStep = () => {
     const newErrors: any = {};
     for (const field of currentStep.fields) {
@@ -189,7 +195,7 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
         if (!flightingStart || !flightingEnd) {
           newErrors['flighting'] = 'Both start and end dates are required.';
         } else if (flightingEnd < flightingStart) {
-          newErrors['flighting'] = 'End date must be after start date.';
+          newErrors['flighting'] = 'End date must be after or equal to start date.';
         }
       }
     }
@@ -287,7 +293,7 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
         <button className="absolute top-2 right-2 text-muted" onClick={onClose}>&times;</button>
         <h2 className="text-xl font-bold mb-4 text-foreground font-sans">Custom Deal Creation</h2>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div className="mb-2 text-foreground font-semibold">Step {step + 1} of {steps.length}: {currentStep.label}</div>
+          <div className={`mb-2 font-semibold ${stepColors[step]}`}>Step {step + 1} of {steps.length}: {currentStep.label}</div>
           {currentStep.fields.map(field => (
             (!field.conditional || field.conditional(form)) && (
               <div key={field.name} className="flex flex-col mb-2">
@@ -359,21 +365,24 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
                   </div>
                 )}
                 {field.type === 'multi-select' && (
-                  <Select
-                    isMulti
-                    inputId={field.name}
-                    name={field.name}
-                    options={field.options}
-                    value={form[field.name] || []}
-                    onChange={val => handleChange(field.name, val)}
-                    classNamePrefix="react-select"
-                    placeholder={field.placeholder}
-                    styles={selectStyles}
-                    theme={selectTheme}
-                    aria-label={field.label}
-                    aria-required={field.required}
-                    aria-invalid={!!errors[field.name]}
-                  />
+                  <div className="flex items-center">
+                    <Select
+                      isMulti
+                      inputId={field.name}
+                      name={field.name}
+                      options={field.options}
+                      value={form[field.name] || []}
+                      onChange={val => handleChange(field.name, val)}
+                      classNamePrefix="react-select"
+                      placeholder={field.placeholder || 'Select options...'}
+                      styles={selectStyles}
+                      theme={selectTheme}
+                      aria-label={field.label}
+                      aria-required={field.required}
+                      aria-invalid={!!errors[field.name]}
+                    />
+                    <Tooltip text={field.tooltip || 'Select from the dropdown'} />
+                  </div>
                 )}
                 {field.type === 'select' && (
                   <Select
@@ -383,7 +392,7 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
                     value={form[field.name] || null}
                     onChange={val => handleChange(field.name, val)}
                     classNamePrefix="react-select"
-                    placeholder={field.placeholder}
+                    placeholder={field.placeholder || 'Select an option...'}
                     styles={selectStyles}
                     theme={selectTheme}
                     aria-label={field.label}

@@ -52,10 +52,17 @@ const deviceTypes = [
   'Mobile', 'Desktop', 'Tablet', 'CTV', 'Audio'
 ];
 
+// 1. Add tooltips to all dropdowns
+const Tooltip = ({ text }: { text: string }) => (
+  <span className="ml-2 cursor-pointer text-accent" tabIndex={0} title={text || 'Select from the dropdown'} aria-label={text || 'Select from the dropdown'}>❓</span>
+);
+
+// 2. Update (Required)/(Optional) text color
+// 3. Enhance dropdown menu backdrops
 const selectStyles = {
   control: (base: any) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)', boxShadow: '0 2px 8px rgba(0,0,0,0.12)' }),
-  menu: (base: any) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)', zIndex: 9999 }),
-  multiValue: (base: any) => ({ ...base, backgroundColor: 'var(--accent)', color: 'var(--accent-foreground)' }),
+  menu: (base: any) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)', zIndex: 9999, backdropFilter: 'blur(8px)', backgroundClip: 'padding-box', boxShadow: '0 8px 32px rgba(0,0,0,0.25)' }),
+  multiValue: (base: any, state: any) => ({ ...base, backgroundColor: vibrantChipColor(state.index), color: 'var(--accent-foreground)' }),
   input: (base: any) => ({ ...base, color: 'var(--foreground)' }),
   clearIndicator: (base: any) => ({ ...base, color: 'var(--foreground)' }),
   dropdownIndicator: (base: any) => ({ ...base, color: 'var(--foreground)' }),
@@ -69,7 +76,7 @@ const selectStyles = {
   loadingMessage: (base: any) => ({ ...base, color: 'var(--foreground)' }),
   placeholder: (base: any) => ({ ...base, color: 'var(--foreground)' }),
   singleValue: (base: any) => ({ ...base, color: 'var(--foreground)' }),
-  multiValueLabel: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+  multiValueLabel: (base: any, state: any) => ({ ...base, color: 'var(--foreground)' }),
   multiValueRemove: (base: any) => ({ ...base, color: 'var(--foreground)' }),
 };
 const selectTheme = (theme: any) => ({
@@ -82,6 +89,15 @@ const selectTheme = (theme: any) => ({
     neutral80: 'var(--foreground)',
   },
 });
+
+// 4. Audience Taxonomy: searchable, always-open, default short list
+const [audienceSearch, setAudienceSearch] = useState('');
+const filteredAudienceOptions = audienceTaxonomy.map(aud => ({ value: aud.id, label: aud.name })).filter(opt => opt.label.toLowerCase().includes(audienceSearch.toLowerCase())).slice(0, 10);
+
+// 5. Label all steps and use vibrant color for step headers and chips
+const stepColors = ['text-pink-400', 'text-blue-400', 'text-yellow-400', 'text-green-400'];
+const vibrantChipColors = ['bg-pink-500', 'bg-blue-500', 'bg-yellow-400', 'bg-green-500', 'bg-purple-500', 'bg-orange-400'];
+function vibrantChipColor(index: number) { return vibrantChipColors[index % vibrantChipColors.length]; }
 
 const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
   const [step, setStep] = useState(0);
@@ -180,14 +196,14 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
           <div className="mb-4 max-h-96 overflow-y-auto">
             {steps.slice(0, -1).map((s, i) => (
               <div key={s.label} className="mb-4">
-                <div className="font-semibold text-accent mb-1">Step {i + 1}: {s.label}</div>
+                <div className={`font-semibold ${stepColors[i]} mb-1`}>Step {i + 1}: {s.label}</div>
                 {s.fields.map(field => (
                   <div key={field} className="mb-2">
                     <span className="font-semibold text-foreground">{fieldLabels[field] || field}:</span>{' '}
                     {Array.isArray(form[field]) ? (
                       <span className="inline-flex flex-wrap gap-2">
                         {form[field].map((v: any, idx: number) => (
-                          <span key={idx} className="bg-accent text-accent-foreground px-2 py-1 rounded-full text-xs font-medium">{v.label || v}</span>
+                          <span key={idx} className={`${vibrantChipColor(idx)} text-white px-2 py-1 rounded-full text-xs font-medium`}>{v.label || v}</span>
                         ))}
                       </span>
                     ) : (
@@ -216,51 +232,45 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
         <button className="absolute top-2 right-2 text-muted" onClick={onClose}>&times;</button>
         <h2 className="text-xl font-bold mb-4 text-foreground font-sans">RFP Generator</h2>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div className="mb-2 text-foreground font-semibold">Step {step + 1} of {steps.length}: {currentStep.label}</div>
+          <div className={`mb-2 font-semibold ${stepColors[step]}`}>Step {step + 1} of {steps.length}: {currentStep.label}</div>
           {currentStep.fields.map(field => (
             <div key={field} className="flex flex-col">
               <label htmlFor={field} className="mb-1 text-foreground font-sans" title={fieldTooltips[field] || ''}>
                 {fieldLabels[field]}
-                <span className="ml-1 text-xs text-blue-200 dark:text-accent/90" aria-label={fieldTooltips[field] ? fieldTooltips[field] : ''}>
-                  {['description', 'customAudience', 'measurement'].includes(field) ? ' (Optional)' : ' (Required)'}
-                </span>
+                <span className={`ml-2 text-xs ${['description', 'customAudience', 'measurement'].includes(field) ? 'text-blue-200' : 'text-accent font-bold'}`}>{['description', 'customAudience', 'measurement'].includes(field) ? '(Optional)' : '(Required)'}</span>
               </label>
-              {field === 'audienceTaxonomy' ? (
-                <Select
-                  isMulti
-                  options={audienceTaxonomy.map(aud => ({ value: aud.id, label: aud.name }))}
-                  value={form.audienceTaxonomy}
-                  onChange={opts => handleSelectChange('audienceTaxonomy', opts || [])}
-                  classNamePrefix="react-select"
-                  placeholder="Search audiences..."
-                  styles={selectStyles}
-                  theme={selectTheme}
-                  menuPortalTarget={typeof window !== 'undefined' ? document.body : undefined}
-                  menuPosition="fixed"
-                  maxMenuHeight={200}
-                />
-              ) : field === 'creatives' ? (
-                <Select
-                  isMulti
-                  options={creativeTypes.map(type => ({ value: type, label: type }))}
-                  value={form.creatives}
-                  onChange={opts => handleSelectChange('creatives', opts || [])}
-                  classNamePrefix="react-select"
-                  placeholder="Search creatives..."
-                  styles={selectStyles}
-                  theme={selectTheme}
-                />
-              ) : field === 'deviceTypes' ? (
-                <Select
-                  isMulti
-                  options={deviceTypes.map(type => ({ value: type, label: type }))}
-                  value={form.deviceTypes}
-                  onChange={opts => handleSelectChange('deviceTypes', opts || [])}
-                  classNamePrefix="react-select"
-                  placeholder="Search device types..."
-                  styles={selectStyles}
-                  theme={selectTheme}
-                />
+              {field === 'audienceTaxonomy' && (
+                <div>
+                  <input type="text" value={audienceSearch} onChange={e => setAudienceSearch(e.target.value)} placeholder="Search audiences..." className="w-full px-2 py-1 mb-2 bg-muted text-foreground rounded" />
+                  <Select
+                    isMulti
+                    options={filteredAudienceOptions}
+                    value={form.audienceTaxonomy}
+                    onChange={opts => handleSelectChange('audienceTaxonomy', opts || [])}
+                    classNamePrefix="react-select"
+                    placeholder="Search audiences..."
+                    styles={selectStyles}
+                    theme={selectTheme}
+                    menuPortalTarget={typeof window !== 'undefined' ? document.body : undefined}
+                    menuPosition="fixed"
+                    maxMenuHeight={200}
+                  />
+                  <Tooltip text={fieldTooltips[field]} />
+                </div>
+              ) : field === 'creatives' || field === 'deviceTypes' ? (
+                <div className="flex items-center">
+                  <Select
+                    isMulti
+                    options={field === 'creatives' ? creativeTypes.map(type => ({ value: type, label: type })) : deviceTypes.map(type => ({ value: type, label: type }))}
+                    value={form[field]}
+                    onChange={opts => handleSelectChange(field, opts || [])}
+                    classNamePrefix="react-select"
+                    placeholder="Search..."
+                    styles={selectStyles}
+                    theme={selectTheme}
+                  />
+                  <Tooltip text={fieldTooltips[field]} />
+                </div>
               ) : field === 'description' || field === 'customAudience' || field === 'measurement' ? (
                 <textarea
                   name={field}
