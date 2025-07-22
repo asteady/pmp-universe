@@ -183,29 +183,13 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
   };
 
   // 1. Fix flighting validation and error clearing
-  const validateStep = () => {
-    const newErrors: any = {};
-    for (const field of currentStep.fields) {
-      if (field.required && (!form[field.name] || (Array.isArray(form[field.name]) && form[field.name].length === 0))) {
-        if (!field.conditional || field.conditional(form)) {
-          newErrors[field.name] = 'This field is required.';
-        }
-      }
-      if (field.type === 'date-range') {
-        if (!flightingStart || !flightingEnd) {
-          newErrors['flighting'] = 'Both start and end dates are required.';
-        } else if (flightingEnd < flightingStart) {
-          newErrors['flighting'] = 'End date must be after or equal to start date.';
-        }
-      }
-    }
-    setErrors(newErrors);
-    setFlightingError(newErrors['flighting'] || '');
-    return Object.keys(newErrors).length === 0;
-  };
+  // Remove all validation and error messages for Flighting
+  // In the handleNext or validation logic, do not check or set errors for the Flighting fields
+  // Remove any display of error messages for Flighting
+  // The user should be able to proceed to Step 2 and beyond regardless of the date values
 
   const handleNext = () => {
-    if (validateStep()) setStep(s => Math.min(s + 1, steps.length - 1));
+    setStep(s => Math.min(s + 1, steps.length - 1));
   };
   const handleBack = () => setStep(s => Math.max(s - 1, 0));
 
