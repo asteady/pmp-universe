@@ -188,120 +188,121 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
     );
   }
 
-  if (step === steps.length - 1) {
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-        <div className="bg-background rounded-lg shadow-lg p-8 w-full max-w-lg relative">
-          <button className="absolute top-2 right-2 text-muted" onClick={onClose}>&times;</button>
-          <h2 className="text-xl font-bold mb-4 text-foreground font-sans">Review & Submit</h2>
-          <div className="mb-4 max-h-96 overflow-y-auto">
-            {steps.slice(0, -1).map((s, i) => (
-              <div key={s.label} className="mb-4">
-                <div className={`font-semibold ${stepColors[i]} mb-1`}>Step {i + 1}: {s.label}</div>
-                {s.fields.map(field => (
-                  <div key={field} className="mb-2">
-                    <span className="font-semibold text-foreground">{fieldLabels[field] || field}:</span>{' '}
-                    {Array.isArray(form[field]) ? (
-                      <span className="inline-flex flex-wrap gap-2">
-                        {form[field].map((v: any, idx: number) => (
-                          <span key={idx} className={`${vibrantChipColor(idx)} text-white px-2 py-1 rounded-full text-xs font-medium`}>{v.label || v}</span>
-                        ))}
-                      </span>
-                    ) : (
-                      <span className="bg-muted text-foreground px-2 py-1 rounded text-xs font-mono ml-1">{form[field]}</span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-          <div className="flex gap-2">
-            <button className="bg-card text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleBack}>Back</button>
-            <button className="bg-green text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleSubmit} disabled={submitting}>Submit</button>
-          </div>
-          {submitError && <div className="mt-4 text-red-500">{submitError}</div>}
-        </div>
-      </div>
-    );
-  }
-
   const currentStep = steps[step];
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
       <div className="bg-background rounded-lg shadow-lg p-8 w-full max-w-lg relative">
         <button className="absolute top-2 right-2 text-muted" onClick={onClose}>&times;</button>
-        <h2 className="text-xl font-bold mb-4 text-foreground font-sans">RFP Generator</h2>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div className={`mb-2 font-semibold ${stepColors[step]}`}>Step {step + 1} of {steps.length}: {currentStep.label}</div>
-          {currentStep.fields.map(field => (
-            <div key={field} className="flex flex-col">
-              <label htmlFor={field} className="mb-1 text-foreground font-sans" title={fieldTooltips[field] || ''}>
-                {fieldLabels[field]}
-                <span className={`ml-2 text-xs ${['description', 'customAudience', 'measurement'].includes(field) ? 'text-blue-200' : 'text-accent font-bold'}`}>{['description', 'customAudience', 'measurement'].includes(field) ? '(Optional)' : '(Required)'}</span>
-              </label>
-              {field === 'audienceTaxonomy' && (
-                <div>
-                  <input type="text" value={audienceSearch} onChange={e => setAudienceSearch(e.target.value)} placeholder="Search audiences..." className="w-full px-2 py-1 mb-2 bg-muted text-foreground rounded" />
-                  <Select
-                    isMulti
-                    options={filteredAudienceOptions}
-                    value={form.audienceTaxonomy}
-                    onChange={opts => handleSelectChange('audienceTaxonomy', opts || [])}
-                    classNamePrefix="react-select"
-                    placeholder="Search audiences..."
-                    styles={selectStyles}
-                    theme={selectTheme}
-                    menuPortalTarget={typeof window !== 'undefined' ? document.body : undefined}
-                    menuPosition="fixed"
-                    maxMenuHeight={200}
-                  />
-                  <Tooltip text={fieldTooltips[field]} />
+        {step === steps.length - 1 ? (
+          <>
+            <h2 className="text-xl font-bold mb-4 text-foreground font-sans">Review & Submit</h2>
+            <div className="mb-4 max-h-96 overflow-y-auto">
+              {steps.slice(0, -1).map((s, i) => (
+                <div key={s.label} className="mb-4">
+                  <div className={`font-semibold ${stepColors[i]} mb-1`}>Step {i + 1}: {s.label}</div>
+                  {s.fields.map(field => (
+                    <div key={field} className="mb-2">
+                      <span className="font-semibold text-foreground">{fieldLabels[field] || field}:</span>{' '}
+                      {Array.isArray(form[field]) ? (
+                        <span className="inline-flex flex-wrap gap-2">
+                          {form[field].map((v: any, idx: number) => (
+                            <span key={idx} className={`${vibrantChipColor(idx)} text-white px-2 py-1 rounded-full text-xs font-medium`}>{v.label || v}</span>
+                          ))}
+                        </span>
+                      ) : (
+                        <span className="bg-muted text-foreground px-2 py-1 rounded text-xs font-mono ml-1">{form[field]}</span>
+                      )}
+                    </div>
+                  ))}
                 </div>
-              ) : field === 'creatives' || field === 'deviceTypes' ? (
-                <div className="flex items-center">
-                  <Select
-                    isMulti
-                    options={field === 'creatives' ? creativeTypes.map(type => ({ value: type, label: type })) : deviceTypes.map(type => ({ value: type, label: type }))}
-                    value={form[field]}
-                    onChange={opts => handleSelectChange(field, opts || [])}
-                    classNamePrefix="react-select"
-                    placeholder="Search..."
-                    styles={selectStyles}
-                    theme={selectTheme}
-                  />
-                  <Tooltip text={fieldTooltips[field]} />
-                </div>
-              ) : field === 'description' || field === 'customAudience' || field === 'measurement' ? (
-                <textarea
-                  name={field}
-                  value={form[field] || ''}
-                  onChange={handleChange}
-                  className="p-2 border rounded text-foreground bg-background"
-                  aria-label={`Enter ${fieldLabels[field]}`}
-                />
-              ) : (
-                <input
-                  name={field}
-                  value={form[field] || ''}
-                  onChange={handleChange}
-                  aria-label={`Enter ${fieldLabels[field]}`}
-                  aria-required={true}
-                  aria-invalid={!!errors[field]}
-                  className={`p-2 border rounded text-foreground bg-background ${errors[field] ? 'border-red-500' : ''}`}
-                />
-              )}
-              {errors[field] && <span className="text-red-500 text-xs mt-1">{errors[field]}</span>}
+              ))}
             </div>
-          ))}
-          <div className="flex gap-2 mt-4">
-            {step > 0 && <button type="button" className="bg-card text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleBack}>Back</button>}
-            <button type="button" className="bg-green text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleNext}>Next</button>
-          </div>
-        </form>
+            <div className="flex gap-2">
+              <button className="bg-card text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleBack}>Back</button>
+              <button className="bg-green text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleSubmit} disabled={submitting}>Submit</button>
+            </div>
+            {submitError && <div className="mt-4 text-red-500">{submitError}</div>}
+          </>
+        ) : (
+          <>
+            <h2 className="text-xl font-bold mb-4 text-foreground font-sans">RFP Generator</h2>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <div className={`mb-2 font-semibold ${stepColors[step]}`}>Step {step + 1} of {steps.length}: {currentStep.label}</div>
+              {currentStep.fields.map(field => (
+                <div key={field} className="flex flex-col">
+                  <label htmlFor={field} className="mb-1 text-foreground font-sans" title={fieldTooltips[field] || ''}>
+                    {fieldLabels[field]}
+                    <span className={`ml-2 text-xs ${['description', 'customAudience', 'measurement'].includes(field) ? 'text-blue-200' : 'text-accent font-bold'}`}>{['description', 'customAudience', 'measurement'].includes(field) ? '(Optional)' : '(Required)'}</span>
+                  </label>
+                  {field === 'audienceTaxonomy' && (
+                    <div>
+                      <input type="text" value={audienceSearch} onChange={e => setAudienceSearch(e.target.value)} placeholder="Search audiences..." className="w-full px-2 py-1 mb-2 bg-muted text-foreground rounded" />
+                      <Select
+                        isMulti
+                        options={filteredAudienceOptions}
+                        value={form.audienceTaxonomy}
+                        onChange={opts => handleSelectChange('audienceTaxonomy', opts || [])}
+                        classNamePrefix="react-select"
+                        placeholder="Search audiences..."
+                        styles={selectStyles}
+                        theme={selectTheme}
+                        menuPortalTarget={typeof window !== 'undefined' ? document.body : undefined}
+                        menuPosition="fixed"
+                        maxMenuHeight={200}
+                      />
+                      <Tooltip text={fieldTooltips[field]} />
+                    </div>
+                  )}
+                  {field !== 'audienceTaxonomy' && (field === 'creatives' || field === 'deviceTypes') && (
+                    <div className="flex items-center">
+                      <Select
+                        isMulti
+                        options={field === 'creatives' ? creativeTypes.map(type => ({ value: type, label: type })) : deviceTypes.map(type => ({ value: type, label: type }))}
+                        value={form[field]}
+                        onChange={opts => handleSelectChange(field, opts || [])}
+                        classNamePrefix="react-select"
+                        placeholder="Search..."
+                        styles={selectStyles}
+                        theme={selectTheme}
+                      />
+                      <Tooltip text={fieldTooltips[field]} />
+                    </div>
+                  )}
+                  {field !== 'audienceTaxonomy' && field !== 'creatives' && field !== 'deviceTypes' && (field === 'description' || field === 'customAudience' || field === 'measurement') && (
+                    <textarea
+                      name={field}
+                      value={form[field] || ''}
+                      onChange={handleChange}
+                      className="p-2 border rounded text-foreground bg-background"
+                      aria-label={`Enter ${fieldLabels[field]}`}
+                    />
+                  )}
+                  {field !== 'audienceTaxonomy' && field !== 'creatives' && field !== 'deviceTypes' && field !== 'description' && field !== 'customAudience' && field !== 'measurement' && (
+                    <input
+                      name={field}
+                      value={form[field] || ''}
+                      onChange={handleChange}
+                      aria-label={`Enter ${fieldLabels[field]}`}
+                      aria-required={true}
+                      aria-invalid={!!errors[field]}
+                      className={`p-2 border rounded text-foreground bg-background ${errors[field] ? 'border-red-500' : ''}`}
+                    />
+                  )}
+                  {errors[field] && <span className="text-red-500 text-xs mt-1">{errors[field]}</span>}
+                </div>
+              ))}
+              <div className="flex gap-2 mt-4">
+                {step > 0 && <button type="button" className="bg-card text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleBack}>Back</button>}
+                <button type="button" className="bg-green text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleNext}>Next</button>
+              </div>
+            </form>
+          </>
+        )}
       </div>
     </div>
   );
 };
 
-export default RFPGeneratorModal; 
+export default RFPGeneratorModal;
+
