@@ -213,16 +213,16 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                 )}
               </label>
               {field === 'requestType' ? (
-                <select name="requestType" value={form.requestType || ''} onChange={handleChange} className="p-2 border rounded text-foreground" required aria-required="true" aria-invalid={submitted && !form.requestType}>
+                <select name="requestType" value={form.requestType || ''} onChange={handleChange} className="p-2 border rounded text-foreground bg-background" required aria-required="true" aria-invalid={submitted && !form.requestType}>
                   <option value="">Select...</option>
                   {requestTypes.map(rt => (
                     <option key={rt.value} value={rt.value} aria-label={rt.label}>{rt.label}</option>
                   ))}
                 </select>
               ) : field === 'description' || field === 'customReporting' ? (
-                <textarea name={field} value={form[field] || ''} onChange={handleChange} className="p-2 border rounded text-foreground" aria-label={`Enter ${fieldLabels[field]}`} />
+                <textarea name={field} value={form[field] || ''} onChange={handleChange} className="p-2 border rounded text-foreground bg-background" aria-label={`Enter ${fieldLabels[field]}`} />
               ) : (
-                <input name={field} value={form[field] || ''} onChange={handleChange} aria-label={`Enter ${fieldLabels[field]}`} aria-required={true} aria-invalid={!!errors[field]} className={`p-2 border rounded text-foreground ${errors[field] ? 'border-red-500' : ''}`} />
+                <input name={field} value={form[field] || ''} onChange={handleChange} aria-label={`Enter ${fieldLabels[field]}`} aria-required={true} aria-invalid={!!errors[field]} className={`p-2 border rounded text-foreground bg-background ${errors[field] ? 'border-red-500' : ''}`} />
               )}
               {errors[field] && <span className="text-red-500 text-xs mt-1">{errors[field]}</span>}
             </div>
@@ -254,6 +254,9 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                       neutral80: 'var(--foreground)',
                     },
                   })}
+                  menuPortalTarget={document.body}
+                  menuPosition="fixed"
+                  maxMenuHeight={200}
                 />
               </div>
               <Select
@@ -307,7 +310,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
               <textarea
                 value={customAudience}
                 onChange={e => setCustomAudience(e.target.value)}
-                className="p-2 border rounded text-foreground w-full mt-2"
+                className="p-2 border rounded text-foreground bg-background w-full mt-2"
                 aria-label="Custom Audience"
                 placeholder="Describe custom audiences, POIs, etc."
               />
@@ -315,14 +318,14 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                 type="text"
                 value={measurement}
                 onChange={e => setMeasurement(e.target.value)}
-                className="p-2 border rounded text-foreground w-full mt-2"
+                className="p-2 border rounded text-foreground bg-background w-full mt-2"
                 aria-label="Measurement"
                 placeholder="e.g. Arrival, Online Conversion, etc."
               />
               <textarea
                 value={customReporting}
                 onChange={e => setCustomReporting(e.target.value)}
-                className="p-2 border rounded text-foreground w-full mt-2"
+                className="p-2 border rounded text-foreground bg-background w-full mt-2"
                 aria-label="Custom Reporting"
                 placeholder="Describe custom reporting needs"
               />

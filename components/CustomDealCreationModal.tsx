@@ -30,7 +30,7 @@ const creativeOptions = [
 const audienceOptions = audienceTaxonomy.map(aud => ({ value: aud.id, label: aud.name, description: aud.description }));
 const evergreenSeasonalOptions = [
   { value: 'Evergreen', label: 'Evergreen' },
-  { value: 'Seasonal', label: 'Seasonal' },
+  { value: 'Meeting Moments', label: 'Meeting Moments' },
 ];
 const goalOptions = [
   { value: 'Awareness', label: 'Awareness' },
@@ -81,7 +81,7 @@ const steps = [
       { name: 'dealName', label: 'Deal Name', type: 'text', required: true, placeholder: 'Enter custom deal name' },
       { name: 'flighting', label: 'Flighting', type: 'text', required: true, placeholder: 'e.g. Q3 2024, July 1 - Aug 31' },
       { name: 'dsps', label: 'DSP(s)', type: 'multi-select', required: true, options: dspOptions, placeholder: 'Select DSP(s)' },
-      { name: 'dspOtherName', label: 'DSP (Other) Name', type: 'text', required: false, placeholder: 'If "Other" selected, specify name', conditional: (form) => form.dsps?.some((d:any) => d.value === 'Other') },
+      { name: 'dspOtherName', label: 'DSP (Other) Name', type: 'text', required: false, placeholder: 'If "Other" selected, specify name', conditional: (form: any) => form.dsps?.some((d:any) => d.value === 'Other') },
       { name: 'dspSeatId', label: 'DSP Seat ID', type: 'text', required: false, placeholder: 'Optional seat ID' },
       { name: 'ssps', label: 'Preferred SSP(s)', type: 'multi-select', required: false, options: sspOptions, placeholder: 'Select SSP(s)', tooltip: 'Optional: Preferred supply partners' },
       { name: 'creatives', label: 'Infillion Curated Creative', type: 'multi-select', required: true, options: creativeOptions, placeholder: 'Select creative types' },
@@ -92,7 +92,7 @@ const steps = [
     fields: [
       { name: 'customAudience', label: 'Custom Audience', type: 'textarea', required: false, placeholder: 'Describe custom audience, POIs, etc.' },
       { name: 'audienceTaxonomy', label: 'Infillion Audience Taxonomy', type: 'multi-select', required: false, options: audienceOptions, placeholder: 'Search and select audience segments' },
-      { name: 'evergreenSeasonal', label: 'Evergreen & Seasonal', type: 'multi-select', required: false, options: evergreenSeasonalOptions, placeholder: 'Select deal type(s)' },
+      { name: 'evergreenSeasonal', label: 'Evergreen & Meeting Moments', type: 'multi-select', required: false, options: evergreenSeasonalOptions, placeholder: 'Select deal type(s)' },
     ],
   },
   {
