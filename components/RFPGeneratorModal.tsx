@@ -3,13 +3,9 @@ import { createAsanaTask } from '../lib/asana';
 import audienceTaxonomy from '../data/audienceTaxonomy.json';
 import Select from 'react-select';
 
-const requestTypes = [
-  { value: 'deal-id', label: 'Deal ID Only' },
-  { value: 'rfp-slides', label: 'RFP Slides Only' },
-  { value: 'both', label: 'Both (Deal ID + RFP Slides)' },
-];
+// The modal will always reflect the current theme (light/dark) because it uses CSS variables set on :root and updated via the html class (see app/layout.tsx)
 
-// 1. Define the new step structure
+// 1. Define the step structure
 const steps = [
   {
     label: 'Client Details',
@@ -49,52 +45,72 @@ const fieldTooltips: Record<string, string> = {
 
 const RFP_PROPOSAL_SECTION_GID = process.env.ASANA_RFP_PROPOSAL_SECTION_GID || '1209264958990943';
 
+const creativeTypes = [
+  'IDV', 'Rich Media', 'Display', 'Video', 'Native', 'Audio'
+];
+const deviceTypes = [
+  'Mobile', 'Desktop', 'Tablet', 'CTV', 'Audio'
+];
+
+const selectStyles = {
+  control: (base: any) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)', boxShadow: '0 2px 8px rgba(0,0,0,0.12)' }),
+  menu: (base: any) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)', zIndex: 9999 }),
+  multiValue: (base: any) => ({ ...base, backgroundColor: 'var(--accent)', color: 'var(--accent-foreground)' }),
+  input: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+  clearIndicator: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+  dropdownIndicator: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+  option: (base: any, state: any) => ({
+    ...base,
+    backgroundColor: state.isFocused ? 'var(--accent)' : 'var(--background)',
+    color: state.isFocused ? 'var(--accent-foreground)' : 'var(--foreground)',
+    '&:active': { backgroundColor: 'var(--accent)' },
+  }),
+  noOptionsMessage: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+  loadingMessage: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+  placeholder: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+  singleValue: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+  multiValueLabel: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+  multiValueRemove: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+};
+const selectTheme = (theme: any) => ({
+  ...theme,
+  colors: {
+    ...theme.colors,
+    primary: '#00FFB7',
+    primary25: '#00FFB733',
+    neutral0: 'var(--background)',
+    neutral80: 'var(--foreground)',
+  },
+});
+
 const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
   const [step, setStep] = useState(0);
-  const [form, setForm] = useState<Record<string, string>>({});
-  const [submitted, setSubmitted] = useState(false);
-  const [resultMsg, setResultMsg] = useState<string | null>(null);
-  // Add error state and helper text for all required fields
+  // All form state in one object
+  const [form, setForm] = useState<Record<string, any>>({
+    agencyName: '',
+    advertiserName: '',
+    description: '',
+    audienceTaxonomy: [],
+    customAudience: '',
+    creatives: [],
+    deviceTypes: [],
+    measurement: '',
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
-  // Add state for multi-selects and single-selects
-  const audienceTaxonomyOptions = audienceTaxonomy.map(aud => ({ value: aud.id, label: aud.name }));
-  const creativeTypes = [
-    'IDV', 'Rich Media', 'Display', 'Video', 'Native', 'Audio'
-  ];
-  const deviceTypes = [
-    'Mobile', 'Desktop', 'Tablet', 'CTV', 'Audio'
-  ];
-  const [selectedAudiences, setSelectedAudiences] = useState<string[]>([]);
-  const [selectedCreatives, setSelectedCreatives] = useState<string[]>([]);
-  const [selectedDeviceTypes, setSelectedDeviceTypes] = useState<string[]>([]);
-  const [measurement, setMeasurement] = useState('');
-  const [customAudience, setCustomAudience] = useState('');
-
-  // Conditional logic: Only show relevant steps based on requestType
-  const getVisibleSteps = () => {
-    if (form.requestType === 'deal-id') {
-      // Minimal info for Deal ID
-      return steps.filter((s, i) => [0, 1, 2, 3, 4].includes(i));
-    }
-    if (form.requestType === 'rfp-slides') {
-      // Full RFP info
-      return steps;
-    }
-    // Both: all info
-    return steps;
-  };
-  const visibleSteps = getVisibleSteps();
-
+  // Validation
   const validateStep = () => {
-    const currentStepFields = visibleSteps[step]?.fields || [];
+    const currentStepFields = steps[step]?.fields || [];
     const newErrors: Record<string, string> = {};
     currentStepFields.forEach(field => {
       if (["agencyName", "advertiserName", "description", "audienceTaxonomy", "customAudience", "creatives", "deviceTypes"].includes(field)) {
-        if (!form[field] || (Array.isArray(form[field]) && form[field].length === 0)) {
+        if (
+          form[field] === '' ||
+          (Array.isArray(form[field]) && form[field].length === 0)
+        ) {
           newErrors[field] = 'This field is required.';
         }
       }
@@ -103,13 +119,16 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  // Handlers
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
+  const handleSelectChange = (field: string, value: any) => {
+    setForm({ ...form, [field]: value });
+  };
   const handleNext = () => {
     if (validateStep()) {
-      setStep(s => Math.min(s + 1, visibleSteps.length));
+      setStep(s => Math.min(s + 1, steps.length - 1));
     }
   };
   const handleBack = () => setStep(s => Math.max(s - 1, 0));
@@ -120,7 +139,14 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
     setSubmitError('');
     setSubmitSuccess(false);
     try {
-      await createAsanaTask(form, { sectionGid: RFP_PROPOSAL_SECTION_GID });
+      // Prepare payload for Asana
+      const payload = {
+        ...form,
+        audienceTaxonomy: form.audienceTaxonomy.map((opt: any) => opt.value),
+        creatives: form.creatives.map((opt: any) => opt.value),
+        deviceTypes: form.deviceTypes.map((opt: any) => opt.value),
+      };
+      await createAsanaTask(payload, { sectionGid: RFP_PROPOSAL_SECTION_GID });
       setSubmitSuccess(true);
     } catch (err: any) {
       setSubmitError(err.message || 'Failed to submit to Asana.');
@@ -131,7 +157,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
 
   if (!open) return null;
 
-  if (submitted) {
+  if (submitSuccess) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
         <div className="bg-background rounded-lg shadow-lg p-8 w-full max-w-lg relative">
@@ -145,58 +171,44 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
     );
   }
 
-  if (step === visibleSteps.length) {
-    // Summary/confirmation step
+  if (step === steps.length - 1) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
         <div className="bg-background rounded-lg shadow-lg p-8 w-full max-w-lg relative">
           <button className="absolute top-2 right-2 text-muted" onClick={onClose}>&times;</button>
           <h2 className="text-xl font-bold mb-4 text-foreground font-sans">Review & Submit</h2>
-          <div className="mb-4">
-            <div className="mb-2">
-              <span className="font-semibold text-foreground">Audiences:</span>
-              <div className="flex flex-wrap gap-2 mt-1">
-                {selectedAudiences.map(aud => (
-                  <span key={aud} className="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium">{audienceTaxonomy.find(o => o.id === aud)?.name || aud}</span>
+          <div className="mb-4 max-h-96 overflow-y-auto">
+            {steps.slice(0, -1).map((s, i) => (
+              <div key={s.label} className="mb-4">
+                <div className="font-semibold text-accent mb-1">Step {i + 1}: {s.label}</div>
+                {s.fields.map(field => (
+                  <div key={field} className="mb-2">
+                    <span className="font-semibold text-foreground">{fieldLabels[field] || field}:</span>{' '}
+                    {Array.isArray(form[field]) ? (
+                      <span className="inline-flex flex-wrap gap-2">
+                        {form[field].map((v: any, idx: number) => (
+                          <span key={idx} className="bg-accent text-accent-foreground px-2 py-1 rounded-full text-xs font-medium">{v.label || v}</span>
+                        ))}
+                      </span>
+                    ) : (
+                      <span className="bg-muted text-foreground px-2 py-1 rounded text-xs font-mono ml-1">{form[field]}</span>
+                    )}
+                  </div>
                 ))}
               </div>
-            </div>
-            <div className="mb-2">
-              <span className="font-semibold text-foreground">Creatives:</span>
-              <div className="flex flex-wrap gap-2 mt-1">
-                {selectedCreatives.map(c => (
-                  <span key={c} className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-medium">{c}</span>
-                ))}
-              </div>
-            </div>
-            <div className="mb-2">
-              <span className="font-semibold text-foreground">Device Types:</span>
-              <div className="flex flex-wrap gap-2 mt-1">
-                {selectedDeviceTypes.map(d => (
-                  <span key={d} className="bg-purple-500 text-white px-3 py-1 rounded-full text-xs font-medium">{d}</span>
-                ))}
-              </div>
-            </div>
-            <div className="mb-2">
-              <span className="font-semibold text-foreground">Custom Audience:</span>
-              <div className="bg-slate-100 text-foreground px-3 py-2 rounded text-xs font-mono mt-1">{customAudience}</div>
-            </div>
-            <div className="mb-2">
-              <span className="font-semibold text-foreground">Measurement:</span>
-              <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-medium ml-2">{measurement}</span>
-            </div>
+            ))}
           </div>
           <div className="flex gap-2">
             <button className="bg-card text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleBack}>Back</button>
-            <button className="bg-green text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleSubmit}>Submit</button>
+            <button className="bg-green text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleSubmit} disabled={submitting}>Submit</button>
           </div>
-          {resultMsg && <div className="mt-4 text-foreground">{resultMsg}</div>}
+          {submitError && <div className="mt-4 text-red-500">{submitError}</div>}
         </div>
       </div>
     );
   }
 
-  const currentStep = visibleSteps[step];
+  const currentStep = steps[step];
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
@@ -204,183 +216,76 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
         <button className="absolute top-2 right-2 text-muted" onClick={onClose}>&times;</button>
         <h2 className="text-xl font-bold mb-4 text-foreground font-sans">RFP Generator</h2>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div className="mb-2 text-foreground font-semibold">Step {step + 1} of {visibleSteps.length + 1}: {currentStep.label}</div>
+          <div className="mb-2 text-foreground font-semibold">Step {step + 1} of {steps.length}: {currentStep.label}</div>
           {currentStep.fields.map(field => (
             <div key={field} className="flex flex-col">
               <label htmlFor={field} className="mb-1 text-foreground font-sans" title={fieldTooltips[field] || ''}>
                 {fieldLabels[field]}
-                {field === 'requestType' ? (
-                  <span className="ml-1 text-xs text-blue-300 dark:text-accent/80" aria-label="Select the type of RFP you need"> (Select)</span>
-                ) : field === 'description' || field === 'customAudience' || field === 'measurement' ? (
-                  <span className="ml-1 text-xs text-blue-300 dark:text-accent/80" aria-label="Enter a description for the RFP"> (Optional)</span>
-                ) : (
-                  <span className="ml-1 text-xs text-blue-300 dark:text-accent/80" aria-label="Enter a value for the field"> (Required)</span>
-                )}
+                <span className="ml-1 text-xs text-blue-200 dark:text-accent/90" aria-label={fieldTooltips[field] ? fieldTooltips[field] : ''}>
+                  {['description', 'customAudience', 'measurement'].includes(field) ? ' (Optional)' : ' (Required)'}
+                </span>
               </label>
-              {field === 'requestType' ? (
-                <select name="requestType" value={form.requestType || ''} onChange={handleChange} className="p-2 border rounded text-foreground bg-background" required aria-required="true" aria-invalid={submitted && !form.requestType}>
-                  <option value="">Select...</option>
-                  {requestTypes.map(rt => (
-                    <option key={rt.value} value={rt.value} aria-label={rt.label}>{rt.label}</option>
-                  ))}
-                </select>
+              {field === 'audienceTaxonomy' ? (
+                <Select
+                  isMulti
+                  options={audienceTaxonomy.map(aud => ({ value: aud.id, label: aud.name }))}
+                  value={form.audienceTaxonomy}
+                  onChange={opts => handleSelectChange('audienceTaxonomy', opts || [])}
+                  classNamePrefix="react-select"
+                  placeholder="Search audiences..."
+                  styles={selectStyles}
+                  theme={selectTheme}
+                  menuPortalTarget={typeof window !== 'undefined' ? document.body : undefined}
+                  menuPosition="fixed"
+                  maxMenuHeight={200}
+                />
+              ) : field === 'creatives' ? (
+                <Select
+                  isMulti
+                  options={creativeTypes.map(type => ({ value: type, label: type }))}
+                  value={form.creatives}
+                  onChange={opts => handleSelectChange('creatives', opts || [])}
+                  classNamePrefix="react-select"
+                  placeholder="Search creatives..."
+                  styles={selectStyles}
+                  theme={selectTheme}
+                />
+              ) : field === 'deviceTypes' ? (
+                <Select
+                  isMulti
+                  options={deviceTypes.map(type => ({ value: type, label: type }))}
+                  value={form.deviceTypes}
+                  onChange={opts => handleSelectChange('deviceTypes', opts || [])}
+                  classNamePrefix="react-select"
+                  placeholder="Search device types..."
+                  styles={selectStyles}
+                  theme={selectTheme}
+                />
               ) : field === 'description' || field === 'customAudience' || field === 'measurement' ? (
-                <textarea name={field} value={form[field] || ''} onChange={handleChange} className="p-2 border rounded text-foreground bg-background" aria-label={`Enter ${fieldLabels[field]}`} />
+                <textarea
+                  name={field}
+                  value={form[field] || ''}
+                  onChange={handleChange}
+                  className="p-2 border rounded text-foreground bg-background"
+                  aria-label={`Enter ${fieldLabels[field]}`}
+                />
               ) : (
-                <input name={field} value={form[field] || ''} onChange={handleChange} aria-label={`Enter ${fieldLabels[field]}`} aria-required={true} aria-invalid={!!errors[field]} className={`p-2 border rounded text-foreground bg-background ${errors[field] ? 'border-red-500' : ''}`} />
+                <input
+                  name={field}
+                  value={form[field] || ''}
+                  onChange={handleChange}
+                  aria-label={`Enter ${fieldLabels[field]}`}
+                  aria-required={true}
+                  aria-invalid={!!errors[field]}
+                  className={`p-2 border rounded text-foreground bg-background ${errors[field] ? 'border-red-500' : ''}`}
+                />
               )}
               {errors[field] && <span className="text-red-500 text-xs mt-1">{errors[field]}</span>}
             </div>
           ))}
-          {currentStep.label === 'Deal Settings' && (
-            <>
-              <div className="mb-4">
-                <label className="block text-sm font-semibold text-foreground mb-2">Select Audiences</label>
-                <Select
-                  isMulti
-                  options={audienceTaxonomy.map(aud => ({ value: aud.id, label: aud.name }))}
-                  value={audienceTaxonomy.filter(aud => selectedAudiences.includes(aud.id)).map(aud => ({ value: aud.id, label: aud.name }))}
-                  onChange={opts => setSelectedAudiences(opts.map(opt => opt.value))}
-                  classNamePrefix="react-select"
-                  placeholder="Search audiences..."
-                  styles={{
-                    control: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)', boxShadow: 'none' }),
-                    menu: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)' }),
-                    multiValue: (base) => ({ ...base, backgroundColor: 'var(--accent)', color: 'var(--accent-foreground)' }),
-                    input: (base) => ({ ...base, color: 'var(--foreground)' }),
-                    clearIndicator: (base) => ({ ...base, color: 'var(--foreground)' }),
-                    dropdownIndicator: (base) => ({ ...base, color: 'var(--foreground)' }),
-                    option: (base, state) => ({
-                      ...base,
-                      backgroundColor: state.isFocused ? 'var(--accent)' : 'var(--background)',
-                      color: state.isFocused ? 'var(--accent-foreground)' : 'var(--foreground)',
-                      '&:active': {
-                        backgroundColor: 'var(--accent)',
-                      },
-                    }),
-                    noOptionsMessage: (base) => ({ ...base, color: 'var(--foreground)' }),
-                    loadingMessage: (base) => ({ ...base, color: 'var(--foreground)' }),
-                    placeholder: (base) => ({ ...base, color: 'var(--foreground)' }),
-                    singleValue: (base) => ({ ...base, color: 'var(--foreground)' }),
-                    multiValueLabel: (base) => ({ ...base, color: 'var(--foreground)' }),
-                    multiValueRemove: (base) => ({ ...base, color: 'var(--foreground)' }),
-                  }}
-                  theme={theme => ({
-                    ...theme,
-                    colors: {
-                      ...theme.colors,
-                      primary: '#00FFB7',
-                      primary25: '#00FFB733',
-                      neutral0: 'var(--background)',
-                      neutral80: 'var(--foreground)',
-                    },
-                  })}
-                  menuPortalTarget={document.body}
-                  menuPosition="fixed"
-                  maxMenuHeight={200}
-                />
-                <textarea
-                  value={customAudience}
-                  onChange={e => setCustomAudience(e.target.value)}
-                  className="p-2 border rounded text-foreground bg-background w-full mt-2"
-                  aria-label="Custom Audience"
-                  placeholder="Describe custom audiences, POIs, Frequency, Dwell Time, Survey Questions/Responses, etc."
-                  title={fieldTooltips['customAudience']}
-                />
-              </div>
-              <Select
-                isMulti
-                options={creativeTypes.map(type => ({ value: type, label: type }))}
-                value={selectedCreatives.map(c => ({ value: c, label: c }))}
-                onChange={opts => setSelectedCreatives(opts.map(opt => opt.value))}
-                classNamePrefix="react-select"
-                placeholder="Search creatives..."
-                styles={{
-                  control: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)', boxShadow: 'none' }),
-                  menu: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)' }),
-                  multiValue: (base) => ({ ...base, backgroundColor: 'var(--accent)', color: 'var(--accent-foreground)' }),
-                  input: (base) => ({ ...base, color: 'var(--foreground)' }),
-                  clearIndicator: (base) => ({ ...base, color: 'var(--foreground)' }),
-                  dropdownIndicator: (base) => ({ ...base, color: 'var(--foreground)' }),
-                  option: (base, state) => ({
-                    ...base,
-                    backgroundColor: state.isFocused ? 'var(--accent)' : 'var(--background)',
-                    color: state.isFocused ? 'var(--accent-foreground)' : 'var(--foreground)',
-                    '&:active': {
-                      backgroundColor: 'var(--accent)',
-                    },
-                  }),
-                  noOptionsMessage: (base) => ({ ...base, color: 'var(--foreground)' }),
-                  loadingMessage: (base) => ({ ...base, color: 'var(--foreground)' }),
-                  placeholder: (base) => ({ ...base, color: 'var(--foreground)' }),
-                  singleValue: (base) => ({ ...base, color: 'var(--foreground)' }),
-                  multiValueLabel: (base) => ({ ...base, color: 'var(--foreground)' }),
-                  multiValueRemove: (base) => ({ ...base, color: 'var(--foreground)' }),
-                }}
-                theme={theme => ({
-                  ...theme,
-                  colors: {
-                    ...theme.colors,
-                    primary: '#00FFB7',
-                    primary25: '#00FFB733',
-                    neutral0: 'var(--background)',
-                    neutral80: 'var(--foreground)',
-                  },
-                })}
-              />
-              <Select
-                isMulti
-                options={deviceTypes.map(type => ({ value: type, label: type }))}
-                value={selectedDeviceTypes.map(d => ({ value: d, label: d }))}
-                onChange={opts => setSelectedDeviceTypes(opts.map(opt => opt.value))}
-                classNamePrefix="react-select"
-                placeholder="Search device types..."
-                styles={{
-                  control: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)', boxShadow: 'none' }),
-                  menu: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)' }),
-                  multiValue: (base) => ({ ...base, backgroundColor: 'var(--accent)', color: 'var(--accent-foreground)' }),
-                  input: (base) => ({ ...base, color: 'var(--foreground)' }),
-                  clearIndicator: (base) => ({ ...base, color: 'var(--foreground)' }),
-                  dropdownIndicator: (base) => ({ ...base, color: 'var(--foreground)' }),
-                  option: (base, state) => ({
-                    ...base,
-                    backgroundColor: state.isFocused ? 'var(--accent)' : 'var(--background)',
-                    color: state.isFocused ? 'var(--accent-foreground)' : 'var(--foreground)',
-                    '&:active': {
-                      backgroundColor: 'var(--accent)',
-                    },
-                  }),
-                  noOptionsMessage: (base) => ({ ...base, color: 'var(--foreground)' }),
-                  loadingMessage: (base) => ({ ...base, color: 'var(--foreground)' }),
-                  placeholder: (base) => ({ ...base, color: 'var(--foreground)' }),
-                  singleValue: (base) => ({ ...base, color: 'var(--foreground)' }),
-                  multiValueLabel: (base) => ({ ...base, color: 'var(--foreground)' }),
-                  multiValueRemove: (base) => ({ ...base, color: 'var(--foreground)' }),
-                }}
-                theme={theme => ({
-                  ...theme,
-                  colors: {
-                    ...theme.colors,
-                    primary: '#00FFB7',
-                    primary25: '#00FFB733',
-                    neutral0: 'var(--background)',
-                    neutral80: 'var(--foreground)',
-                  },
-                })}
-              />
-              <input
-                type="text"
-                value={measurement}
-                onChange={e => setMeasurement(e.target.value)}
-                className="p-2 border rounded text-foreground bg-background w-full mt-2"
-                aria-label="Measurement"
-                placeholder="Arrival Foot Traffic Attribution, Online Conversions, Quartiles, etc."
-              />
-            </>
-          )}
           <div className="flex gap-2 mt-4">
             {step > 0 && <button type="button" className="bg-card text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleBack}>Back</button>}
-            <button type="button" className="bg-green text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleNext} disabled={currentStep.fields.includes('requestType') && !form.requestType}>Next</button>
+            <button type="button" className="bg-green text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleNext}>Next</button>
           </div>
         </form>
       </div>

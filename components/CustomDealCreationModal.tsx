@@ -6,6 +6,11 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { evergreenPMPs, mergedAndNewPMPs } from '../data/pmpData';
 import { createAsanaTask } from '../lib/asana';
 
+// Modular Tooltip component
+const Tooltip = ({ text }: { text: string }) => (
+  <span className="ml-2 cursor-pointer text-accent" tabIndex={0} title={text} aria-label={text}>❓</span>
+);
+
 const sspOptions = [
   { value: 'Nexxen', label: 'Nexxen' },
   { value: 'Magnite', label: 'Magnite' },
@@ -123,6 +128,38 @@ const steps = [
   },
 ];
 
+// Enhanced react-select styles (same as RFP Generator)
+const selectStyles = {
+  control: (base: any) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)', boxShadow: '0 2px 8px rgba(0,0,0,0.12)' }),
+  menu: (base: any) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)', zIndex: 9999 }),
+  multiValue: (base: any) => ({ ...base, backgroundColor: 'var(--accent)', color: 'var(--accent-foreground)' }),
+  input: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+  clearIndicator: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+  dropdownIndicator: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+  option: (base: any, state: any) => ({
+    ...base,
+    backgroundColor: state.isFocused ? 'var(--accent)' : 'var(--background)',
+    color: state.isFocused ? 'var(--accent-foreground)' : 'var(--foreground)',
+    '&:active': { backgroundColor: 'var(--accent)' },
+  }),
+  noOptionsMessage: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+  loadingMessage: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+  placeholder: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+  singleValue: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+  multiValueLabel: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+  multiValueRemove: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+};
+const selectTheme = (theme: any) => ({
+  ...theme,
+  colors: {
+    ...theme.colors,
+    primary: '#00FFB7',
+    primary25: '#00FFB733',
+    neutral0: 'var(--background)',
+    neutral80: 'var(--foreground)',
+  },
+});
+
 function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<any>({});
@@ -130,8 +167,6 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
   const [submitting, setSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
-
-  // 3. Add state for flighting dates
   const [flightingStart, setFlightingStart] = useState<Date | null>(null);
   const [flightingEnd, setFlightingEnd] = useState<Date | null>(null);
   const [flightingError, setFlightingError] = useState('');
@@ -142,7 +177,6 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
     setForm((prev: any) => ({ ...prev, [name]: value }));
   };
 
-  // 1. Add validation for flighting date range
   const validateStep = () => {
     const newErrors: any = {};
     for (const field of currentStep.fields) {
@@ -175,7 +209,6 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
     setSubmitError('');
     setSubmitSuccess(false);
     try {
-      // Prepare payload for Asana
       const payload = {
         ...form,
         flighting: flightingStart && flightingEnd ? `${flightingStart.toLocaleDateString()} - ${flightingEnd.toLocaleDateString()}` : '',
@@ -206,7 +239,6 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
   }
 
   if (step === steps.length - 1) {
-    // Review & Submit
     return (
       <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
         <div className="bg-background rounded-lg shadow-lg p-8 w-full max-w-lg relative">
@@ -249,40 +281,6 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
     );
   }
 
-  // 2. For all Select components, use the same styles and theme as in RFPGeneratorModal.tsx
-  const selectStyles = {
-    control: (base: any) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)', boxShadow: 'none' }),
-    menu: (base: any) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)' }),
-    multiValue: (base: any) => ({ ...base, backgroundColor: 'var(--accent)', color: 'var(--accent-foreground)' }),
-    input: (base: any) => ({ ...base, color: 'var(--foreground)' }),
-    clearIndicator: (base: any) => ({ ...base, color: 'var(--foreground)' }),
-    dropdownIndicator: (base: any) => ({ ...base, color: 'var(--foreground)' }),
-    option: (base: any, state: any) => ({
-      ...base,
-      backgroundColor: state.isFocused ? 'var(--accent)' : 'var(--background)',
-      color: state.isFocused ? 'var(--accent-foreground)' : 'var(--foreground)',
-      '&:active': {
-        backgroundColor: 'var(--accent)',
-      },
-    }),
-    noOptionsMessage: (base: any) => ({ ...base, color: 'var(--foreground)' }),
-    loadingMessage: (base: any) => ({ ...base, color: 'var(--foreground)' }),
-    placeholder: (base: any) => ({ ...base, color: 'var(--foreground)' }),
-    singleValue: (base: any) => ({ ...base, color: 'var(--foreground)' }),
-    multiValueLabel: (base: any) => ({ ...base, color: 'var(--foreground)' }),
-    multiValueRemove: (base: any) => ({ ...base, color: 'var(--foreground)' }),
-  };
-  const selectTheme = (theme: any) => ({
-    ...theme,
-    colors: {
-      ...theme.colors,
-      primary: '#00FFB7',
-      primary25: '#00FFB733',
-      neutral0: 'var(--background)',
-      neutral80: 'var(--foreground)',
-    },
-  });
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
       <div className="bg-background rounded-lg shadow-lg p-8 w-full max-w-lg relative">
@@ -295,8 +293,9 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
               <div key={field.name} className="flex flex-col mb-2">
                 <label htmlFor={field.name} className="mb-1 text-foreground font-sans">
                   {field.label}
-                  {field.required && <span className="ml-1 text-xs text-blue-300">*</span>}
-                  {field.tooltip && <span className="ml-2 text-xs text-muted" title={field.tooltip}>?</span>}
+                  {field.required && <span className="ml-1 text-xs text-accent font-bold">*</span>}
+                  {field.tooltip && <Tooltip text={field.tooltip} />}
+                  <span className={`ml-2 text-xs ${field.required ? 'text-accent font-bold' : 'text-blue-200'}`}>{field.required ? '(Required)' : '(Optional)'}</span>
                 </label>
                 {field.type === 'text' && (
                   <input
@@ -307,6 +306,7 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
                     onChange={e => handleChange(field.name, e.target.value)}
                     className={`p-2 border rounded text-foreground bg-background border-border ${errors[field.name] ? 'border-red-500' : ''}`}
                     placeholder={field.placeholder}
+                    aria-label={field.label}
                     aria-required={field.required}
                     aria-invalid={!!errors[field.name]}
                   />
@@ -319,6 +319,7 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
                     onChange={e => handleChange(field.name, e.target.value)}
                     className={`p-2 border rounded text-foreground bg-background border-border ${errors[field.name] ? 'border-red-500' : ''}`}
                     placeholder={field.placeholder}
+                    aria-label={field.label}
                     aria-required={field.required}
                     aria-invalid={!!errors[field.name]}
                   />
@@ -336,6 +337,7 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
                       endDate={flightingEnd}
                       placeholderText="Start Date"
                       className="p-2 border rounded text-foreground bg-background border-border"
+                      aria-label="Flighting Start Date"
                       aria-required={field.required}
                       aria-invalid={!!flightingError}
                     />
@@ -350,6 +352,7 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
                       endDate={flightingEnd}
                       placeholderText="End Date"
                       className="p-2 border rounded text-foreground bg-background border-border"
+                      aria-label="Flighting End Date"
                       aria-required={field.required}
                       aria-invalid={!!flightingError}
                     />
@@ -367,6 +370,7 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
                     placeholder={field.placeholder}
                     styles={selectStyles}
                     theme={selectTheme}
+                    aria-label={field.label}
                     aria-required={field.required}
                     aria-invalid={!!errors[field.name]}
                   />
@@ -382,11 +386,13 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
                     placeholder={field.placeholder}
                     styles={selectStyles}
                     theme={selectTheme}
+                    aria-label={field.label}
                     aria-required={field.required}
                     aria-invalid={!!errors[field.name]}
                   />
                 )}
                 {errors[field.name] && <span className="text-red-500 text-xs mt-1">{errors[field.name]}</span>}
+                {field.type === 'date-range' && flightingError && <span className="text-red-500 text-xs mt-1">{flightingError}</span>}
               </div>
             )
           ))}
