@@ -38,24 +38,24 @@ export function ProgressBar({ progress, className = '' }: ProgressBarProps) {
       className={`futuristic-card p-4 ${className}`}
     >
       <div className="flex items-center justify-between mb-2">
-        <h4 className="text-white font-medium">{progress.label}</h4>
+        <h4 className="text-foreground font-medium">{progress.label}</h4>
         <div className="text-right">
-          <p className="text-white font-semibold">
+          <p className="text-foreground font-semibold">
             {formatValue(progress.value)} / {formatValue(progress.maxValue)}
           </p>
-          <p className="text-sm text-gray-400">{progress.unit}</p>
+          <p className="text-sm text-muted">{progress.unit}</p>
         </div>
       </div>
       
-      <div className="w-full bg-gray-700 rounded-full h-3 relative overflow-hidden">
+      <div className="w-full bg-muted rounded-full h-3 relative overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${percentage}%` }}
           transition={{ duration: 1, delay: 0.2 }}
           className={`h-3 rounded-full relative ${
             isComplete 
-              ? 'bg-gradient-to-r from-neon-green to-emerald-500' 
-              : 'bg-gradient-to-r from-neon-blue to-cyan-500'
+              ? 'bg-gradient-to-r from-accent to-primary' 
+              : 'bg-gradient-to-r from-primary to-accent'
           }`}
           style={{
             background: `linear-gradient(90deg, ${progress.color} 0%, ${progress.color}80 100%)`

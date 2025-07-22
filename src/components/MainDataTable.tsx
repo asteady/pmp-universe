@@ -122,23 +122,23 @@ export function MainDataTable({ data }: MainDataTableProps) {
   }
 
   return (
-    <div className="bg-gray-900 rounded-lg p-6 border border-gray-700">
+    <div className="bg-card rounded-lg p-6 border border-border">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-xl font-semibold text-white">Campaign Performance Data (MediaMath)</h3>
+        <h3 className="text-xl font-semibold text-foreground">Campaign Performance Data (MediaMath)</h3>
         <div className="flex gap-3">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted" size={20} />
             <input
               type="text"
               placeholder="Search campaigns..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="pl-10 pr-4 py-2 bg-muted border border-border rounded-lg text-foreground placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent"
             />
           </div>
           <button
             onClick={exportToCSV}
-            className="flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-accent hover:bg-primary text-accent-foreground rounded-lg transition-colors"
           >
             <Download size={16} />
             Export CSV
@@ -266,9 +266,9 @@ export function MainDataTable({ data }: MainDataTableProps) {
                 <td className="py-3 px-4 text-right text-gray-300">{item.conversionRate.toFixed(2)}%</td>
                 <td className="py-3 px-4">
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    item.status === 'active' ? 'bg-green-900 text-green-300' :
-                    item.status === 'paused' ? 'bg-yellow-900 text-yellow-300' :
-                    'bg-gray-700 text-gray-300'
+                    item.status === 'active' ? 'bg-green-700 text-green-100' :
+                    item.status === 'paused' ? 'bg-yellow-600 text-yellow-100' :
+                    'bg-muted text-muted-foreground'
                   }`}>
                     {item.status}
                   </span>
@@ -281,24 +281,24 @@ export function MainDataTable({ data }: MainDataTableProps) {
 
       {totalPages > 1 && (
         <div className="flex justify-between items-center mt-6">
-          <div className="text-gray-400">
+          <div className="text-muted">
             Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredAndSortedData.length)} of {filteredAndSortedData.length} results
           </div>
           <div className="flex gap-2">
             <button
               onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
-              className="px-3 py-1 bg-gray-800 text-gray-300 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700"
+              className="px-3 py-1 bg-muted text-muted-foreground rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted/70"
             >
               Previous
             </button>
-            <span className="px-3 py-1 bg-gray-800 text-white rounded">
+            <span className="px-3 py-1 bg-muted text-foreground rounded">
               {currentPage} of {totalPages}
             </span>
             <button
               onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
               disabled={currentPage === totalPages}
-              className="px-3 py-1 bg-gray-800 text-gray-300 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700"
+              className="px-3 py-1 bg-muted text-muted-foreground rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted/70"
             >
               Next
             </button>

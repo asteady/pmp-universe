@@ -131,23 +131,23 @@ export function AudienceDataTable({ data }: AudienceDataTableProps) {
   }
 
   return (
-    <div className="bg-gray-900 rounded-lg p-6 border border-gray-700">
+    <div className="bg-card rounded-lg p-6 border border-border">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-xl font-semibold text-white">Audience Performance Data</h3>
+        <h3 className="text-xl font-semibold text-foreground">Audience Performance Data</h3>
         <div className="flex gap-3">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted" size={20} />
             <input
               type="text"
               placeholder="Search campaigns, advertisers, or segments..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="pl-10 pr-4 py-2 bg-muted border border-border rounded-lg text-foreground placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent"
             />
           </div>
           <button
             onClick={exportToCSV}
-            className="flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-accent hover:bg-primary text-accent-foreground rounded-lg transition-colors"
           >
             <Download size={16} />
             Export CSV

@@ -24,25 +24,25 @@ export function Badge({ badge, className = '' }: BadgeProps) {
           {badge.icon}
         </div>
         <div className="flex-1">
-          <h4 className={`text-lg font-semibold ${isAchieved ? 'text-white' : 'text-gray-400'}`}>
+          <h4 className={`text-lg font-semibold ${isAchieved ? 'text-foreground' : 'text-muted'}`}>
             {badge.name}
           </h4>
-          <p className="text-sm text-gray-500 mb-2">
+          <p className="text-sm text-muted mb-2">
             {badge.description}
           </p>
-          <div className="w-full bg-gray-700 rounded-full h-2">
+          <div className="w-full bg-muted rounded-full h-2">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${progressPercentage}%` }}
               transition={{ duration: 1, delay: 0.3 }}
               className={`h-2 rounded-full ${
                 isAchieved 
-                  ? 'bg-gradient-to-r from-neon-green to-emerald-500' 
-                  : 'bg-gradient-to-r from-neon-blue to-cyan-500'
+                  ? 'bg-gradient-to-r from-accent to-primary' 
+                  : 'bg-gradient-to-r from-primary to-accent'
               }`}
             />
           </div>
-          <div className="flex justify-between text-xs text-gray-400 mt-1">
+          <div className="flex justify-between text-xs text-muted mt-1">
             <span>Progress: {badge.progress}</span>
             <span>Goal: {badge.maxProgress}</span>
           </div>

@@ -51,7 +51,7 @@ export function Leaderboard({ entries, title = 'Leaderboard', className = '' }: 
       transition={{ duration: 0.5 }}
       className={`futuristic-card ${className}`}
     >
-      <h3 className="text-xl font-semibold text-white mb-4">{title}</h3>
+      <h3 className="text-xl font-semibold text-foreground mb-4">{title}</h3>
       <div className="space-y-2">
         {entries.map((entry, index) => (
           <motion.div
@@ -61,8 +61,8 @@ export function Leaderboard({ entries, title = 'Leaderboard', className = '' }: 
             transition={{ duration: 0.3, delay: index * 0.1 }}
             className={`flex items-center justify-between p-3 rounded-lg transition-all duration-200 hover:scale-105 ${
               entry.rank <= 3 
-                ? 'bg-gradient-to-r from-gray-800 to-gray-700 border border-neon-blue/20' 
-                : 'bg-gray-800/50 hover:bg-gray-800'
+                ? 'bg-gradient-to-r from-accent to-primary border border-accent/20' 
+                : 'bg-muted/50 hover:bg-muted'
             }`}
           >
             <div className="flex items-center space-x-3">
@@ -70,13 +70,13 @@ export function Leaderboard({ entries, title = 'Leaderboard', className = '' }: 
                 {getRankIcon(entry.rank)}
               </div>
               <div>
-                <h4 className="text-white font-medium">{entry.name}</h4>
-                <p className="text-sm text-gray-400">{entry.metric}</p>
+                <h4 className="text-foreground font-medium">{entry.name}</h4>
+                <p className="text-sm text-muted">{entry.metric}</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
               <div className="text-right">
-                <p className="text-white font-semibold">{entry.value}</p>
+                <p className="text-foreground font-semibold">{entry.value}</p>
                 <div className="flex items-center space-x-1">
                   {getChangeIcon(entry.change)}
                   <span className={`text-xs ${getChangeColor(entry.change)}`}>

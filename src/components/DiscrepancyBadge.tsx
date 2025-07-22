@@ -5,10 +5,10 @@ export function DiscrepancyBadge({ value }: { value: number }) {
   let color = 'bg-primary text-foreground';
   let label = 'Low';
   if (value >= 0.08) {
-    color = 'bg-accent text-foreground';
+    color = 'bg-accent text-accent-foreground';
     label = 'High';
   } else if (value >= 0.03) {
-    color = 'bg-yellow-400 text-gray-900';
+    color = 'bg-warning text-warning-foreground';
     label = 'Medium';
   }
   return (
