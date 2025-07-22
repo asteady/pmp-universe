@@ -17,7 +17,7 @@ const steps = [
   },
   {
     label: 'Deal Settings',
-    fields: ['audienceTaxonomy', 'customAudience', 'creatives', 'deviceTypes', 'measurement', 'customReporting'],
+    fields: ['audienceTaxonomy', 'customAudience', 'creatives', 'deviceTypes', 'measurement'],
   },
   {
     label: 'Review & Submit',
@@ -33,8 +33,18 @@ const fieldLabels: Record<string, string> = {
   customAudience: 'Custom Audience',
   creatives: 'Creatives',
   deviceTypes: 'Device Type(s)',
-  measurement: 'Measurement (Arrival, etc.)',
-  customReporting: 'Custom Reporting',
+  measurement: 'Custom Reporting & Insights',
+};
+
+const fieldTooltips: Record<string, string> = {
+  agencyName: '',
+  advertiserName: '',
+  description: '',
+  audienceTaxonomy: 'Select one or more audience segments from the taxonomy. Use search to filter.',
+  customAudience: 'Describe custom audiences, POIs, Frequency, Dwell Time, Survey Questions/Responses, etc.',
+  creatives: 'Select one or more creative types for this deal.',
+  deviceTypes: 'Select all device types to target.',
+  measurement: 'e.g. Arrival Foot Traffic Attribution, Online Conversions, Quartiles, etc.',
 };
 
 const RFP_PROPOSAL_SECTION_GID = process.env.ASANA_RFP_PROPOSAL_SECTION_GID || '1209264958990943';
@@ -202,14 +212,14 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
           <div className="mb-2 text-foreground font-semibold">Step {step + 1} of {visibleSteps.length + 1}: {currentStep.label}</div>
           {currentStep.fields.map(field => (
             <div key={field} className="flex flex-col">
-              <label htmlFor={field} className="mb-1 text-foreground font-sans">
+              <label htmlFor={field} className="mb-1 text-foreground font-sans" title={fieldTooltips[field] || ''}>
                 {fieldLabels[field]}
                 {field === 'requestType' ? (
-                  <span className="ml-1 text-xs text-muted" aria-label="Select the type of RFP you need"> (Select)</span>
+                  <span className="ml-1 text-xs text-blue-300 dark:text-accent/80" aria-label="Select the type of RFP you need"> (Select)</span>
                 ) : field === 'description' || field === 'customReporting' ? (
-                  <span className="ml-1 text-xs text-muted" aria-label="Enter a description for the RFP"> (Optional)</span>
+                  <span className="ml-1 text-xs text-blue-300 dark:text-accent/80" aria-label="Enter a description for the RFP"> (Optional)</span>
                 ) : (
-                  <span className="ml-1 text-xs text-muted" aria-label="Enter a value for the field"> (Required)</span>
+                  <span className="ml-1 text-xs text-blue-300 dark:text-accent/80" aria-label="Enter a value for the field"> (Required)</span>
                 )}
               </label>
               {field === 'requestType' ? (
@@ -239,10 +249,26 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                   classNamePrefix="react-select"
                   placeholder="Search audiences..."
                   styles={{
-                    control: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)' }),
-                    menu: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)' }),
+                    control: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)', boxShadow: 'none' }),
+                    menu: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)' }),
                     multiValue: (base) => ({ ...base, backgroundColor: 'var(--accent)', color: 'var(--accent-foreground)' }),
                     input: (base) => ({ ...base, color: 'var(--foreground)' }),
+                    clearIndicator: (base) => ({ ...base, color: 'var(--foreground)' }),
+                    dropdownIndicator: (base) => ({ ...base, color: 'var(--foreground)' }),
+                    option: (base, state) => ({
+                      ...base,
+                      backgroundColor: state.isFocused ? 'var(--accent)' : 'var(--background)',
+                      color: state.isFocused ? 'var(--accent-foreground)' : 'var(--foreground)',
+                      '&:active': {
+                        backgroundColor: 'var(--accent)',
+                      },
+                    }),
+                    noOptionsMessage: (base) => ({ ...base, color: 'var(--foreground)' }),
+                    loadingMessage: (base) => ({ ...base, color: 'var(--foreground)' }),
+                    placeholder: (base) => ({ ...base, color: 'var(--foreground)' }),
+                    singleValue: (base) => ({ ...base, color: 'var(--foreground)' }),
+                    multiValueLabel: (base) => ({ ...base, color: 'var(--foreground)' }),
+                    multiValueRemove: (base) => ({ ...base, color: 'var(--foreground)' }),
                   }}
                   theme={theme => ({
                     ...theme,
@@ -267,10 +293,26 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                 classNamePrefix="react-select"
                 placeholder="Search creatives..."
                 styles={{
-                  control: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)' }),
-                  menu: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)' }),
+                  control: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)', boxShadow: 'none' }),
+                  menu: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)' }),
                   multiValue: (base) => ({ ...base, backgroundColor: 'var(--accent)', color: 'var(--accent-foreground)' }),
                   input: (base) => ({ ...base, color: 'var(--foreground)' }),
+                  clearIndicator: (base) => ({ ...base, color: 'var(--foreground)' }),
+                  dropdownIndicator: (base) => ({ ...base, color: 'var(--foreground)' }),
+                  option: (base, state) => ({
+                    ...base,
+                    backgroundColor: state.isFocused ? 'var(--accent)' : 'var(--background)',
+                    color: state.isFocused ? 'var(--accent-foreground)' : 'var(--foreground)',
+                    '&:active': {
+                      backgroundColor: 'var(--accent)',
+                    },
+                  }),
+                  noOptionsMessage: (base) => ({ ...base, color: 'var(--foreground)' }),
+                  loadingMessage: (base) => ({ ...base, color: 'var(--foreground)' }),
+                  placeholder: (base) => ({ ...base, color: 'var(--foreground)' }),
+                  singleValue: (base) => ({ ...base, color: 'var(--foreground)' }),
+                  multiValueLabel: (base) => ({ ...base, color: 'var(--foreground)' }),
+                  multiValueRemove: (base) => ({ ...base, color: 'var(--foreground)' }),
                 }}
                 theme={theme => ({
                   ...theme,
@@ -291,10 +333,26 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                 classNamePrefix="react-select"
                 placeholder="Search device types..."
                 styles={{
-                  control: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)' }),
-                  menu: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)' }),
+                  control: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)', boxShadow: 'none' }),
+                  menu: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)' }),
                   multiValue: (base) => ({ ...base, backgroundColor: 'var(--accent)', color: 'var(--accent-foreground)' }),
                   input: (base) => ({ ...base, color: 'var(--foreground)' }),
+                  clearIndicator: (base) => ({ ...base, color: 'var(--foreground)' }),
+                  dropdownIndicator: (base) => ({ ...base, color: 'var(--foreground)' }),
+                  option: (base, state) => ({
+                    ...base,
+                    backgroundColor: state.isFocused ? 'var(--accent)' : 'var(--background)',
+                    color: state.isFocused ? 'var(--accent-foreground)' : 'var(--foreground)',
+                    '&:active': {
+                      backgroundColor: 'var(--accent)',
+                    },
+                  }),
+                  noOptionsMessage: (base) => ({ ...base, color: 'var(--foreground)' }),
+                  loadingMessage: (base) => ({ ...base, color: 'var(--foreground)' }),
+                  placeholder: (base) => ({ ...base, color: 'var(--foreground)' }),
+                  singleValue: (base) => ({ ...base, color: 'var(--foreground)' }),
+                  multiValueLabel: (base) => ({ ...base, color: 'var(--foreground)' }),
+                  multiValueRemove: (base) => ({ ...base, color: 'var(--foreground)' }),
                 }}
                 theme={theme => ({
                   ...theme,
@@ -312,7 +370,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                 onChange={e => setCustomAudience(e.target.value)}
                 className="p-2 border rounded text-foreground bg-background w-full mt-2"
                 aria-label="Custom Audience"
-                placeholder="Describe custom audiences, POIs, etc."
+                placeholder="Describe custom audiences, POIs, Frequency, Dwell Time, Survey Questions/Responses, etc."
               />
               <input
                 type="text"
@@ -320,7 +378,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                 onChange={e => setMeasurement(e.target.value)}
                 className="p-2 border rounded text-foreground bg-background w-full mt-2"
                 aria-label="Measurement"
-                placeholder="e.g. Arrival, Online Conversion, etc."
+                placeholder="Arrival Foot Traffic Attribution, Online Conversions, Quartiles, etc."
               />
               <textarea
                 value={customReporting}
