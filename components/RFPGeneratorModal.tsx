@@ -91,9 +91,6 @@ const selectTheme = (theme: any) => ({
 });
 
 // 4. Audience Taxonomy: searchable, always-open, default short list
-const [audienceSearch, setAudienceSearch] = useState('');
-const filteredAudienceOptions = audienceTaxonomy.map(aud => ({ value: aud.id, label: aud.name })).filter(opt => opt.label.toLowerCase().includes(audienceSearch.toLowerCase())).slice(0, 10);
-
 // 5. Label all steps and use vibrant color for step headers and chips
 const stepColors = ['text-pink-400', 'text-blue-400', 'text-yellow-400', 'text-green-400'];
 const vibrantChipColors = ['bg-pink-500', 'bg-blue-500', 'bg-yellow-400', 'bg-green-500', 'bg-purple-500', 'bg-orange-400'];
@@ -101,7 +98,6 @@ function vibrantChipColor(index: number) { return vibrantChipColors[index % vibr
 
 const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
   const [step, setStep] = useState(0);
-  // All form state in one object
   const [form, setForm] = useState<Record<string, any>>({
     agencyName: '',
     advertiserName: '',
@@ -116,6 +112,11 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [audienceSearch, setAudienceSearch] = useState('');
+  const filteredAudienceOptions = audienceTaxonomy
+    .map(aud => ({ value: aud.id, label: aud.name }))
+    .filter(opt => opt.label.toLowerCase().includes(audienceSearch.toLowerCase()))
+    .slice(0, 10);
 
   // Validation
   const validateStep = () => {

@@ -26,17 +26,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/pmp-universe/page.js"
     ],
-    "/custom-deals/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/custom-deals/page.css",
-      "static/chunks/app/custom-deals/page.js"
-    ],
-    "/rfp-generator/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/rfp-generator/page.js"
-    ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
