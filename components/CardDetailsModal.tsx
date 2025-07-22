@@ -102,21 +102,23 @@ const CardDetailsModal: React.FC<CardDetailsModalProps> = ({ open, onClose, deal
                   <li key={idx}>{q}</li>
                 ))}
               </ul>
-              {deal.pois && deal.pois.length > 0 && (
-                <>
-                  <h4 className="text-md font-semibold mb-1 text-foreground">Targeting Signals (POIs)</h4>
-                  <div className="flex flex-wrap gap-2 mb-2">
-                    {deal.pois.map((poi: string, idx: number) => (
-                      <span key={idx} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium" title={poi}>{poi}</span>
-                    ))}
-                  </div>
-                </>
+              <h4 className="text-md font-semibold mb-1 text-foreground">Targeting Signals (POIs)</h4>
+              {deal.sensitive || deal.type === 'Sensitive' ? (
+                <div className="mb-2 text-muted-foreground text-sm">
+                  In accordance with Infillion’s privacy standards and platform bylaws, we do not track or target users based on visits to sensitive locations such as hospitals, clinics, reproductive health centers, or places of worship.
+                </div>
+              ) : (
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {(deal.pois || []).map((poi: string, idx: number) => (
+                    <span key={idx} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium" title={poi}>{poi}</span>
+                  ))}
+                </div>
               )}
             </div>
           )}
           {activeTab === "Creatives" && (
             <div>
-              <h3 className="text-lg font-bold mb-2 text-foreground">Creative Formats optimized to run with this PMP Deal include:</h3>
+              <h3 className="text-lg font-bold mb-2 text-foreground">EXPERIENTIAL RECOMMENDATIONS</h3>
               <p className="mb-3 text-foreground/80">Rich Media, Interactive Digital Video (IDV), Display (Static), Video, Audio, and Native</p>
               <div className="mb-4">
                 {creativeFormats.map(fmt => (
@@ -135,12 +137,6 @@ const CardDetailsModal: React.FC<CardDetailsModalProps> = ({ open, onClose, deal
                   </div>
                 ))}
               </div>
-              <h4 className="text-md font-semibold mb-1 text-foreground">Creative Examples</h4>
-              <ul className="list-disc list-inside text-foreground/90">
-                {creativeExamples.map((ex: string, idx: number) => (
-                  <li key={idx}>{ex}</li>
-                ))}
-              </ul>
             </div>
           )}
         </div>
