@@ -7,7 +7,7 @@ const ASANA_API_ENDPOINT = 'https://app.asana.com/api/1.0/tasks';
 const ASANA_WORKSPACE_ID = '1155777871829';
 const ASANA_PROJECT_ID = '1209264819095789';
 const ASANA_SECTION_ID_RFP = '1209264958990943';
-const ASANA_SECTION_ID_CUSTOM_DEAL = 'Deal Request (AUTO)';
+const ASANA_SECTION_ID_CUSTOM_DEAL = '1209264958990943';
 const ASANA_TOKEN = '2/1201732381903046/1210841855726554:85985b32eb20d006c5ead37fd361947f';
 
 export async function createAsanaTask(form: Record<string, any>, options?: { formType?: 'rfp' | 'customDeal' }) {
