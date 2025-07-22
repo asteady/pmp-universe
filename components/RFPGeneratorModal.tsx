@@ -112,11 +112,19 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [audienceSearch, setAudienceSearch] = useState('');
-  const filteredAudienceOptions = audienceTaxonomy
+  // Only one input for search
+  const [audienceInput, setAudienceInput] = useState('');
+
+  // Alphabetize options
+  const allAudienceOptions = audienceTaxonomy
     .map(aud => ({ value: aud.id, label: aud.name }))
-    .filter(opt => opt.label.toLowerCase().includes(audienceSearch.toLowerCase()))
-    .slice(0, 10);
+    .sort((a, b) => a.label.localeCompare(b.label));
+
+  // Filtered options: if input < 4 chars, show first 10; else, show up to 10 matches
+  const filteredAudienceOptions =
+    audienceInput.length < 4
+      ? allAudienceOptions.slice(0, 10)
+      : allAudienceOptions.filter(opt => opt.label.toLowerCase().includes(audienceInput.toLowerCase())).slice(0, 10);
 
   // Validation
   const validateStep = () => {
@@ -237,7 +245,6 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                   </label>
                   {field === 'audienceTaxonomy' && (
                     <div>
-                      <input type="text" value={audienceSearch} onChange={e => setAudienceSearch(e.target.value)} placeholder="Search audiences..." className="w-full px-2 py-1 mb-2 bg-muted text-foreground rounded" />
                       <Select
                         isMulti
                         options={filteredAudienceOptions}
@@ -250,6 +257,8 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                         menuPortalTarget={typeof window !== 'undefined' ? document.body : undefined}
                         menuPosition="fixed"
                         maxMenuHeight={200}
+                        inputValue={audienceInput}
+                        onInputChange={val => setAudienceInput(val)}
                       />
                       <Tooltip text={fieldTooltips[field]} />
                     </div>
