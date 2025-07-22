@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 import audienceTaxonomy from '../data/audienceTaxonomy.json';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { evergreenPMPs, mergedAndNewPMPs } from '../data/pmpData';
+import { createAsanaTask } from '../lib/asana';
 
 const sspOptions = [
   { value: 'Nexxen', label: 'Nexxen' },
@@ -28,6 +32,10 @@ const creativeOptions = [
   { value: 'Audio', label: 'Audio' },
 ];
 const audienceOptions = audienceTaxonomy.map(aud => ({ value: aud.id, label: aud.name, description: aud.description }));
+const pmpDealCardOptions = [
+  ...evergreenPMPs,
+  ...mergedAndNewPMPs,
+].map(deal => ({ value: deal.name, label: deal.name }));
 const evergreenSeasonalOptions = [
   { value: 'Evergreen', label: 'Evergreen' },
   { value: 'Meeting Moments', label: 'Meeting Moments' },
@@ -79,7 +87,7 @@ const steps = [
       { name: 'agencyName', label: 'Agency Name', type: 'text', required: true, placeholder: 'Enter agency name' },
       { name: 'advertiserNames', label: 'Advertiser Name(s)', type: 'text', required: true, placeholder: 'Enter advertiser/brand names' },
       { name: 'dealName', label: 'Deal Name', type: 'text', required: true, placeholder: 'Enter custom deal name' },
-      { name: 'flighting', label: 'Flighting', type: 'text', required: true, placeholder: 'e.g. Q3 2024, July 1 - Aug 31' },
+      { name: 'flighting', label: 'Flighting', type: 'date-range', required: true, placeholder: 'Select flighting dates' },
       { name: 'dsps', label: 'DSP(s)', type: 'multi-select', required: true, options: dspOptions, placeholder: 'Select DSP(s)' },
       { name: 'dspOtherName', label: 'DSP (Other) Name', type: 'text', required: false, placeholder: 'If "Other" selected, specify name', conditional: (form: any) => form.dsps?.some((d:any) => d.value === 'Other') },
       { name: 'dspSeatId', label: 'DSP Seat ID', type: 'text', required: false, placeholder: 'Optional seat ID' },
@@ -92,7 +100,7 @@ const steps = [
     fields: [
       { name: 'customAudience', label: 'Custom Audience', type: 'textarea', required: false, placeholder: 'Describe custom audience, POIs, etc.' },
       { name: 'audienceTaxonomy', label: 'Infillion Audience Taxonomy', type: 'multi-select', required: false, options: audienceOptions, placeholder: 'Search and select audience segments' },
-      { name: 'evergreenSeasonal', label: 'Evergreen & Meeting Moments', type: 'multi-select', required: false, options: evergreenSeasonalOptions, placeholder: 'Select deal type(s)' },
+      { name: 'evergreenSeasonal', label: 'Evergreen & Meeting Moments', type: 'multi-select', required: false, options: pmpDealCardOptions, placeholder: 'Select deal type(s)' },
     ],
   },
   {
@@ -123,12 +131,18 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
+  // 3. Add state for flighting dates
+  const [flightingStart, setFlightingStart] = useState<Date | null>(null);
+  const [flightingEnd, setFlightingEnd] = useState<Date | null>(null);
+  const [flightingError, setFlightingError] = useState('');
+
   const currentStep = steps[step];
 
   const handleChange = (name: string, value: any) => {
     setForm((prev: any) => ({ ...prev, [name]: value }));
   };
 
+  // 1. Add validation for flighting date range
   const validateStep = () => {
     const newErrors: any = {};
     for (const field of currentStep.fields) {
@@ -137,8 +151,16 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
           newErrors[field.name] = 'This field is required.';
         }
       }
+      if (field.type === 'date-range') {
+        if (!flightingStart || !flightingEnd) {
+          newErrors['flighting'] = 'Both start and end dates are required.';
+        } else if (flightingEnd < flightingStart) {
+          newErrors['flighting'] = 'End date must be after start date.';
+        }
+      }
     }
     setErrors(newErrors);
+    setFlightingError(newErrors['flighting'] || '');
     return Object.keys(newErrors).length === 0;
   };
 
@@ -153,7 +175,12 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
     setSubmitError('');
     setSubmitSuccess(false);
     try {
-      // TODO: Integrate with Asana API
+      // Prepare payload for Asana
+      const payload = {
+        ...form,
+        flighting: flightingStart && flightingEnd ? `${flightingStart.toLocaleDateString()} - ${flightingEnd.toLocaleDateString()}` : '',
+      };
+      await createAsanaTask(payload, { sectionGid: process.env.ASANA_RFP_PROPOSAL_SECTION_GID || '1209264958990943' });
       setSubmitSuccess(true);
     } catch (err: any) {
       setSubmitError(err.message || 'Failed to submit.');
@@ -193,7 +220,11 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
                   (!field.conditional || field.conditional(form)) && (
                     <div key={field.name} className="mb-2">
                       <span className="font-semibold text-foreground">{field.label}:</span>{' '}
-                      {Array.isArray(form[field.name]) ? (
+                      {field.type === 'date-range' ? (
+                        <span className="bg-muted text-foreground px-2 py-1 rounded text-xs font-mono ml-1">
+                          {flightingStart && flightingEnd ? `${flightingStart.toLocaleDateString()} - ${flightingEnd.toLocaleDateString()}` : ''}
+                        </span>
+                      ) : Array.isArray(form[field.name]) ? (
                         <span className="inline-flex flex-wrap gap-2">
                           {form[field.name].map((v: any, idx: number) => (
                             <span key={idx} className="bg-accent text-accent-foreground px-2 py-1 rounded-full text-xs font-medium">{v.label || v}</span>
@@ -218,6 +249,40 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
     );
   }
 
+  // 2. For all Select components, use the same styles and theme as in RFPGeneratorModal.tsx
+  const selectStyles = {
+    control: (base: any) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)', boxShadow: 'none' }),
+    menu: (base: any) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)', border: '1px solid var(--border)' }),
+    multiValue: (base: any) => ({ ...base, backgroundColor: 'var(--accent)', color: 'var(--accent-foreground)' }),
+    input: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+    clearIndicator: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+    dropdownIndicator: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+    option: (base: any, state: any) => ({
+      ...base,
+      backgroundColor: state.isFocused ? 'var(--accent)' : 'var(--background)',
+      color: state.isFocused ? 'var(--accent-foreground)' : 'var(--foreground)',
+      '&:active': {
+        backgroundColor: 'var(--accent)',
+      },
+    }),
+    noOptionsMessage: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+    loadingMessage: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+    placeholder: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+    singleValue: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+    multiValueLabel: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+    multiValueRemove: (base: any) => ({ ...base, color: 'var(--foreground)' }),
+  };
+  const selectTheme = (theme: any) => ({
+    ...theme,
+    colors: {
+      ...theme.colors,
+      primary: '#00FFB7',
+      primary25: '#00FFB733',
+      neutral0: 'var(--background)',
+      neutral80: 'var(--foreground)',
+    },
+  });
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
       <div className="bg-background rounded-lg shadow-lg p-8 w-full max-w-lg relative">
@@ -230,7 +295,7 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
               <div key={field.name} className="flex flex-col mb-2">
                 <label htmlFor={field.name} className="mb-1 text-foreground font-sans">
                   {field.label}
-                  {field.required && <span className="ml-1 text-xs text-red-400">*</span>}
+                  {field.required && <span className="ml-1 text-xs text-blue-300">*</span>}
                   {field.tooltip && <span className="ml-2 text-xs text-muted" title={field.tooltip}>?</span>}
                 </label>
                 {field.type === 'text' && (
@@ -258,6 +323,38 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
                     aria-invalid={!!errors[field.name]}
                   />
                 )}
+                {field.type === 'date-range' && (
+                  <div className="flex gap-2">
+                    <DatePicker
+                      selected={flightingStart}
+                      onChange={(date) => {
+                        setFlightingStart(date);
+                        setFlightingError('');
+                      }}
+                      selectsStart
+                      startDate={flightingStart}
+                      endDate={flightingEnd}
+                      placeholderText="Start Date"
+                      className="p-2 border rounded text-foreground bg-background border-border"
+                      aria-required={field.required}
+                      aria-invalid={!!flightingError}
+                    />
+                    <DatePicker
+                      selected={flightingEnd}
+                      onChange={(date) => {
+                        setFlightingEnd(date);
+                        setFlightingError('');
+                      }}
+                      selectsEnd
+                      startDate={flightingStart}
+                      endDate={flightingEnd}
+                      placeholderText="End Date"
+                      className="p-2 border rounded text-foreground bg-background border-border"
+                      aria-required={field.required}
+                      aria-invalid={!!flightingError}
+                    />
+                  </div>
+                )}
                 {field.type === 'multi-select' && (
                   <Select
                     isMulti
@@ -268,22 +365,8 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
                     onChange={val => handleChange(field.name, val)}
                     classNamePrefix="react-select"
                     placeholder={field.placeholder}
-                    styles={{
-                      control: base => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)' }),
-                      menu: base => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)' }),
-                      multiValue: base => ({ ...base, backgroundColor: 'var(--accent)', color: 'var(--accent-foreground)' }),
-                      input: base => ({ ...base, color: 'var(--foreground)' }),
-                    }}
-                    theme={theme => ({
-                      ...theme,
-                      colors: {
-                        ...theme.colors,
-                        primary: '#00FFB7',
-                        primary25: '#00FFB733',
-                        neutral0: 'var(--background)',
-                        neutral80: 'var(--foreground)',
-                      },
-                    })}
+                    styles={selectStyles}
+                    theme={selectTheme}
                     aria-required={field.required}
                     aria-invalid={!!errors[field.name]}
                   />
@@ -297,21 +380,8 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
                     onChange={val => handleChange(field.name, val)}
                     classNamePrefix="react-select"
                     placeholder={field.placeholder}
-                    styles={{
-                      control: base => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)' }),
-                      menu: base => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)' }),
-                      input: base => ({ ...base, color: 'var(--foreground)' }),
-                    }}
-                    theme={theme => ({
-                      ...theme,
-                      colors: {
-                        ...theme.colors,
-                        primary: '#00FFB7',
-                        primary25: '#00FFB733',
-                        neutral0: 'var(--background)',
-                        neutral80: 'var(--foreground)',
-                      },
-                    })}
+                    styles={selectStyles}
+                    theme={selectTheme}
                     aria-required={field.required}
                     aria-invalid={!!errors[field.name]}
                   />

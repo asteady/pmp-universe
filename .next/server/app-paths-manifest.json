@@ -1,5 +1,5 @@
 {
-  "/rfp-generator/page": "app/rfp-generator/page.js",
+  "/pmp-universe/page": "app/pmp-universe/page.js",
   "/custom-deals/page": "app/custom-deals/page.js",
-  "/pmp-universe/page": "app/pmp-universe/page.js"
+  "/rfp-generator/page": "app/rfp-generator/page.js"
 }
