@@ -2,9 +2,17 @@
 // Usage: await createAsanaTask(formData)
 // Requires env vars: ASANA_TOKEN, ASANA_PROJECT_ID
 
-export async function createAsanaTask(form: Record<string, any>, options?: { sectionGid?: string }) {
-  const token = process.env.ASANA_TOKEN;
-  const projectId = process.env.ASANA_PROJECT_ID;
+// Hardcoded Asana credentials and section IDs
+const ASANA_API_ENDPOINT = 'https://app.asana.com/api/1.0/tasks';
+const ASANA_WORKSPACE_ID = '1155777871829';
+const ASANA_PROJECT_ID = '1209264819095789';
+const ASANA_SECTION_ID_RFP = '1209264958990943';
+const ASANA_SECTION_ID_CUSTOM_DEAL = 'Deal Request (AUTO)';
+const ASANA_TOKEN = '2/1201732381903046/1210841855726554:85985b32eb20d006c5ead37fd361947f';
+
+export async function createAsanaTask(form: Record<string, any>, options?: { formType?: 'rfp' | 'customDeal' }) {
+  const token = ASANA_TOKEN;
+  const projectId = ASANA_PROJECT_ID;
   if (!token || !projectId) throw new Error('Missing ASANA_TOKEN or ASANA_PROJECT_ID');
 
   // Field mapping (example, update with real Asana custom field GIDs)
@@ -49,8 +57,10 @@ export async function createAsanaTask(form: Record<string, any>, options?: { sec
     }
   }
 
-  // Section/column placement (if provided)
-  const memberships = options?.sectionGid ? [{ project: projectId, section: options.sectionGid }] : [{ project: projectId }];
+  // Section/column placement (based on formType)
+  let sectionGid = ASANA_SECTION_ID_RFP;
+  if (options?.formType === 'customDeal') sectionGid = ASANA_SECTION_ID_CUSTOM_DEAL;
+  const memberships = sectionGid ? [{ project: projectId, section: sectionGid }] : [{ project: projectId }];
 
   const body = {
     data: {
@@ -64,7 +74,7 @@ export async function createAsanaTask(form: Record<string, any>, options?: { sec
 
   let asanaRes;
   try {
-    const res = await fetch('https://app.asana.com/api/1.0/tasks', {
+    const res = await fetch(ASANA_API_ENDPOINT, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -84,7 +94,7 @@ export async function createAsanaTask(form: Record<string, any>, options?: { sec
         memberships,
       },
     };
-    const res = await fetch('https://app.asana.com/api/1.0/tasks', {
+    const res = await fetch(ASANA_API_ENDPOINT, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

@@ -8,14 +8,12 @@ import { createAsanaTask } from '../lib/asana';
 
 // Modular Tooltip component
 const Tooltip = ({ text }: { text: string }) => (
-  <span className="ml-2 cursor-pointer text-accent" tabIndex={0} title={text || 'Select from the dropdown'} aria-label={text || 'Select from the dropdown'}>❓</span>
+  <span className="ml-2 cursor-pointer text-accent transition-transform duration-200 hover:scale-110" tabIndex={0} title={text || 'Select from the dropdown'} aria-label={text || 'Select from the dropdown'}>❓</span>
 );
 
 const sspOptions = [
   { value: 'Nexxen', label: 'Nexxen' },
-  { value: 'Magnite', label: 'Magnite' },
   { value: 'OpenX', label: 'OpenX' },
-  { value: 'Index', label: 'Index' },
   { value: 'Beachfront', label: 'Beachfront' },
   { value: 'Other', label: 'Other' },
 ];
@@ -33,8 +31,8 @@ const creativeOptions = [
   { value: 'Rich Media', label: 'Rich Media' },
   { value: 'Display', label: 'Display' },
   { value: 'Video', label: 'Video' },
-  { value: 'Native', label: 'Native' },
-  { value: 'Audio', label: 'Audio' },
+  { value: 'None', label: 'None' },
+  { value: 'Use Existing Infillion Creatives (NeXt, IDV, etc.)', label: 'Use Existing Infillion Creatives (NeXt, IDV, etc.)' },
 ];
 const audienceOptions = audienceTaxonomy.map(aud => ({ value: aud.id, label: aud.name, description: aud.description }));
 const pmpDealCardOptions = [
@@ -203,7 +201,7 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
         ...form,
         flighting: flightingStart && flightingEnd ? `${flightingStart.toLocaleDateString()} - ${flightingEnd.toLocaleDateString()}` : '',
       };
-      await createAsanaTask(payload, { sectionGid: process.env.ASANA_RFP_PROPOSAL_SECTION_GID || '1209264958990943' });
+      await createAsanaTask(payload, { formType: 'customDeal' });
       setSubmitSuccess(true);
     } catch (err: any) {
       setSubmitError(err.message || 'Failed to submit.');

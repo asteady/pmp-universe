@@ -32,24 +32,12 @@ const fieldLabels: Record<string, string> = {
   measurement: 'Custom Reporting & Insights',
 };
 
-const fieldTooltips: Record<string, string> = {
-  agencyName: '',
-  advertiserName: '',
-  description: '',
-  audienceTaxonomy: 'Select one or more audience segments from the taxonomy. Use search to filter.',
-  customAudience: 'Describe custom audiences, POIs, Frequency, Dwell Time, Survey Questions/Responses, etc.',
-  creatives: 'Select one or more creative types for this deal.',
-  deviceTypes: 'Select all device types to target.',
-  measurement: 'e.g. Arrival Foot Traffic Attribution, Online Conversions, Quartiles, etc.',
-};
-
-const RFP_PROPOSAL_SECTION_GID = process.env.ASANA_RFP_PROPOSAL_SECTION_GID || '1209264958990943';
-
+// 1. Update creativeTypes and deviceTypes arrays
 const creativeTypes = [
-  'IDV', 'Rich Media', 'Display', 'Video', 'Native', 'Audio'
+  'IDV', 'Rich Media', 'Display', 'Video', 'None', 'Use Existing Infillion Creatives (NeXt, IDV, etc.)'
 ];
 const deviceTypes = [
-  'Mobile', 'Desktop', 'Tablet', 'CTV', 'Audio'
+  'Smartphone', 'Desktop', 'Tablet', 'CTV'
 ];
 
 // 1. Add tooltips to all dropdowns
@@ -158,6 +146,30 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
   };
   const handleBack = () => setStep(s => Math.max(s - 1, 0));
 
+  // 2. Add clear-on-focus for input fields
+  const [agencyNamePlaceholder, setAgencyNamePlaceholder] = useState('Enter the Agency Name!');
+  const [advertiserNamePlaceholder, setAdvertiserNamePlaceholder] = useState('Enter the Brand(s) Name(s)!');
+  const [descriptionPlaceholder, setDescriptionPlaceholder] = useState('Please add as much detail about this request as you can!');
+  const [customAudiencePlaceholder, setCustomAudiencePlaceholder] = useState('Get creative! What are the ideal customer personas of this Advertiser? If applicable, please provide some thought-starters. If not, just type in N/A!');
+  const [measurementPlaceholder, setMeasurementPlaceholder] = useState('Any insights or analytics we should call out in the RFP (Arrival Foot Traffic Attribution, Custom Insights, Engagement Metrics, etc.)?');
+
+  // 3. Update tooltips
+  const fieldTooltips: Record<string, string> = {
+    agencyName: '',
+    advertiserName: '',
+    description: '',
+    audienceTaxonomy: 'Please select from the drop down menu. You must select at least one pre-built Segment, and you can select as many as you’d like!',
+    customAudience: '',
+    creatives: 'Studio is currently helping curate these RFPs, but we will auto-generate these soon. Let us know if you need any of these. Multi-select enabled!',
+    deviceTypes: 'Any specific screens you’d like to see the advertisement mock ups visualized within?',
+    measurement: '',
+  };
+
+  // 4. Update label color logic
+  const requiredColor = { color: '#ff5a36' };
+  const optionalColor = { color: '#84B067' };
+
+  // 5. Update createAsanaTask call
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -171,7 +183,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
         creatives: form.creatives.map((opt: any) => opt.value),
         deviceTypes: form.deviceTypes.map((opt: any) => opt.value),
       };
-      await createAsanaTask(payload, { sectionGid: RFP_PROPOSAL_SECTION_GID });
+      await createAsanaTask(payload, { formType: 'rfp' });
       setSubmitSuccess(true);
     } catch (err: any) {
       setSubmitError(err.message || 'Failed to submit to Asana.');
@@ -285,6 +297,8 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                       onChange={handleChange}
                       className="p-2 border rounded text-foreground bg-background"
                       aria-label={`Enter ${fieldLabels[field]}`}
+                      onFocus={() => setDescriptionPlaceholder('')}
+                      placeholder={descriptionPlaceholder}
                     />
                   )}
                   {field !== 'audienceTaxonomy' && field !== 'creatives' && field !== 'deviceTypes' && field !== 'description' && field !== 'customAudience' && field !== 'measurement' && (
@@ -296,6 +310,47 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                       aria-required={true}
                       aria-invalid={!!errors[field]}
                       className={`p-2 border rounded text-foreground bg-background ${errors[field] ? 'border-red-500' : ''}`}
+                      onFocus={() => setAgencyNamePlaceholder('')}
+                      placeholder={agencyNamePlaceholder}
+                    />
+                  )}
+                  {field !== 'audienceTaxonomy' && field !== 'creatives' && field !== 'deviceTypes' && field !== 'description' && field !== 'customAudience' && field !== 'measurement' && (
+                    <input
+                      name={field}
+                      value={form[field] || ''}
+                      onChange={handleChange}
+                      aria-label={`Enter ${fieldLabels[field]}`}
+                      aria-required={true}
+                      aria-invalid={!!errors[field]}
+                      className={`p-2 border rounded text-foreground bg-background ${errors[field] ? 'border-red-500' : ''}`}
+                      onFocus={() => setAdvertiserNamePlaceholder('')}
+                      placeholder={advertiserNamePlaceholder}
+                    />
+                  )}
+                  {field !== 'audienceTaxonomy' && field !== 'creatives' && field !== 'deviceTypes' && field !== 'description' && field !== 'customAudience' && field !== 'measurement' && (
+                    <textarea
+                      name={field}
+                      value={form[field] || ''}
+                      onChange={handleChange}
+                      aria-label={`Enter ${fieldLabels[field]}`}
+                      aria-required={true}
+                      aria-invalid={!!errors[field]}
+                      className={`p-2 border rounded text-foreground bg-background ${errors[field] ? 'border-red-500' : ''}`}
+                      onFocus={() => setCustomAudiencePlaceholder('')}
+                      placeholder={customAudiencePlaceholder}
+                    />
+                  )}
+                  {field !== 'audienceTaxonomy' && field !== 'creatives' && field !== 'deviceTypes' && field !== 'description' && field !== 'customAudience' && field !== 'measurement' && (
+                    <textarea
+                      name={field}
+                      value={form[field] || ''}
+                      onChange={handleChange}
+                      aria-label={`Enter ${fieldLabels[field]}`}
+                      aria-required={true}
+                      aria-invalid={!!errors[field]}
+                      className={`p-2 border rounded text-foreground bg-background ${errors[field] ? 'border-red-500' : ''}`}
+                      onFocus={() => setMeasurementPlaceholder('')}
+                      placeholder={measurementPlaceholder}
                     />
                   )}
                   {errors[field] && <span className="text-red-500 text-xs mt-1">{errors[field]}</span>}
