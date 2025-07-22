@@ -73,7 +73,6 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
   const [selectedDeviceTypes, setSelectedDeviceTypes] = useState<string[]>([]);
   const [measurement, setMeasurement] = useState('');
   const [customAudience, setCustomAudience] = useState('');
-  const [customReporting, setCustomReporting] = useState('');
 
   // Conditional logic: Only show relevant steps based on requestType
   const getVisibleSteps = () => {
@@ -186,10 +185,6 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
               <span className="font-semibold text-foreground">Measurement:</span>
               <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-medium ml-2">{measurement}</span>
             </div>
-            <div className="mb-2">
-              <span className="font-semibold text-foreground">Custom Reporting:</span>
-              <div className="bg-slate-100 text-foreground px-3 py-2 rounded text-xs font-mono mt-1">{customReporting}</div>
-            </div>
           </div>
           <div className="flex gap-2">
             <button className="bg-card text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleBack}>Back</button>
@@ -216,7 +211,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                 {fieldLabels[field]}
                 {field === 'requestType' ? (
                   <span className="ml-1 text-xs text-blue-300 dark:text-accent/80" aria-label="Select the type of RFP you need"> (Select)</span>
-                ) : field === 'description' || field === 'customReporting' ? (
+                ) : field === 'description' || field === 'customAudience' || field === 'measurement' ? (
                   <span className="ml-1 text-xs text-blue-300 dark:text-accent/80" aria-label="Enter a description for the RFP"> (Optional)</span>
                 ) : (
                   <span className="ml-1 text-xs text-blue-300 dark:text-accent/80" aria-label="Enter a value for the field"> (Required)</span>
@@ -229,7 +224,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                     <option key={rt.value} value={rt.value} aria-label={rt.label}>{rt.label}</option>
                   ))}
                 </select>
-              ) : field === 'description' || field === 'customReporting' ? (
+              ) : field === 'description' || field === 'customAudience' || field === 'measurement' ? (
                 <textarea name={field} value={form[field] || ''} onChange={handleChange} className="p-2 border rounded text-foreground bg-background" aria-label={`Enter ${fieldLabels[field]}`} />
               ) : (
                 <input name={field} value={form[field] || ''} onChange={handleChange} aria-label={`Enter ${fieldLabels[field]}`} aria-required={true} aria-invalid={!!errors[field]} className={`p-2 border rounded text-foreground bg-background ${errors[field] ? 'border-red-500' : ''}`} />
@@ -283,6 +278,14 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                   menuPortalTarget={document.body}
                   menuPosition="fixed"
                   maxMenuHeight={200}
+                />
+                <textarea
+                  value={customAudience}
+                  onChange={e => setCustomAudience(e.target.value)}
+                  className="p-2 border rounded text-foreground bg-background w-full mt-2"
+                  aria-label="Custom Audience"
+                  placeholder="Describe custom audiences, POIs, Frequency, Dwell Time, Survey Questions/Responses, etc."
+                  title={fieldTooltips['customAudience']}
                 />
               </div>
               <Select
@@ -365,13 +368,6 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                   },
                 })}
               />
-              <textarea
-                value={customAudience}
-                onChange={e => setCustomAudience(e.target.value)}
-                className="p-2 border rounded text-foreground bg-background w-full mt-2"
-                aria-label="Custom Audience"
-                placeholder="Describe custom audiences, POIs, Frequency, Dwell Time, Survey Questions/Responses, etc."
-              />
               <input
                 type="text"
                 value={measurement}
@@ -379,13 +375,6 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                 className="p-2 border rounded text-foreground bg-background w-full mt-2"
                 aria-label="Measurement"
                 placeholder="Arrival Foot Traffic Attribution, Online Conversions, Quartiles, etc."
-              />
-              <textarea
-                value={customReporting}
-                onChange={e => setCustomReporting(e.target.value)}
-                className="p-2 border rounded text-foreground bg-background w-full mt-2"
-                aria-label="Custom Reporting"
-                placeholder="Describe custom reporting needs"
               />
             </>
           )}
