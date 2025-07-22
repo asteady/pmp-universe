@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { createAsanaTask } from '../lib/asana';
-import ChipSelect from '../src/components/ChipSelect';
 import audienceTaxonomy from '../data/audienceTaxonomy.json';
+import Select from 'react-select';
 
 const requestTypes = [
   { value: 'deal-id', label: 'Deal ID Only' },
@@ -229,29 +229,80 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
           ))}
           {currentStep.label === 'Deal Settings' && (
             <>
-              <ChipSelect
-                options={audienceTaxonomy.map(aud => ({ value: aud.id, label: aud.name }))}
-                selected={selectedAudiences}
-                onChange={setSelectedAudiences}
-                label="Select Audiences"
-                placeholder="Search audiences..."
-                ariaLabel="Audience Taxonomy"
-              />
-              <ChipSelect
+              <div className="mb-4">
+                <label className="block text-sm font-semibold text-foreground mb-2">Select Audiences</label>
+                <Select
+                  isMulti
+                  options={audienceTaxonomy.map(aud => ({ value: aud.id, label: aud.name }))}
+                  value={audienceTaxonomy.filter(aud => selectedAudiences.includes(aud.id)).map(aud => ({ value: aud.id, label: aud.name }))}
+                  onChange={opts => setSelectedAudiences(opts.map(opt => opt.value))}
+                  classNamePrefix="react-select"
+                  placeholder="Search audiences..."
+                  styles={{
+                    control: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)' }),
+                    menu: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)' }),
+                    multiValue: (base) => ({ ...base, backgroundColor: 'var(--accent)', color: 'var(--accent-foreground)' }),
+                    input: (base) => ({ ...base, color: 'var(--foreground)' }),
+                  }}
+                  theme={theme => ({
+                    ...theme,
+                    colors: {
+                      ...theme.colors,
+                      primary: '#00FFB7',
+                      primary25: '#00FFB733',
+                      neutral0: 'var(--background)',
+                      neutral80: 'var(--foreground)',
+                    },
+                  })}
+                />
+              </div>
+              <Select
+                isMulti
                 options={creativeTypes.map(type => ({ value: type, label: type }))}
-                selected={selectedCreatives}
-                onChange={setSelectedCreatives}
-                label="Select Creatives"
+                value={selectedCreatives.map(c => ({ value: c, label: c }))}
+                onChange={opts => setSelectedCreatives(opts.map(opt => opt.value))}
+                classNamePrefix="react-select"
                 placeholder="Search creatives..."
-                ariaLabel="Creative Types"
+                styles={{
+                  control: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)' }),
+                  menu: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)' }),
+                  multiValue: (base) => ({ ...base, backgroundColor: 'var(--accent)', color: 'var(--accent-foreground)' }),
+                  input: (base) => ({ ...base, color: 'var(--foreground)' }),
+                }}
+                theme={theme => ({
+                  ...theme,
+                  colors: {
+                    ...theme.colors,
+                    primary: '#00FFB7',
+                    primary25: '#00FFB733',
+                    neutral0: 'var(--background)',
+                    neutral80: 'var(--foreground)',
+                  },
+                })}
               />
-              <ChipSelect
+              <Select
+                isMulti
                 options={deviceTypes.map(type => ({ value: type, label: type }))}
-                selected={selectedDeviceTypes}
-                onChange={setSelectedDeviceTypes}
-                label="Select Device Types"
+                value={selectedDeviceTypes.map(d => ({ value: d, label: d }))}
+                onChange={opts => setSelectedDeviceTypes(opts.map(opt => opt.value))}
+                classNamePrefix="react-select"
                 placeholder="Search device types..."
-                ariaLabel="Device Types"
+                styles={{
+                  control: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)' }),
+                  menu: (base) => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)' }),
+                  multiValue: (base) => ({ ...base, backgroundColor: 'var(--accent)', color: 'var(--accent-foreground)' }),
+                  input: (base) => ({ ...base, color: 'var(--foreground)' }),
+                }}
+                theme={theme => ({
+                  ...theme,
+                  colors: {
+                    ...theme.colors,
+                    primary: '#00FFB7',
+                    primary25: '#00FFB733',
+                    neutral0: 'var(--background)',
+                    neutral80: 'var(--foreground)',
+                  },
+                })}
               />
               <textarea
                 value={customAudience}

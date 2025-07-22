@@ -1,3 +1,4 @@
+// DEPRECATED: Use react-select for all multi-selects. This component is no longer used in forms.
 import React, { useState } from 'react';
 
 interface ChipSelectProps {

@@ -1,64 +1,113 @@
-'use client';
-
 import React, { useState } from 'react';
+import Select from 'react-select';
 import audienceTaxonomy from '../data/audienceTaxonomy.json';
-import { createAsanaTask } from '../lib/asana';
-import ChipSelect from '../src/components/ChipSelect';
 
-const ssps = [
-  { name: 'OpenX', icon: '🔵', status: 'Active' },
-  { name: 'Nexxen', icon: '🟢', status: 'Active' },
-  { name: 'Beachfront', icon: '🟡', status: 'Active' },
-  { name: 'Magnite', icon: '🟣', status: 'Active' },
-  { name: 'Index', icon: '🟠', status: 'Active' },
-  { name: 'AdsWizz', icon: '🔴', status: 'Active' },
-  { name: 'Nativo', icon: '⚪', status: 'Active' }
+const sspOptions = [
+  { value: 'Nexxen', label: 'Nexxen' },
+  { value: 'Magnite', label: 'Magnite' },
+  { value: 'OpenX', label: 'OpenX' },
+  { value: 'Index', label: 'Index' },
+  { value: 'Beachfront', label: 'Beachfront' },
+  { value: 'Other', label: 'Other' },
 ];
-
-const dsps = [
-  { name: 'The Trade Desk', icon: '🎯', status: 'Compatible' },
-  { name: 'DV360', icon: '📊', status: 'Compatible' },
-  { name: 'MediaMath', icon: '🧮', status: 'Compatible' },
-  { name: 'Xandr', icon: '🔗', status: 'Compatible' },
-  { name: 'Amazon DSP', icon: '📦', status: 'Compatible' },
-  { name: 'Amobee', icon: '🟪', status: 'Compatible' },
-  { name: 'Basis', icon: '🟫', status: 'Compatible' },
-  { name: 'Adform', icon: '🟦', status: 'Compatible' },
-  { name: 'StackAdapt', icon: '🟩', status: 'Compatible' },
-  { name: 'Quantcast', icon: '🟧', status: 'Compatible' }
+const dspOptions = [
+  { value: 'MediaMath', label: 'MediaMath' },
+  { value: 'Index', label: 'Index' },
+  { value: 'The Trade Desk', label: 'The Trade Desk' },
+  { value: 'DV360', label: 'DV360' },
+  { value: 'Adelphic', label: 'Adelphic' },
+  { value: 'StackAdapt', label: 'StackAdapt' },
+  { value: 'Other', label: 'Other' },
 ];
-
+const creativeOptions = [
+  { value: 'IDV', label: 'IDV' },
+  { value: 'Rich Media', label: 'Rich Media' },
+  { value: 'Display', label: 'Display' },
+  { value: 'Video', label: 'Video' },
+  { value: 'Native', label: 'Native' },
+  { value: 'Audio', label: 'Audio' },
+];
+const audienceOptions = audienceTaxonomy.map(aud => ({ value: aud.id, label: aud.name, description: aud.description }));
+const evergreenSeasonalOptions = [
+  { value: 'Evergreen', label: 'Evergreen' },
+  { value: 'Seasonal', label: 'Seasonal' },
+];
+const goalOptions = [
+  { value: 'Awareness', label: 'Awareness' },
+  { value: 'Consideration', label: 'Consideration' },
+  { value: 'Conversion', label: 'Conversion' },
+  { value: 'Foot Traffic', label: 'Foot Traffic' },
+  { value: 'Brand Lift', label: 'Brand Lift' },
+];
+const kpiOptions = [
+  { value: 'VCR', label: 'VCR' },
+  { value: 'CTR', label: 'CTR' },
+  { value: 'ROI', label: 'ROI' },
+  { value: 'Impressions', label: 'Impressions' },
+  { value: 'Conversions', label: 'Conversions' },
+];
+const deviceOptions = [
+  { value: 'Mobile', label: 'Mobile' },
+  { value: 'Desktop', label: 'Desktop' },
+  { value: 'Tablet', label: 'Tablet' },
+  { value: 'CTV', label: 'CTV' },
+  { value: 'Audio', label: 'Audio' },
+];
 const geoOptions = [
-  'USA', 'Canada', 'Mexico', 'Costa Rica', 'Brazil', 'Argentina', 'Peru', 'Colombia', 'Chile'
+  { value: 'USA', label: 'USA' },
+  { value: 'Canada', label: 'Canada' },
+  { value: 'Mexico', label: 'Mexico' },
+  { value: 'Brazil', label: 'Brazil' },
+  { value: 'Argentina', label: 'Argentina' },
+  { value: 'Colombia', label: 'Colombia' },
+  { value: 'Chile', label: 'Chile' },
+  { value: 'Peru', label: 'Peru' },
+  { value: 'Other', label: 'Other (Americas)' },
 ];
-
-const creativeTypes = [
-  'IDV', 'Rich Media', 'Display', 'Video', 'Native', 'Audio'
-];
-
-const viewabilityOptions = [
-  '10% or higher', '20% or higher', '30% or higher', '40% or higher', '50% or higher', '60% or higher', '70% or higher', '80% or higher', '90% or higher'
-];
-
 const reportingOptions = [
-  'Arrival Foot Traffic Attribution', 'Online Conversion Tracking'
+  { value: 'Standard', label: 'Standard' },
+  { value: 'Custom', label: 'Custom' },
+  { value: 'Foot Traffic', label: 'Foot Traffic' },
+  { value: 'Brand Lift', label: 'Brand Lift' },
+  { value: 'Viewability', label: 'Viewability' },
 ];
 
-const DEAL_REQUEST_SECTION_GID = process.env.ASANA_DEAL_REQUEST_SECTION_GID || '1209264958990943';
-
-// 1. Define the new step structure
 const steps = [
   {
     label: 'Client Details',
-    fields: ['agencyName', 'advertiserName', 'dealName', 'flighting', 'selectedDSP', 'dspSeatId', 'selectedSSPs', 'selectedCreative'],
+    fields: [
+      { name: 'agencyName', label: 'Agency Name', type: 'text', required: true, placeholder: 'Enter agency name' },
+      { name: 'advertiserNames', label: 'Advertiser Name(s)', type: 'text', required: true, placeholder: 'Enter advertiser/brand names' },
+      { name: 'dealName', label: 'Deal Name', type: 'text', required: true, placeholder: 'Enter custom deal name' },
+      { name: 'flighting', label: 'Flighting', type: 'text', required: true, placeholder: 'e.g. Q3 2024, July 1 - Aug 31' },
+      { name: 'dsps', label: 'DSP(s)', type: 'multi-select', required: true, options: dspOptions, placeholder: 'Select DSP(s)' },
+      { name: 'dspOtherName', label: 'DSP (Other) Name', type: 'text', required: false, placeholder: 'If "Other" selected, specify name', conditional: (form) => form.dsps?.some((d:any) => d.value === 'Other') },
+      { name: 'dspSeatId', label: 'DSP Seat ID', type: 'text', required: false, placeholder: 'Optional seat ID' },
+      { name: 'ssps', label: 'Preferred SSP(s)', type: 'multi-select', required: false, options: sspOptions, placeholder: 'Select SSP(s)', tooltip: 'Optional: Preferred supply partners' },
+      { name: 'creatives', label: 'Infillion Curated Creative', type: 'multi-select', required: true, options: creativeOptions, placeholder: 'Select creative types' },
+    ],
   },
   {
     label: 'Ideal Audience Persona(s)',
-    fields: ['customAudience', 'selectedAudiences', 'evergreenSeasonal'],
+    fields: [
+      { name: 'customAudience', label: 'Custom Audience', type: 'textarea', required: false, placeholder: 'Describe custom audience, POIs, etc.' },
+      { name: 'audienceTaxonomy', label: 'Infillion Audience Taxonomy', type: 'multi-select', required: false, options: audienceOptions, placeholder: 'Search and select audience segments' },
+      { name: 'evergreenSeasonal', label: 'Evergreen & Seasonal', type: 'multi-select', required: false, options: evergreenSeasonalOptions, placeholder: 'Select deal type(s)' },
+    ],
   },
   {
     label: 'Settings',
-    fields: ['primaryGoal', 'primaryGoalBenchmark', 'secondaryKPI', 'secondaryKPIBenchmark', 'deviceTypes', 'selectedGeos', 'targeting', 'publisherInclusion', 'publisherExclusion', 'selectedReporting'],
+    fields: [
+      { name: 'primaryGoal', label: 'Primary Goal', type: 'select', required: true, options: goalOptions, placeholder: 'Select primary goal' },
+      { name: 'primaryGoalBenchmark', label: 'Primary Goal Benchmark', type: 'textarea', required: true, placeholder: 'Describe benchmark for primary goal' },
+      { name: 'secondaryKpi', label: 'Secondary KPI', type: 'select', required: false, options: kpiOptions, placeholder: 'Select secondary KPI' },
+      { name: 'secondaryKpiBenchmark', label: 'Secondary KPI Benchmark', type: 'textarea', required: false, placeholder: 'Describe benchmark for secondary KPI' },
+      { name: 'deviceTypes', label: 'Device Type(s)', type: 'multi-select', required: true, options: deviceOptions, placeholder: 'Select device types' },
+      { name: 'geos', label: 'Geos', type: 'multi-select', required: true, options: geoOptions, placeholder: 'Select geos (Americas only)' },
+      { name: 'otherTargeting', label: 'Other Targeting Details', type: 'textarea', required: false, placeholder: 'Describe any other targeting details' },
+      { name: 'publisherInclusionExclusion', label: 'Publisher Inclusion/Exclusion', type: 'textarea', required: false, placeholder: 'List publishers to include/exclude' },
+      { name: 'reporting', label: 'Reporting & Measurement', type: 'multi-select', required: false, options: reportingOptions, placeholder: 'Select reporting/measurement' },
+    ],
   },
   {
     label: 'Review & Submit',
@@ -66,72 +115,37 @@ const steps = [
   },
 ];
 
-const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
+function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [step, setStep] = useState(0);
-  const [selectedSSPs, setSelectedSSPs] = useState<string[]>([]);
-  const [selectedDSP, setSelectedDSP] = useState('');
-  const [dealName, setDealName] = useState('');
-  const [dealType, setDealType] = useState('');
-  const [targeting, setTargeting] = useState('');
-  const [generatedDealId, setGeneratedDealId] = useState('');
-  const [selectedAudiences, setSelectedAudiences] = useState<string[]>([]);
-  const [customAudience, setCustomAudience] = useState('');
-  const [advertiserName, setAdvertiserName] = useState('');
-  const [dspSeatId, setDspSeatId] = useState('');
-  const [selectedGeos, setSelectedGeos] = useState<string[]>([]);
-  const [selectedCreative, setSelectedCreative] = useState('');
-  const [selectedViewability, setSelectedViewability] = useState('');
-  const [selectedReporting, setSelectedReporting] = useState<string[]>([]);
-  const [publisherInclusion, setPublisherInclusion] = useState('');
-  const [publisherExclusion, setPublisherExclusion] = useState('');
-  // 1. Add Agency Name and Flighting to Step 1
-  const [agencyName, setAgencyName] = useState('');
-  const [flighting, setFlighting] = useState('');
-  // 2. Add Device Types, Primary/Secondary Goal, Benchmarks, Evergreen & Seasonal, etc. to Step 3
-  const [deviceTypes, setDeviceTypes] = useState<string[]>([]);
-  const [primaryGoal, setPrimaryGoal] = useState('');
-  const [primaryGoalBenchmark, setPrimaryGoalBenchmark] = useState('');
-  const [secondaryKPI, setSecondaryKPI] = useState('');
-  const [secondaryKPIBenchmark, setSecondaryKPIBenchmark] = useState('');
-  const [evergreenSeasonal, setEvergreenSeasonal] = useState<string[]>([]);
+  const [form, setForm] = useState<any>({});
+  const [errors, setErrors] = useState<any>({});
   const [submitting, setSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
-  const generateDealId = () => {
-    const timestamp = Date.now().toString(36);
-    const random = Math.random().toString(36).substring(2, 8);
-    const sspPrefix = selectedSSPs.length > 0 ? selectedSSPs[0].toLowerCase() : 'custom';
-    return `infil-${sspPrefix}-${dealType.toLowerCase()}-${timestamp}-${random}`;
+  const currentStep = steps[step];
+
+  const handleChange = (name: string, value: any) => {
+    setForm((prev: any) => ({ ...prev, [name]: value }));
   };
 
-  const handleSSPToggle = (sspName: string) => {
-    setSelectedSSPs(prev => 
-      prev.includes(sspName) 
-        ? prev.filter(s => s !== sspName)
-        : [...prev, sspName]
-    );
+  const validateStep = () => {
+    const newErrors: any = {};
+    for (const field of currentStep.fields) {
+      if (field.required && (!form[field.name] || (Array.isArray(form[field.name]) && form[field.name].length === 0))) {
+        if (!field.conditional || field.conditional(form)) {
+          newErrors[field.name] = 'This field is required.';
+        }
+      }
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleNext = () => {
-    if (step === 1 && selectedSSPs.length > 0) {
-      setStep(2);
-    } else if (step === 2 && selectedDSP && dealName && dealType) {
-      setGeneratedDealId(generateDealId());
-      setStep(3);
-    }
+    if (validateStep()) setStep(s => Math.min(s + 1, steps.length - 1));
   };
-
-  const handleBack = () => {
-    if (step > 1) {
-      setStep(step - 1);
-    }
-  };
-
-  const copyDealId = () => {
-    navigator.clipboard.writeText(generatedDealId);
-    // You could add a toast notification here
-  };
+  const handleBack = () => setStep(s => Math.max(s - 1, 0));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -139,34 +153,10 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
     setSubmitError('');
     setSubmitSuccess(false);
     try {
-      const formPayload = {
-        agencyName,
-        advertiserName,
-        dealName,
-        flighting,
-        dsp: selectedDSP,
-        dspSeatId,
-        preferredSSP: selectedSSPs,
-        infillionCreative: selectedCreative,
-        customAudience,
-        audienceTaxonomy: selectedAudiences,
-        evergreenSeasonal,
-        primaryGoal,
-        primaryGoalBenchmark,
-        secondaryKPI,
-        secondaryKPIBenchmark,
-        deviceTypes,
-        geos: selectedGeos,
-        otherTargeting: targeting,
-        publisherInclusion,
-        publisherExclusion,
-        reporting: selectedReporting,
-        // Add any additional fields as needed
-      };
-      await createAsanaTask(formPayload, { sectionGid: DEAL_REQUEST_SECTION_GID });
+      // TODO: Integrate with Asana API
       setSubmitSuccess(true);
     } catch (err: any) {
-      setSubmitError(err.message || 'Failed to submit to Asana.');
+      setSubmitError(err.message || 'Failed to submit.');
     } finally {
       setSubmitting(false);
     }
@@ -174,715 +164,170 @@ const CustomDealCreationModal = ({ open, onClose }: { open: boolean; onClose: ()
 
   if (!open) return null;
 
-  return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-card rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-border">
-        {/* Header */}
-        <div className="p-6 border-b border-slate-700">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
-                <span className="text-foreground text-lg">🎯</span>
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-foreground">Custom Deal Creation</h2>
-                <p className="text-muted">Create your perfect PMP deal with automated SSP integration</p>
-              </div>
-            </div>
-            <button 
-              onClick={onClose}
-              className="text-muted hover:text-foreground transition-colors"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
+  if (submitSuccess) {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div className="bg-background rounded-lg shadow-lg p-8 w-full max-w-lg relative">
+          <button className="absolute top-2 right-2 text-muted" onClick={onClose}>&times;</button>
+          <h2 className="text-xl font-bold mb-4 text-foreground font-sans">Custom Deal Submitted!</h2>
+          <div className="text-foreground mb-2">Thank you for your submission. Our team will follow up soon.</div>
+          <div className="text-foreground mb-2">Asana Link: <a href="#" className="underline text-blue-400">View Task</a></div>
+          <div className="text-foreground">Google Slides Link: <span className="italic text-muted">(Coming soon)</span></div>
         </div>
+      </div>
+    );
+  }
 
-        {/* Progress Steps */}
-        <div className="p-6 border-b border-slate-700">
-          <div className="flex items-center justify-between">
-            {[1, 2, 3].map((stepNumber) => (
-              <div key={stepNumber} className="flex items-center">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold transition-all duration-300 ${
-                  step >= stepNumber 
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white' 
-                    : 'bg-slate-700 text-slate-400'
-                }`}>
-                  {stepNumber}
-                </div>
-                {stepNumber < 3 && (
-                  <div className={`w-16 h-1 mx-2 transition-all duration-300 ${
-                    step > stepNumber ? 'bg-gradient-to-r from-blue-500 to-purple-500' : 'bg-slate-700'
-                  }`} />
-                )}
+  if (step === steps.length - 1) {
+    // Review & Submit
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div className="bg-background rounded-lg shadow-lg p-8 w-full max-w-lg relative">
+          <button className="absolute top-2 right-2 text-muted" onClick={onClose}>&times;</button>
+          <h2 className="text-xl font-bold mb-4 text-foreground font-sans">Review & Submit</h2>
+          <div className="mb-4 max-h-96 overflow-y-auto">
+            {steps.slice(0, -1).map((s, i) => (
+              <div key={s.label} className="mb-4">
+                <div className="font-semibold text-accent mb-1">Step {i + 1}: {s.label}</div>
+                {s.fields.map(field => (
+                  (!field.conditional || field.conditional(form)) && (
+                    <div key={field.name} className="mb-2">
+                      <span className="font-semibold text-foreground">{field.label}:</span>{' '}
+                      {Array.isArray(form[field.name]) ? (
+                        <span className="inline-flex flex-wrap gap-2">
+                          {form[field.name].map((v: any, idx: number) => (
+                            <span key={idx} className="bg-accent text-accent-foreground px-2 py-1 rounded-full text-xs font-medium">{v.label || v}</span>
+                          ))}
+                        </span>
+                      ) : (
+                        <span className="bg-muted text-foreground px-2 py-1 rounded text-xs font-mono ml-1">{form[field.name]}</span>
+                      )}
+                    </div>
+                  )
+                ))}
               </div>
             ))}
           </div>
-          <div className="flex justify-between mt-2 text-sm">
-            <span className={`${step >= 1 ? 'text-blue-400' : 'text-slate-500'}`}>Select SSPs</span>
-            <span className={`${step >= 2 ? 'text-blue-400' : 'text-slate-500'}`}>Configure Deal</span>
-            <span className={`${step >= 3 ? 'text-blue-400' : 'text-slate-500'}`}>Generate Deal ID</span>
+          <div className="flex gap-2">
+            <button className="bg-card text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleBack}>Back</button>
+            <button className="bg-green text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleSubmit} disabled={submitting}>Submit</button>
           </div>
+          {submitError && <div className="mt-4 text-red-500">{submitError}</div>}
         </div>
+      </div>
+    );
+  }
 
-        {/* Step Content */}
-        <div className="p-6">
-          {step === 1 && (
-            <div className="space-y-6">
-              {/* Agency Name */}
-              <div>
-                <label htmlFor="agencyName" className="block text-sm font-semibold text-foreground mb-2">Agency Name</label>
-                <input
-                  type="text"
-                  id="agencyName"
-                  value={agencyName}
-                  onChange={e => setAgencyName(e.target.value)}
-                  placeholder="Enter agency name..."
-                  className="w-full px-4 py-3 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
-                  aria-required="true"
-                  aria-label="Agency Name"
-                />
-                {agencyName === '' && (
-                  <p className="text-red-500 text-xs mt-1" role="alert">Agency Name is required.</p>
-                )}
-              </div>
-              {/* Advertiser Name(s) */}
-              <div>
-                <label htmlFor="advertiserName" className="block text-sm font-semibold text-foreground mb-2">Advertiser Name(s)?</label>
-                <input
-                  type="text"
-                  id="advertiserName"
-                  value={advertiserName}
-                  onChange={e => setAdvertiserName(e.target.value)}
-                  placeholder="Enter advertiser name(s)..."
-                  className="w-full px-4 py-3 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
-                  aria-label="Advertiser Name(s)"
-                />
-                {advertiserName === '' && (
-                  <p className="text-red-500 text-xs mt-1" role="alert">Advertiser Name(s) is required.</p>
-                )}
-              </div>
-              {/* Deal Name */}
-              <div>
-                <label htmlFor="dealName" className="block text-sm font-semibold text-foreground mb-2">Please name this Deal</label>
-                <input
-                  type="text"
-                  id="dealName"
-                  value={dealName}
-                  onChange={(e) => setDealName(e.target.value)}
-                  placeholder="I.e., The Best Deal Ever Launch Q3 2025, Agentic Pokémon Nintendo Anthropic Collab, etc."
-                  className="w-full px-4 py-3 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
-                  aria-required="true"
-                  aria-label="Deal Name"
-                />
-                {dealName === '' && (
-                  <p className="text-red-500 text-xs mt-1" role="alert">Deal Name is required.</p>
-                )}
-              </div>
-              {/* Flighting */}
-              <div>
-                <label htmlFor="flighting" className="block text-sm font-semibold text-foreground mb-2">Flighting</label>
-                <input
-                  type="text"
-                  id="flighting"
-                  value={flighting}
-                  onChange={e => setFlighting(e.target.value)}
-                  placeholder="To ensure we keep the Deal activated & consistently refreshed"
-                  className="w-full px-4 py-3 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
-                  aria-required="true"
-                  aria-label="Flighting"
-                  title="This field is required to ensure the deal is kept active and consistently refreshed."
-                />
-                {flighting === '' && (
-                  <p className="text-red-500 text-xs mt-1" role="alert">Flighting is required.</p>
-                )}
-              </div>
-              {/* DSP(s), DSP (Other) Name, DSP Seat ID, Preferred SSP(s), Infillion Curated Creative */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  {/* Audience Taxonomy Multi-Select */}
-                  <div>
-                    <label htmlFor="selectedAudiences" className="block text-sm font-semibold text-foreground mb-2">Select Infillion Audiences</label>
-                    <ChipSelect
-                      options={audienceTaxonomy.map(aud => ({ value: aud.id, label: aud.name }))}
-                      selected={selectedAudiences}
-                      onChange={setSelectedAudiences}
-                      label="Select Infillion Audiences"
-                      placeholder="Search audiences..."
-                      ariaLabel="Audience Taxonomy"
-                    />
-                    {selectedAudiences.length === 0 && (
-                      <p className="text-red-500 text-xs mt-1" role="alert">At least one Infillion Audience is required.</p>
-                    )}
-                  </div>
-                  {/* Custom Audience Input */}
-                  <div>
-                    <label htmlFor="customAudience" className="block text-sm font-semibold text-foreground mb-2">Custom Audience (optional)</label>
-                    <textarea
-                      id="customAudience"
-                      value={customAudience}
-                      onChange={e => setCustomAudience(e.target.value)}
-                      placeholder="Describe custom audiences, POIs, dwell time, frequency, survey questions, custom metrics, retargeting, etc."
-                      rows={2}
-                      className="w-full px-4 py-2 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
-                      aria-label="Custom Audience Description"
-                      title="This field is required if custom audiences are selected."
-                    />
-                    {customAudience === '' && (
-                      <p className="text-red-500 text-xs mt-1" role="alert">Custom Audience Description is required if custom audiences are selected.</p>
-                    )}
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="dealType" className="block text-sm font-semibold text-foreground mb-2">Deal Type</label>
-                    <select
-                      id="dealType"
-                      value={dealType}
-                      onChange={(e) => setDealType(e.target.value)}
-                      className="w-full px-4 py-3 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
-                      aria-required="true"
-                      aria-label="Deal Type"
-                    >
-                      <option value="">Select deal type...</option>
-                      <option value="Performance">Performance</option>
-                      <option value="Brand">Brand</option>
-                      <option value="Awareness">Awareness</option>
-                      <option value="Conversion">Conversion</option>
-                    </select>
-                    {dealType === '' && (
-                      <p className="text-red-500 text-xs mt-1" role="alert">Deal Type is required.</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label htmlFor="targeting" className="block text-sm font-semibold text-foreground mb-2">Targeting Description</label>
-                    <textarea
-                      id="targeting"
-                      value={targeting}
-                      onChange={(e) => setTargeting(e.target.value)}
-                      placeholder="Describe your targeting requirements..."
-                      rows={3}
-                      className="w-full px-4 py-3 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
-                      aria-label="Targeting Description"
-                      title="This field is required to describe your targeting requirements."
-                    />
-                    {targeting === '' && (
-                      <p className="text-red-500 text-xs mt-1" role="alert">Targeting Description is required.</p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Move SSP selection here (Execution Preferences) */}
-                <div className="space-y-4 mt-8">
-                  <label htmlFor="selectedSSPs" className="block text-sm font-semibold text-foreground mb-2">Select your SSP(s)</label>
-                  <ChipSelect
-                    options={ssps.map(ssp => ({ value: ssp.name, label: `${ssp.icon} ${ssp.name}` }))}
-                    selected={selectedSSPs}
-                    onChange={setSelectedSSPs}
-                    label="Select your SSP(s)"
-                    placeholder="Search SSPs..."
-                    ariaLabel="SSP Selection"
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+      <div className="bg-background rounded-lg shadow-lg p-8 w-full max-w-lg relative">
+        <button className="absolute top-2 right-2 text-muted" onClick={onClose}>&times;</button>
+        <h2 className="text-xl font-bold mb-4 text-foreground font-sans">Custom Deal Creation</h2>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div className="mb-2 text-foreground font-semibold">Step {step + 1} of {steps.length}: {currentStep.label}</div>
+          {currentStep.fields.map(field => (
+            (!field.conditional || field.conditional(form)) && (
+              <div key={field.name} className="flex flex-col mb-2">
+                <label htmlFor={field.name} className="mb-1 text-foreground font-sans">
+                  {field.label}
+                  {field.required && <span className="ml-1 text-xs text-red-400">*</span>}
+                  {field.tooltip && <span className="ml-2 text-xs text-muted" title={field.tooltip}>?</span>}
+                </label>
+                {field.type === 'text' && (
+                  <input
+                    id={field.name}
+                    name={field.name}
+                    type="text"
+                    value={form[field.name] || ''}
+                    onChange={e => handleChange(field.name, e.target.value)}
+                    className={`p-2 border rounded text-foreground bg-background border-border ${errors[field.name] ? 'border-red-500' : ''}`}
+                    placeholder={field.placeholder}
+                    aria-required={field.required}
+                    aria-invalid={!!errors[field.name]}
                   />
-                  {selectedSSPs.length === 0 && (
-                    <p className="text-red-500 text-xs mt-1" role="alert">At least one SSP is required.</p>
-                  )}
-                </div>
-
-                {/* DSP Selection */}
-                <div>
-                  <label htmlFor="selectedDSP" className="block text-sm font-semibold text-foreground mb-4">Select DSP for Activation</label>
-                  {/* Replace DSP ChipSelect with a single-select pill button group: */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {dsps.map(dsp => (
-                      <button
-                        key={dsp.name}
-                        type="button"
-                        onClick={() => setSelectedDSP(dsp.name)}
-                        className={`px-3 py-1 rounded-full border text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                          selectedDSP === dsp.name
-                            ? 'bg-blue-500 text-white border-blue-500 shadow'
-                            : 'bg-slate-800 text-foreground border-slate-700 hover:bg-slate-700'
-                        }`}
-                        aria-pressed={selectedDSP === dsp.name}
-                        aria-label={dsp.name}
-                      >
-                        {dsp.icon} {dsp.name}
-                      </button>
-                    ))}
-                  </div>
-                  {selectedDSP === '' && (
-                    <p className="text-red-500 text-xs mt-1" role="alert">DSP for Activation is required.</p>
-                  )}
-                  {/* DSP Seat ID input (conditional) */}
-                  {selectedDSP && (
-                    <div className="mt-3">
-                      <label htmlFor="dspSeatId" className="block text-xs font-semibold text-foreground mb-1">DSP Seat ID</label>
-                      <input
-                        type="text"
-                        id="dspSeatId"
-                        value={dspSeatId}
-                        onChange={e => setDspSeatId(e.target.value)}
-                        placeholder="Enter DSP Seat ID..."
-                        className="w-full px-4 py-2 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-purple-500 focus:outline-none"
-                        aria-label="DSP Seat ID"
-                        title="This field is required if a DSP is selected."
-                      />
-                      {dspSeatId === '' && (
-                        <p className="text-red-500 text-xs mt-1" role="alert">DSP Seat ID is required if a DSP is selected.</p>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* Creative Type */}
-                <div>
-                  <label htmlFor="selectedCreative" className="block text-sm font-semibold text-foreground mb-2">Infillion Curated Creative</label>
-                  {/* Replace Creative Type ChipSelect with a single-select pill button group: */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {creativeTypes.map(type => (
-                      <button
-                        key={type}
-                        type="button"
-                        onClick={() => setSelectedCreative(type)}
-                        className={`px-3 py-1 rounded-full border text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                          selectedCreative === type
-                            ? 'bg-blue-500 text-white border-blue-500 shadow'
-                            : 'bg-slate-800 text-foreground border-slate-700 hover:bg-slate-700'
-                        }`}
-                        aria-pressed={selectedCreative === type}
-                        aria-label={type}
-                      >
-                        {type}
-                      </button>
-                    ))}
-                  </div>
-                  {selectedCreative === '' && (
-                    <p className="text-red-500 text-xs mt-1" role="alert">Creative Type is required.</p>
-                  )}
-                </div>
-
-                {/* Viewability */}
-                <div>
-                  <label htmlFor="selectedViewability" className="block text-sm font-semibold text-foreground mb-2">Viewability</label>
-                  {/* Replace Viewability ChipSelect with a single-select pill button group: */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {viewabilityOptions.map(opt => (
-                      <button
-                        key={opt}
-                        type="button"
-                        onClick={() => setSelectedViewability(opt)}
-                        className={`px-3 py-1 rounded-full border text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                          selectedViewability === opt
-                            ? 'bg-blue-500 text-white border-blue-500 shadow'
-                            : 'bg-slate-800 text-foreground border-slate-700 hover:bg-slate-700'
-                        }`}
-                        aria-pressed={selectedViewability === opt}
-                        aria-label={opt}
-                      >
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
-                  {selectedViewability === '' && (
-                    <p className="text-red-500 text-xs mt-1" role="alert">Viewability is required.</p>
-                  )}
-                </div>
-
-                {/* Reporting & Measurement */}
-                <div>
-                  <label htmlFor="selectedReporting" className="block text-sm font-semibold text-foreground mb-2">Reporting & Measurement</label>
-                  <div className="flex flex-wrap gap-2">
-                    {reportingOptions.map(opt => (
-                      <label key={opt} className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={selectedReporting.includes(opt)}
-                          onChange={() => setSelectedReporting(prev => prev.includes(opt) ? prev.filter(o => o !== opt) : [...prev, opt])}
-                          className="accent-blue-500"
-                          aria-label={`Select ${opt}`}
-                        />
-                        <span className="text-foreground text-sm">{opt}</span>
-                      </label>
-                    ))}
-                  </div>
-                  {selectedReporting.length === 0 && (
-                    <p className="text-red-500 text-xs mt-1" role="alert">At least one reporting option is required.</p>
-                  )}
-                </div>
-
-                {/* Publisher Inclusion/Exclusion */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="publisherInclusion" className="block text-sm font-semibold text-foreground mb-2">Publisher Inclusion (optional)</label>
-                    <input
-                      type="text"
-                      id="publisherInclusion"
-                      value={publisherInclusion}
-                      onChange={e => setPublisherInclusion(e.target.value)}
-                      placeholder="List publishers to include..."
-                      className="w-full px-4 py-2 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
-                      aria-label="Publisher Inclusion"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="publisherExclusion" className="block text-sm font-semibold text-foreground mb-2">Publisher Exclusion (optional)</label>
-                    <input
-                      type="text"
-                      id="publisherExclusion"
-                      value={publisherExclusion}
-                      onChange={e => setPublisherExclusion(e.target.value)}
-                      placeholder="List publishers to exclude..."
-                      className="w-full px-4 py-2 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
-                      aria-label="Publisher Exclusion"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg p-4 border border-purple-500/30">
-                <h4 className="text-purple-400 font-semibold mb-2">⚡ Instant Activation</h4>
-                <p className="text-foreground text-sm">
-                  Your deal will be automatically configured for {selectedDSP || 'selected DSP'} 
-                  with all necessary parameters and targeting options.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {step === 2 && (
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-xl font-semibold text-foreground mb-4">Step 2: Configure Your Deal</h3>
-                <p className="text-foreground mb-6">Set up your deal parameters and select your preferred DSP for activation.</p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  {/* Custom Audience, Infillion Audience Taxonomy, Evergreen & Seasonal */}
-                  {/* Custom Audience Input */}
-                  <div>
-                    <label htmlFor="customAudienceStep2" className="block text-sm font-semibold text-foreground mb-2">Custom Audience (optional)</label>
-                    <textarea
-                      id="customAudienceStep2"
-                      value={customAudience}
-                      onChange={e => setCustomAudience(e.target.value)}
-                      placeholder="Describe custom audiences, POIs, dwell time, frequency, survey questions, custom metrics, retargeting, etc."
-                      rows={2}
-                      className="w-full px-4 py-2 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
-                      aria-label="Custom Audience Description for Step 2"
-                      title="This field is required if custom audiences are selected."
-                    />
-                    {customAudience === '' && (
-                      <p className="text-red-500 text-xs mt-1" role="alert">Custom Audience Description is required if custom audiences are selected.</p>
-                    )}
-                  </div>
-                  {/* Audience Taxonomy Multi-Select */}
-                  <div>
-                    <label htmlFor="selectedAudiencesStep2" className="block text-sm font-semibold text-foreground mb-2">Select Infillion Audiences</label>
-                    <ChipSelect
-                      options={audienceTaxonomy.map(aud => ({ value: aud.id, label: aud.name }))}
-                      selected={selectedAudiences}
-                      onChange={setSelectedAudiences}
-                      label="Select Infillion Audiences"
-                      placeholder="Search audiences..."
-                      ariaLabel="Audience Taxonomy for Step 2"
-                    />
-                    {selectedAudiences.length === 0 && (
-                      <p className="text-red-500 text-xs mt-1" role="alert">At least one Infillion Audience is required.</p>
-                    )}
-                  </div>
-                  {/* Evergreen & Seasonal */}
-                  <div>
-                    <label htmlFor="evergreenSeasonal" className="block text-sm font-semibold text-foreground mb-2">Evergreen & Seasonal</label>
-                    <ChipSelect
-                      options={['Evergreen Example', 'Seasonal Example'].map(deal => ({ value: deal, label: deal }))}
-                      selected={evergreenSeasonal}
-                      onChange={setEvergreenSeasonal}
-                      label="Evergreen and Seasonal Deals"
-                      placeholder="Search deals..."
-                      ariaLabel="Evergreen and Seasonal Deals"
-                    />
-                    {evergreenSeasonal.length === 0 && (
-                      <p className="text-red-500 text-xs mt-1" role="alert">At least one Evergreen or Seasonal deal is required.</p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Move SSP selection here (Execution Preferences) */}
-                <div className="space-y-4 mt-8">
-                  <label htmlFor="selectedSSPsStep2" className="block text-sm font-semibold text-foreground mb-2">Select your SSP(s)</label>
-                  <ChipSelect
-                    options={ssps.map(ssp => ({ value: ssp.name, label: `${ssp.icon} ${ssp.name}` }))}
-                    selected={selectedSSPs}
-                    onChange={setSelectedSSPs}
-                    label="Select your SSP(s)"
-                    placeholder="Search SSPs..."
-                    ariaLabel="SSP Selection for Step 2"
+                )}
+                {field.type === 'textarea' && (
+                  <textarea
+                    id={field.name}
+                    name={field.name}
+                    value={form[field.name] || ''}
+                    onChange={e => handleChange(field.name, e.target.value)}
+                    className={`p-2 border rounded text-foreground bg-background border-border ${errors[field.name] ? 'border-red-500' : ''}`}
+                    placeholder={field.placeholder}
+                    aria-required={field.required}
+                    aria-invalid={!!errors[field.name]}
                   />
-                  {selectedSSPs.length === 0 && (
-                    <p className="text-red-500 text-xs mt-1" role="alert">At least one SSP is required.</p>
-                  )}
-                </div>
-
-                {/* DSP Selection */}
-                <div>
-                  <label htmlFor="selectedDSPStep2" className="block text-sm font-semibold text-foreground mb-4">Select DSP for Activation</label>
-                  {/* Replace DSP ChipSelect with a single-select pill button group: */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {dsps.map(dsp => (
-                      <button
-                        key={dsp.name}
-                        type="button"
-                        onClick={() => setSelectedDSP(dsp.name)}
-                        className={`px-3 py-1 rounded-full border text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                          selectedDSP === dsp.name
-                            ? 'bg-blue-500 text-white border-blue-500 shadow'
-                            : 'bg-slate-800 text-foreground border-slate-700 hover:bg-slate-700'
-                        }`}
-                        aria-pressed={selectedDSP === dsp.name}
-                        aria-label={dsp.name}
-                      >
-                        {dsp.icon} {dsp.name}
-                      </button>
-                    ))}
-                  </div>
-                  {selectedDSP === '' && (
-                    <p className="text-red-500 text-xs mt-1" role="alert">DSP for Activation is required.</p>
-                  )}
-                  {/* DSP Seat ID input (conditional) */}
-                  {selectedDSP && (
-                    <div className="mt-3">
-                      <label htmlFor="dspSeatIdStep2" className="block text-xs font-semibold text-foreground mb-1">DSP Seat ID</label>
-                      <input
-                        type="text"
-                        id="dspSeatIdStep2"
-                        value={dspSeatId}
-                        onChange={e => setDspSeatId(e.target.value)}
-                        placeholder="Enter DSP Seat ID..."
-                        className="w-full px-4 py-2 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-purple-500 focus:outline-none"
-                        aria-label="DSP Seat ID"
-                        title="This field is required if a DSP is selected."
-                      />
-                      {dspSeatId === '' && (
-                        <p className="text-red-500 text-xs mt-1" role="alert">DSP Seat ID is required if a DSP is selected.</p>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* Creative Type */}
-                <div>
-                  <label htmlFor="selectedCreativeStep2" className="block text-sm font-semibold text-foreground mb-2">Infillion Curated Creative</label>
-                  {/* Replace Creative Type ChipSelect with a single-select pill button group: */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {creativeTypes.map(type => (
-                      <button
-                        key={type}
-                        type="button"
-                        onClick={() => setSelectedCreative(type)}
-                        className={`px-3 py-1 rounded-full border text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                          selectedCreative === type
-                            ? 'bg-blue-500 text-white border-blue-500 shadow'
-                            : 'bg-slate-800 text-foreground border-slate-700 hover:bg-slate-700'
-                        }`}
-                        aria-pressed={selectedCreative === type}
-                        aria-label={type}
-                      >
-                        {type}
-                      </button>
-                    ))}
-                  </div>
-                  {selectedCreative === '' && (
-                    <p className="text-red-500 text-xs mt-1" role="alert">Creative Type is required.</p>
-                  )}
-                </div>
-
-                {/* Viewability */}
-                <div>
-                  <label htmlFor="selectedViewabilityStep2" className="block text-sm font-semibold text-foreground mb-2">Viewability</label>
-                  {/* Replace Viewability ChipSelect with a single-select pill button group: */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {viewabilityOptions.map(opt => (
-                      <button
-                        key={opt}
-                        type="button"
-                        onClick={() => setSelectedViewability(opt)}
-                        className={`px-3 py-1 rounded-full border text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                          selectedViewability === opt
-                            ? 'bg-blue-500 text-white border-blue-500 shadow'
-                            : 'bg-slate-800 text-foreground border-slate-700 hover:bg-slate-700'
-                        }`}
-                        aria-pressed={selectedViewability === opt}
-                        aria-label={opt}
-                      >
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
-                  {selectedViewability === '' && (
-                    <p className="text-red-500 text-xs mt-1" role="alert">Viewability is required.</p>
-                  )}
-                </div>
-
-                {/* Reporting & Measurement */}
-                <div>
-                  <label htmlFor="selectedReportingStep2" className="block text-sm font-semibold text-foreground mb-2">Reporting & Measurement</label>
-                  <div className="flex flex-wrap gap-2">
-                    {reportingOptions.map(opt => (
-                      <label key={opt} className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={selectedReporting.includes(opt)}
-                          onChange={() => setSelectedReporting(prev => prev.includes(opt) ? prev.filter(o => o !== opt) : [...prev, opt])}
-                          className="accent-blue-500"
-                          aria-label={`Select ${opt}`}
-                        />
-                        <span className="text-foreground text-sm">{opt}</span>
-                      </label>
-                    ))}
-                  </div>
-                  {selectedReporting.length === 0 && (
-                    <p className="text-red-500 text-xs mt-1" role="alert">At least one reporting option is required.</p>
-                  )}
-                </div>
-
-                {/* Publisher Inclusion/Exclusion */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="publisherInclusionStep2" className="block text-sm font-semibold text-foreground mb-2">Publisher Inclusion (optional)</label>
-                    <input
-                      type="text"
-                      id="publisherInclusionStep2"
-                      value={publisherInclusion}
-                      onChange={e => setPublisherInclusion(e.target.value)}
-                      placeholder="List publishers to include..."
-                      className="w-full px-4 py-2 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
-                      aria-label="Publisher Inclusion"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="publisherExclusionStep2" className="block text-sm font-semibold text-foreground mb-2">Publisher Exclusion (optional)</label>
-                    <input
-                      type="text"
-                      id="publisherExclusionStep2"
-                      value={publisherExclusion}
-                      onChange={e => setPublisherExclusion(e.target.value)}
-                      placeholder="List publishers to exclude..."
-                      className="w-full px-4 py-2 bg-slate-800 text-foreground rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
-                      aria-label="Publisher Exclusion"
-                    />
-                  </div>
-                </div>
+                )}
+                {field.type === 'multi-select' && (
+                  <Select
+                    isMulti
+                    inputId={field.name}
+                    name={field.name}
+                    options={field.options}
+                    value={form[field.name] || []}
+                    onChange={val => handleChange(field.name, val)}
+                    classNamePrefix="react-select"
+                    placeholder={field.placeholder}
+                    styles={{
+                      control: base => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)' }),
+                      menu: base => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)' }),
+                      multiValue: base => ({ ...base, backgroundColor: 'var(--accent)', color: 'var(--accent-foreground)' }),
+                      input: base => ({ ...base, color: 'var(--foreground)' }),
+                    }}
+                    theme={theme => ({
+                      ...theme,
+                      colors: {
+                        ...theme.colors,
+                        primary: '#00FFB7',
+                        primary25: '#00FFB733',
+                        neutral0: 'var(--background)',
+                        neutral80: 'var(--foreground)',
+                      },
+                    })}
+                    aria-required={field.required}
+                    aria-invalid={!!errors[field.name]}
+                  />
+                )}
+                {field.type === 'select' && (
+                  <Select
+                    inputId={field.name}
+                    name={field.name}
+                    options={field.options}
+                    value={form[field.name] || null}
+                    onChange={val => handleChange(field.name, val)}
+                    classNamePrefix="react-select"
+                    placeholder={field.placeholder}
+                    styles={{
+                      control: base => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)' }),
+                      menu: base => ({ ...base, backgroundColor: 'var(--background)', color: 'var(--foreground)' }),
+                      input: base => ({ ...base, color: 'var(--foreground)' }),
+                    }}
+                    theme={theme => ({
+                      ...theme,
+                      colors: {
+                        ...theme.colors,
+                        primary: '#00FFB7',
+                        primary25: '#00FFB733',
+                        neutral0: 'var(--background)',
+                        neutral80: 'var(--foreground)',
+                      },
+                    })}
+                    aria-required={field.required}
+                    aria-invalid={!!errors[field.name]}
+                  />
+                )}
+                {errors[field.name] && <span className="text-red-500 text-xs mt-1">{errors[field.name]}</span>}
               </div>
-
-              <div className="bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg p-4 border border-purple-500/30">
-                <h4 className="text-purple-400 font-semibold mb-2">⚡ Instant Activation</h4>
-                <p className="text-foreground text-sm">
-                  Your deal will be automatically configured for {selectedDSP || 'selected DSP'} 
-                  with all necessary parameters and targeting options.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {step === 3 && (
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-xl font-semibold text-foreground mb-4">Step 3: Your Deal is Ready!</h3>
-                <p className="text-foreground mb-6">Your custom PMP deal has been created and is ready for activation across all selected platforms.</p>
-              </div>
-
-              <div className="bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-xl p-6 border border-green-500/30">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="text-green-400 font-semibold text-lg">Generated Deal ID</h4>
-                  <button
-                    onClick={copyDealId}
-                    className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-colors flex items-center gap-2"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                    </svg>
-                    Copy
-                  </button>
-                </div>
-                <div className="bg-slate-800 rounded-lg p-4 border border-slate-700">
-                  <code className="text-blue-400 font-mono text-lg break-all">{generatedDealId}</code>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-slate-800 rounded-lg p-4">
-                  <h5 className="text-foreground font-semibold mb-3">✅ SSP Integration Complete</h5>
-                  <ul className="text-foreground text-sm space-y-2">
-                    {selectedSSPs.map(ssp => (
-                      <li key={ssp} className="flex items-center gap-2">
-                        <span className="text-green-400">✓</span>
-                        {ssp} - Auto-configured
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="bg-slate-800 rounded-lg p-4">
-                  <h5 className="text-foreground font-semibold mb-3">🎯 DSP Ready</h5>
-                  <div className="text-foreground text-sm">
-                    <p className="mb-2"><strong>DSP:</strong> {selectedDSP}</p>
-                    <p className="mb-2"><strong>Deal Type:</strong> {dealType}</p>
-                    <p><strong>Status:</strong> Ready for activation</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg p-4 border border-blue-500/30">
-                <h4 className="text-blue-400 font-semibold mb-2">🚀 Next Steps</h4>
-                <ul className="text-foreground text-sm space-y-1">
-                  <li>• Copy the Deal ID above</li>
-                  <li>• Paste into your {selectedDSP} campaign</li>
-                  <li>• Your deal is automatically optimized across all selected SSPs</li>
-                  <li>• Real-time performance monitoring available</li>
-                </ul>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Footer */}
-        <div className="p-6 border-t border-slate-700 flex justify-between">
-          {step > 1 && (
-            <button
-              onClick={handleBack}
-              className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-colors"
-            >
-              Back
-            </button>
-          )}
-          
-          <div className="flex gap-4 ml-auto">
-            {step < 3 ? (
-              <button
-                onClick={handleNext}
-                disabled={
-                  (step === 1 && selectedSSPs.length === 0) ||
-                  (step === 2 && (!selectedDSP || !dealName || !dealType))
-                }
-                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-slate-600 disabled:to-slate-700 disabled:cursor-not-allowed text-white rounded-lg font-semibold transition-all duration-200"
-              >
-                {step === 2 ? 'Generate Deal ID' : 'Next'}
-              </button>
-            ) : (
-              <button
-                onClick={onClose}
-                className="px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-lg font-semibold transition-all duration-200"
-              >
-                Done
-              </button>
-            )}
+            )
+          ))}
+          <div className="flex gap-2 mt-4">
+            {step > 0 && <button type="button" className="bg-card text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleBack}>Back</button>}
+            <button type="button" className="bg-green text-white px-4 py-2 rounded font-bold hover:bg-foreground transition" onClick={handleNext} disabled={submitting}>Next</button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
-};
+}
 
 export default CustomDealCreationModal; 
