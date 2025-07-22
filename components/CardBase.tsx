@@ -24,6 +24,35 @@ const subcategoryColors: Record<string, string> = {
   // ...add more as needed
 };
 
+// Gradient maps for badges and subcategories
+const badgeGradients: Record<string, string> = {
+  Evergreen: 'bg-gradient-to-r from-[#1f261c] to-[#31870c]',
+  'Meeting Moments': 'bg-gradient-to-r from-[#2b4857] to-[#612c4e]',
+  Seasonal: 'bg-gradient-to-r from-[#2b4857] to-[#612c4e]',
+};
+const categoryBadgeGradients: Record<string, string> = {
+  Evergreen: 'bg-gradient-to-r from-[#472A05] to-[#0DBE70]',
+  'Meeting Moments': 'bg-gradient-to-r from-[#F25930] to-[#020b36]',
+  Seasonal: 'bg-gradient-to-r from-[#F25930] to-[#020b36]',
+};
+const subcategoryGradients: Record<string, { name: string; className: string }> = {
+  Sensitive: { name: 'Sensitive', className: 'bg-gradient-to-r from-[#7F1D1D] to-[#DC2626] text-white' },
+  Performance: { name: 'Performance', className: 'bg-gradient-to-r from-[#0F172A] to-[#38BDF8] text-white' },
+  'Infillion Audience Taxonomy': { name: 'Infillion Intelligence Engine', className: 'bg-gradient-to-r from-[#2563EB] to-[#9333EA] text-white' },
+  Summer: { name: 'Sun-Soaked Surge', className: 'bg-gradient-to-r from-[#F97316] to-[#FDE68A] text-black' },
+  July: { name: 'Sun-Soaked Surge', className: 'bg-gradient-to-r from-[#F97316] to-[#FDE68A] text-black' },
+  June: { name: 'Sun-Soaked Surge', className: 'bg-gradient-to-r from-[#F97316] to-[#FDE68A] text-black' },
+  August: { name: 'Sun-Soaked Surge', className: 'bg-gradient-to-r from-[#F97316] to-[#FDE68A] text-black' },
+  September: { name: 'Sun-Soaked Surge', className: 'bg-gradient-to-r from-[#F97316] to-[#FDE68A] text-black' },
+  Fall: { name: 'Harvest Hustle', className: 'bg-gradient-to-r from-[#F59E0B] to-[#FDE68A] text-black' },
+  'Gifting Peak': { name: 'Gifting Peak', className: 'bg-gradient-to-r from-[#DB2777] to-[#F472B6] text-white' },
+  Winter: { name: 'Winter Sports', className: 'bg-gradient-to-r from-[#2563EB] to-[#60A5FA] text-white' },
+  'Valentine\'s Day & Romance': { name: 'Romance', className: 'bg-gradient-to-r from-[#9D174D] to-[#F43F5E] text-white' },
+  Romance: { name: 'Romance', className: 'bg-gradient-to-r from-[#9D174D] to-[#F43F5E] text-white' },
+  'Holiday Shopping & Gifting': { name: 'Capitalism', className: 'bg-gradient-to-r from-[#B91C1C] to-[#FACC15] text-black' },
+  Capitalism: { name: 'Capitalism', className: 'bg-gradient-to-r from-[#B91C1C] to-[#FACC15] text-black' },
+};
+
 // Vibrant color for unique reach pill
 const reachPillClass = 'bg-gradient-to-r from-fuchsia-500 to-cyan-400 text-white px-3 py-1 rounded-full text-xs font-bold shadow-md';
 
@@ -38,6 +67,10 @@ const CardBase: React.FC<CardBaseProps> = ({
   bottomLabel,
 }) => {
   const gradientClass = type === 'Evergreen' ? evergreenGradient : seasonalGradient;
+  const badgeType = type === 'Seasonal' ? 'Meeting Moments' : type;
+  const badgeGradient = badgeGradients[badgeType] || 'bg-muted';
+  const categoryBadgeGradient = categoryBadgeGradients[badgeType] || 'bg-muted';
+  const subcat = subcategoryGradients[subcategory] || { name: subcategory, className: 'bg-muted text-foreground' };
   return (
     <div className={`flex flex-col justify-between min-h-[440px] max-h-[520px] min-w-[380px] max-w-[440px] ${gradientClass} border border-border rounded-2xl p-6 shadow-lg transition-all duration-300 relative`}> 
       {/* Deal Name */}
@@ -48,9 +81,10 @@ const CardBase: React.FC<CardBaseProps> = ({
       </div>
       {/* Badge + Subcategory */}
       <div className="flex items-center justify-center gap-2 mb-3">
-        {/* Badge gradient updated below */}
-        <span className={`${type === 'Evergreen' ? 'bg-gradient-to-r from-[#1f261c] to-[#31870c]' : 'bg-gradient-to-r from-[#2b4857] to-[#612c4e]'} text-white px-2 py-1 rounded-full text-xs font-semibold`} title={badge}>{badge}</span>
-        <span className={`px-2 py-1 rounded-full text-xs font-semibold bg-muted text-foreground`} title={subcategory}>{subcategory}</span>
+        {/* Category badge gradient */}
+        <span className={`${categoryBadgeGradient} text-white px-2 py-1 rounded-full text-xs font-semibold`} title={badge}>{badgeType}</span>
+        {/* Subcategory badge gradient */}
+        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${subcat.className}`} title={subcat.name}>{subcat.name}</span>
       </div>
       {/* Description */}
       <p className="text-base text-center text-foreground mb-4 leading-relaxed" title={description}>{description}</p>

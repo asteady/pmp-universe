@@ -17,8 +17,8 @@ const sortedPMPs = allPMPs.sort((a, b) => a.name.localeCompare(b.name));
 
 const pmpData = {
   summary: {
-    seasonal: { count: seasonalPMPs.length, period: 'Jun-Nov 2025', icon: '📅' },
-    evergreen: { count: evergreenPMPs.length, period: 'Year-round performance', icon: '📈' },
+    meetingMoments: { count: seasonalPMPs.length, period: 'June-Nov 2025', icon: '🗓️' },
+    evergreen: { count: evergreenPMPs.length, period: 'Year-round Performance', icon: '📈' },
     custom: { count: customPMPs.length, period: 'Tailored solutions', icon: '🎯' }
   },
   deals: sortedPMPs
@@ -47,7 +47,8 @@ const PMPUniversePage = () => {
 
     // Apply category filter
     if (selectedFilter !== 'All Deals') {
-      const filterType = selectedFilter.replace(' PMPs', '');
+      let filterType = selectedFilter.replace(' PMPs', '');
+      if (filterType === 'Meeting Moments') filterType = 'Seasonal';
       filtered = filtered.filter(deal => deal.type === filterType);
     }
 
@@ -258,14 +259,14 @@ const PMPUniversePage = () => {
                     All Deals ({sortedPMPs.length})
                   </button>
                   <button 
-                    onClick={() => handleFilterChange('Seasonal PMPs')}
+                    onClick={() => handleFilterChange('Meeting Moments PMPs')}
                     className={`w-full text-left px-3 py-2 rounded-lg hover:bg-muted/20 text-sm transition-colors ${
-                      selectedFilter === 'Seasonal PMPs' 
+                      selectedFilter === 'Meeting Moments PMPs' 
                         ? 'bg-gradient-to-r from-primary to-accent text-foreground' 
                         : 'text-foreground'
                     }`}
                   >
-                    Seasonal ({seasonalPMPs.length})
+                    Meeting Moments ({seasonalPMPs.length})
                   </button>
                   <button 
                     onClick={() => handleFilterChange('Evergreen PMPs')}
@@ -294,29 +295,29 @@ const PMPUniversePage = () => {
           <motion.button
             whileHover={{ scale: 1.05, y: -5 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => handleCategoryClick('Seasonal PMPs')}
-            className={`bg-gradient-to-br rounded-xl p-6 text-white transform transition-all duration-300 hover:shadow-2xl border-2 ${
-              selectedFilter === 'Seasonal PMPs'
-                ? 'from-primary to-accent border-primary shadow-primary/30'
-                : 'from-muted to-primary border-muted/30 hover:border-primary hover:shadow-primary/25'
+            onClick={() => handleCategoryClick('Meeting Moments PMPs')}
+            className={`bg-gradient-to-br from-[#2b4857] to-[#612c4e] rounded-xl p-6 text-white transform transition-all duration-300 hover:shadow-2xl border-2 ${
+              selectedFilter === 'Meeting Moments PMPs'
+                ? 'border-[#612c4e] shadow-[#612c4e]/30'
+                : 'border-muted/30 hover:border-[#612c4e] hover:shadow-[#612c4e]/25'
             }`}
           >
             <div className="flex items-center justify-between mb-4">
-              <span className="text-4xl font-bold">{pmpData.summary.seasonal.count}</span>
-              <span className="text-2xl animate-bounce">{pmpData.summary.seasonal.icon}</span>
+              <span className="text-4xl font-bold">{pmpData.summary.meetingMoments.count}</span>
+              <span className="text-2xl animate-bounce">{pmpData.summary.meetingMoments.icon}</span>
             </div>
-            <h3 className="text-2xl font-semibold mb-1">Seasonal PMPs</h3>
-            <p className="text-primary">{pmpData.summary.seasonal.period}</p>
+            <h3 className="text-2xl font-semibold mb-1">Meeting Moments PMPs</h3>
+            <p className="text-blue-100">{pmpData.summary.meetingMoments.period}</p>
           </motion.button>
           
           <motion.button
             whileHover={{ scale: 1.05, y: -5 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => handleCategoryClick('Evergreen PMPs')}
-            className={`bg-gradient-to-br rounded-xl p-6 text-white transform transition-all duration-300 hover:shadow-2xl border-2 ${
+            className={`bg-gradient-to-br from-[#1f261c] to-[#31870c] rounded-xl p-6 text-white transform transition-all duration-300 hover:shadow-2xl border-2 ${
               selectedFilter === 'Evergreen PMPs'
-                ? 'from-primary to-accent border-primary shadow-primary/30'
-                : 'from-muted to-primary border-muted/30 hover:border-primary hover:shadow-primary/25'
+                ? 'border-[#31870c] shadow-[#31870c]/30'
+                : 'border-muted/30 hover:border-[#31870c] hover:shadow-[#31870c]/25'
             }`}
           >
             <div className="flex items-center justify-between mb-4">

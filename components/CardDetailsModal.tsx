@@ -48,6 +48,39 @@ const CardDetailsModal: React.FC<CardDetailsModalProps> = ({ open, onClose, deal
     "Video: 30s CTV Spot for Auto Intenders"
   ];
 
+  // Gradient maps for badges and subcategories (same as CardBase)
+  const badgeGradients: Record<string, string> = {
+    Evergreen: 'bg-gradient-to-r from-[#1f261c] to-[#31870c]',
+    'Meeting Moments': 'bg-gradient-to-r from-[#2b4857] to-[#612c4e]',
+    Seasonal: 'bg-gradient-to-r from-[#2b4857] to-[#612c4e]',
+  };
+  const categoryBadgeGradients: Record<string, string> = {
+    Evergreen: 'bg-gradient-to-r from-[#472A05] to-[#0DBE70]',
+    'Meeting Moments': 'bg-gradient-to-r from-[#F25930] to-[#020b36]',
+    Seasonal: 'bg-gradient-to-r from-[#F25930] to-[#020b36]',
+  };
+  const subcategoryGradients: Record<string, { name: string; className: string }> = {
+    Sensitive: { name: 'Sensitive', className: 'bg-gradient-to-r from-[#7F1D1D] to-[#DC2626] text-white' },
+    Performance: { name: 'Performance', className: 'bg-gradient-to-r from-[#0F172A] to-[#38BDF8] text-white' },
+    'Infillion Audience Taxonomy': { name: 'Infillion Intelligence Engine', className: 'bg-gradient-to-r from-[#2563EB] to-[#9333EA] text-white' },
+    Summer: { name: 'Sun-Soaked Surge', className: 'bg-gradient-to-r from-[#F97316] to-[#FDE68A] text-black' },
+    July: { name: 'Sun-Soaked Surge', className: 'bg-gradient-to-r from-[#F97316] to-[#FDE68A] text-black' },
+    June: { name: 'Sun-Soaked Surge', className: 'bg-gradient-to-r from-[#F97316] to-[#FDE68A] text-black' },
+    August: { name: 'Sun-Soaked Surge', className: 'bg-gradient-to-r from-[#F97316] to-[#FDE68A] text-black' },
+    September: { name: 'Sun-Soaked Surge', className: 'bg-gradient-to-r from-[#F97316] to-[#FDE68A] text-black' },
+    Fall: { name: 'Harvest Hustle', className: 'bg-gradient-to-r from-[#F59E0B] to-[#FDE68A] text-black' },
+    'Gifting Peak': { name: 'Gifting Peak', className: 'bg-gradient-to-r from-[#DB2777] to-[#F472B6] text-white' },
+    Winter: { name: 'Winter Sports', className: 'bg-gradient-to-r from-[#2563EB] to-[#60A5FA] text-white' },
+    'Valentine\'s Day & Romance': { name: 'Romance', className: 'bg-gradient-to-r from-[#9D174D] to-[#F43F5E] text-white' },
+    Romance: { name: 'Romance', className: 'bg-gradient-to-r from-[#9D174D] to-[#F43F5E] text-white' },
+    'Holiday Shopping & Gifting': { name: 'Capitalism', className: 'bg-gradient-to-r from-[#B91C1C] to-[#FACC15] text-black' },
+    Capitalism: { name: 'Capitalism', className: 'bg-gradient-to-r from-[#B91C1C] to-[#FACC15] text-black' },
+  };
+  const badgeType = deal.type === 'Seasonal' ? 'Meeting Moments' : deal.type;
+  const badgeGradient = badgeGradients[badgeType] || 'bg-muted';
+  const categoryBadgeGradient = categoryBadgeGradients[badgeType] || 'bg-muted';
+  const subcat = subcategoryGradients[deal.subCategory] || { name: deal.subCategory, className: 'bg-muted text-foreground' };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
       <div className="bg-card rounded-2xl shadow-2xl max-w-2xl w-full p-6 relative">
@@ -55,9 +88,9 @@ const CardDetailsModal: React.FC<CardDetailsModalProps> = ({ open, onClose, deal
         {/* Header */}
         <h2 className="text-2xl font-extrabold text-center text-foreground mb-2">{deal.name}</h2>
         <div className="flex justify-center gap-2 mb-2">
-          <span className="bg-gradient-to-r from-fuchsia-500 to-cyan-400 text-white px-3 py-1 rounded-full text-xs font-bold shadow-md" title={`Unique Monthly Reach: ${deal.scale}`}>{deal.scale}</span>
-          <span className="bg-emerald-600 text-white px-2 py-1 rounded-full text-xs font-semibold" title={deal.type}>{deal.type}</span>
-          <span className="bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-semibold" title={deal.subCategory}>{deal.subCategory}</span>
+          <span className={`bg-gradient-to-r from-fuchsia-500 to-cyan-400 text-white px-3 py-1 rounded-full text-xs font-bold shadow-md`} title={`Unique Monthly Reach: ${deal.scale}`}>{deal.scale}</span>
+          <span className={`${categoryBadgeGradient} text-white px-2 py-1 rounded-full text-xs font-semibold`} title={badgeType}>{badgeType}</span>
+          <span className={`px-2 py-1 rounded-full text-xs font-semibold ${subcat.className}`} title={subcat.name}>{subcat.name}</span>
         </div>
         <p className="text-base text-center text-foreground mb-4 leading-relaxed" title={deal.description}>{deal.description}</p>
         {/* Tabs */}

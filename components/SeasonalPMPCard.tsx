@@ -9,7 +9,7 @@ const SeasonalPMPCard = ({ deal }: { deal: any }) => {
       <CardBase
         dealName={deal.name}
         uniqueReach={deal.scale}
-        badge={deal.type}
+        badge="Meeting Moments"
         subcategory={deal.subCategory}
         description={deal.description}
         type="Seasonal"

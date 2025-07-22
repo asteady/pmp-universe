@@ -9,7 +9,7 @@ const EvergreenPMPCard = ({ deal }: { deal: any }) => {
       <CardBase
         dealName={deal.name}
         uniqueReach={deal.scale}
-        badge={deal.type}
+        badge="Evergreen"
         subcategory={deal.subCategory}
         description={deal.description}
         type="Evergreen"
