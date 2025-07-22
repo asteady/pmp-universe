@@ -68,7 +68,7 @@ export async function createAsanaTask(form: Record<string, any>, options?: { for
       notes: description,
       projects: [projectId],
       memberships,
-      custom_fields,
+      // custom_fields, // TEMP: Remove custom_fields for debugging
     },
   };
 
@@ -82,7 +82,10 @@ export async function createAsanaTask(form: Record<string, any>, options?: { for
       },
       body: JSON.stringify(body),
     });
-    if (!res.ok) throw new Error('Failed to create Asana task');
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error('Failed to create Asana task: ' + errorText);
+    }
     asanaRes = await res.json();
   } catch (err) {
     // Fallback: try posting with only notes/description if custom fields fail
@@ -102,7 +105,10 @@ export async function createAsanaTask(form: Record<string, any>, options?: { for
       },
       body: JSON.stringify(fallbackBody),
     });
-    if (!res.ok) throw new Error('Failed to create Asana task (fallback)');
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error('Failed to create Asana task (fallback): ' + errorText);
+    }
     asanaRes = await res.json();
   }
   return asanaRes;
