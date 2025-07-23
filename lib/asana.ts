@@ -10,65 +10,76 @@ const ASANA_SECTION_ID_RFP = '1209264819095797';
 const ASANA_SECTION_ID_CUSTOM_DEAL = '1209264819095796';
 const ASANA_TOKEN = '2/1201732381903046/1210841855726554:85985b32eb20d006c5ead37fd361947f';
 
+// Add Infillion Pre-Sale Intake project and section IDs
+const INFILLION_PRE_SALE_PROJECT_ID = '1200261685800140';
+const INFILLION_PRE_SALE_SECTION_ID = '1202907817062336';
+const ALEX_STEADY_ID = '1201732381907717';
+
+// Map form fields to Asana custom field GIDs (replace with real GIDs from mapping grid)
+const customFieldGidMap: Record<string, string> = {
+  agencyName: '1210843062887236',
+  advertiserName: '1204919402025343',
+  dealName: '1210841720958011',
+  startDate: '1205446541091415',
+  endDate: '1210841720958014',
+  dsp: 'DSP_NAME_GID',
+  dspSeatId: 'DSP_SEAT_ID_GID',
+  preferredSSP: 'PREFERRED_SSP_GID',
+  infillionCreative: 'INFILLION_CURATED_CREATIVE_GID',
+  customAudience: '1210841720958012',
+  audienceTaxonomy: '1210841720958013',
+  evergreenSeasonal: 'EVERGREEN_SEASONAL_GID',
+  primaryGoal: 'PRIMARY_GOAL_GID',
+  primaryGoalBenchmark: 'PRIMARY_GOAL_BENCHMARK_GID',
+  secondaryKPI: 'SECONDARY_KPI_GID',
+  secondaryKPIBenchmark: 'SECONDARY_KPI_BENCHMARK_GID',
+  deviceTypes: '1210841720958015',
+  geos: 'GEO_TARGET_GID',
+  otherTargeting: 'OTHER_TARGETING_DETAILS_GID',
+  publisherInclusion: 'PUBLISHER_INCLUSION_GID',
+  publisherExclusion: 'PUBLISHER_EXCLUSION_GID',
+  reporting: 'REPORTING_MEASUREMENT_GID',
+  dueDate: '445566', // Example GID for Due Date
+  // Add more as needed
+};
+
 export async function createAsanaTask(form: Record<string, any>, options?: { formType?: 'rfp' | 'customDeal' }) {
   const token = ASANA_TOKEN;
   const projectId = ASANA_PROJECT_ID;
   if (!token || !projectId) throw new Error('Missing ASANA_TOKEN or ASANA_PROJECT_ID');
-
-  // Field mapping (example, update with real Asana custom field GIDs)
-  const customFieldMap: Record<string, string> = {
-    agencyName: 'Agency Name',
-    advertiserName: 'Advertiser Name',
-    dealName: 'Deal Name',
-    flighting: 'Start Date <> End Date',
-    dsp: 'DSP Name',
-    dspSeatId: 'DSP Seat ID',
-    preferredSSP: 'Preferred SSP(s)',
-    infillionCreative: 'Infillion Curated Creative',
-    customAudience: 'Custom Audience',
-    audienceTaxonomy: 'Infillion Audience Taxonomy',
-    evergreenSeasonal: 'Evergreen Seasonal',
-    primaryGoal: 'Primary Goal',
-    primaryGoalBenchmark: 'Primary Goal Benchmark',
-    secondaryKPI: 'Secondary KPI',
-    secondaryKPIBenchmark: 'Secondary KPI Benchmark',
-    deviceTypes: 'Device Type(s)',
-    geos: 'Geo Target',
-    otherTargeting: 'Other Targeting Details',
-    publisherInclusion: 'Publisher Inclusion',
-    publisherExclusion: 'Publisher Exclusion',
-    reporting: 'Reporting & Measurement',
-    // Add more as needed
-  };
 
   // Compose card title
   const title = form.dealName || form.agencyName || form.advertiserName || 'Custom Deal Request';
 
   // Compose markdown description
   const description = Object.entries(form)
-    .map(([k, v]) => `**${customFieldMap[k] || k}**: ${Array.isArray(v) ? v.join(', ') : v}`)
+    .map(([k, v]) => `**${k}**: ${Array.isArray(v) ? v.join(', ') : v}`)
     .join('\n');
 
-  // Map to Asana custom fields (example, update with real custom field GIDs)
+  // Map to Asana custom fields using GIDs
   const custom_fields: Record<string, any> = {};
-  for (const [key, asanaField] of Object.entries(customFieldMap)) {
+  for (const [key, gid] of Object.entries(customFieldGidMap)) {
     if (form[key]) {
-      custom_fields[asanaField] = form[key];
+      custom_fields[gid] = form[key];
     }
   }
 
-  // Section/column placement (based on formType)
-  let sectionGid = ASANA_SECTION_ID_RFP;
-  if (options?.formType === 'customDeal') sectionGid = ASANA_SECTION_ID_CUSTOM_DEAL;
-  const memberships = sectionGid ? [{ project: projectId, section: sectionGid }] : [{ project: projectId }];
+  // Multi-home: memberships for both projects/sections
+  const memberships = [
+    { project: projectId, section: ASANA_SECTION_ID_RFP },
+    { project: INFILLION_PRE_SALE_PROJECT_ID, section: INFILLION_PRE_SALE_SECTION_ID },
+  ];
 
   const body = {
     data: {
       name: title,
       notes: description,
-      projects: [projectId],
+      projects: [projectId, INFILLION_PRE_SALE_PROJECT_ID],
       memberships,
-      // custom_fields, // TEMP: Remove custom_fields for debugging
+      custom_fields,
+      assignee: ALEX_STEADY_ID,
+      completed: false, // Ensure task is not auto-completed
+      due_on: form.dueDate || undefined,
     },
   };
 
@@ -93,8 +104,11 @@ export async function createAsanaTask(form: Record<string, any>, options?: { for
       data: {
         name: title,
         notes: description + '\n\n[Custom fields failed to map, see above for all data.]',
-        projects: [projectId],
+        projects: [projectId, INFILLION_PRE_SALE_PROJECT_ID],
         memberships,
+        assignee: ALEX_STEADY_ID,
+        completed: false,
+        due_on: form.dueDate || undefined,
       },
     };
     const res = await fetch(ASANA_API_ENDPOINT, {
