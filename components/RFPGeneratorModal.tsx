@@ -233,15 +233,19 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
         <div className="bg-background rounded-lg shadow-lg p-8 w-full max-w-lg relative">
           <button className="absolute top-2 right-2 text-muted" onClick={onClose}>&times;</button>
           <h2 className="text-xl font-bold mb-4 text-foreground font-sans">RFP Submitted!</h2>
-          <div className="text-foreground mb-2">Thank you for your submission. Our team will follow up soon.</div>
-          <div className="text-foreground mb-2">Asana Link: <a href="#" className="underline text-blue-400">View Task</a></div>
-          <div className="text-foreground">Google Slides Link: <span className="italic text-muted">(Coming soon)</span></div>
+          <div className="text-foreground mb-2">The PMP Universe thanks you. Whisper into the cosmos if you have any questions... And by whisper into the cosmos I mean just reach out to Alex Steady.</div>
+          <div className="text-foreground mb-2">Asana Task: <a href="#" className="underline text-blue-400">View Task</a></div>
+          <div className="text-foreground">RFP Proposal: <span className="italic text-muted">(Coming soon)</span></div>
         </div>
       </div>
     );
   }
 
   const currentStep = steps[step];
+
+  // 1. Remove duplicate '?' tooltips: Only render the Tooltip next to the field label, not next to the input/select.
+  // 2. Add custom styles for input/search boxes:
+  const inputBoxClass = "bg-[#23272f] border border-[#444a54] rounded px-3 py-2 text-foreground placeholder-[#A0A0A0] focus:outline-none focus:ring-2 focus:ring-accent w-full";
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
@@ -270,13 +274,6 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                       )}
                     </div>
                   ))}
-                  {/* Show Due Date in review step */}
-                  {i === 0 && (
-                    <div className="mb-2">
-                      <span className="font-semibold text-foreground">Due Date:</span>{' '}
-                      <span className="bg-muted text-foreground px-2 py-1 rounded text-xs font-mono ml-1">{dueDate ? dueDate.toLocaleDateString() : ''}</span>
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
@@ -331,7 +328,6 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                             aria-required={true}
                             aria-invalid={!!errors[field]}
                           />
-                          <Tooltip text={fieldTooltips[field]} />
                         </div>
                       );
                     }
@@ -349,7 +345,6 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                             theme={selectTheme}
                             className="w-full max-w-full"
                           />
-                          <Tooltip text={fieldTooltips[field]} />
                         </div>
                       );
                     }
