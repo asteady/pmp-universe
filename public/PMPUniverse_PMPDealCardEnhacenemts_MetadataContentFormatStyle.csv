@@ -1,0 +1,454 @@
+PMP Deal Name/Title,Unique Monthly Reach,Category,Subcategory,Subcategory Gradient (Hex Codes),Description,"Persona Playbook  (New Tab in place of ""Data"")","TrueX Attention & Sentiment Surveys (within the new ""Persona Playbook"" Tab)","Gimbal Location SDK Breadcrumb-enabled POIs (within the new ""Persona Playbook"" Tab)",Predictive Storyboards (Tab Header within View Details Modal),"Channel & Device Mix (Within ""Predictive Storyboards"" Tab)",,
+What If We Kissed In The Quad?,35M,Meeting Moments,Back To College,#4B5563 → #9CA3AF,"Captures Gen Z college students navigating back-to-school existentialism driven by their need for identity in a digital age. Combine with upper to lower funnel ads for brands in categories such as business & career, community, apparel, tech, and their intersections. Alcohol, tobacco, and other sensitive verticals can also thrive in this moment ;) ","Audience Segments: Campus Trendsetters, Freshmen Explorers; Signal Sources: Gimbal SDK (bookstore, quad, local eateries; dwell >30 min, frequency 2x/week), TrueX Surveys (social media influence, viewership patterns); Behavioral Drivers: Mobile usage, social engagement; Retargeting Logic: Viewshed near dorms, education ad clickers; Modeled with Infillion’s XGraph and cluster segmentation for targeting precision.","Which campus activities influence your purchases?
+
+How often do you shop for clothing or tech? 
+
+What student discounts do you seek?
+
+Which social media platforms inspire you?
+
+Do you prefer interactive ad elements?","University campus/quad stores, around the college campus/quad stores/bookstores (i.e. campus bookstores, college apparel stores, university bookstores, larger stores/bookstores such as Barnes & Noble, Powell's Books, necessity/convenience stores near/on campus (Target, 7-11, Safeway, etc.), restaurants (QSR such as In N Out, Chick Fil A, Taco Bell, and local eatery POIs), coffee shops (i.e. Peets, Starbucks, Dunkin', and local beanery POIs), clothing stores (hypebeast to boutique to larger retailers such as Abercrombie or Hot Topic), and other smaller Mom & Pop boutique stores/bookstores that are localized), dwell time ranges per category and time of day for POIs: 15–45 min, frequency across visits to POIs: 3–5 visits/week, historical lookback window January 2025 to TTL refresh window every 30 days. ","Upper Funnel: Vertical Video – optimized for passive VCR uplift; Mid Funnel: Filmstrip Slider – enables brand-controlled storytelling; Lower Funnel: Add-To-Wallet – eliminates landing page friction. Plus: Open Web retargeting on mobile/desktop display during study breaks. Formats selected based on persona alignment, survey responses, and past creative performance.","Programmatic OpenWeb Video (Education Apps, Retail Sites), Display (Banners on Tech Blogs); Devices: iPhone 13+, Samsung Galaxy A54 (Android 13+), Laptops (HP Pavilion); OS: iOS 16+, Android 13+; Carriers: T-Mobile, AT&T; Cross-device: Household clusters for phone-to-laptop during after-school shopping (3 PM → 7 PM) and weekend mall runs (11 AM → 4 PM).",,Channel & Device Mix
+Hard Launch Season,29M,Meeting Moments,Romance,#BE185D → #F9A8D4,"When love goes public, it’s a full-on flex. This deal targets couples ready to hard-launch their relationships with grand gestures—think date nights, gift splurges, and Insta-worthy moments. Perfect for jewelry, dining, or travel brands aiming to capture the butterflies and bragging rights of new romance with a cheeky, heart-eyed smirk.","Audience Segments: Lovestruck Launchers, Romantic Show-offs; Signal Sources: Gimbal SDK (jewelry stores, upscale restaurants, florists; dwell >30 min, frequency 2x/week), TrueX Surveys (relationship milestones, purchase intent); Behavioral Drivers: App-driven planning, premium purchases; Retargeting Logic: Date-night venue visitors, romance ad clickers; Modeled with Infillion’s XGraph for love-based targeting.","How often do you plan romantic dates?
+
+Which brands elevate your love game?
+
+What’s your go-to date-night spot?
+
+Which App do you use to find matches, if any?","Jewelry stores (i.e., Kay Jewelers, Zales, Tiffany & Co., local jewelers), upscale restaurants (i.e., Ruth's Chris, The Capital Grille, farm-to-table bistros), florists (i.e., 1-800-Flowers, local floral boutiques), boutique retail (i.e., Anthropologie, Nordstrom, curated gift shops); dwell time: 30 → 60 min, frequency: 2 → 4 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – captures lovey-dovey vibes; Mid Funnel: Romantic Gift Guides – inspires purchases; Lower Funnel: Book Now CTAs – drives reservations or buys. Plus: Open Web retargeting during date planning and gift browsing. Formats optimized via Predictive Intelligence for engagement.,"Programmatic OpenWeb Video (Lifestyle Apps, Romance Blogs), Display (Banners on Gift Retail Sites); Devices: iPhone 14+ (iOS 16+), Samsung Galaxy S23 (Android 13+), Laptops (MacBook Air, HP Spectre); Carriers: AT&T, Verizon; OS: iOS 16+, Android 13+; Cross-device: Individual-level tracking via XGraph for phone-to-laptop during evening date planning (6 PM–9 PM) and weekend gift shopping (11 AM–3 PM).",,
+FOOTBALL SZN,45M,Meeting Moments,Tailgate Takeover,#1E3A8A → #60A5FA,"The gridiron calls, and the fans answer with beer-soaked bravado and tribal loyalty. This deal captures the electric pulse of football season, from tailgates to sports bars, targeting fans who live for the snap count and post-game debates. Perfect for brands in sports betting, snacks, or athleisure aiming to ride the adrenaline wave.","Audience Segments: Diehard Fans, Casual Tailgaters; Signal Sources: Gimbal SDK (stadiums, sports bars, retail sporting goods; dwell >1 hr, frequency 2x/week), TrueX Surveys (fan loyalty, betting habits); Behavioral Drivers: Social media engagement, game-day rituals; Retargeting Logic: Stadium proximity, sports app users; Modeled with Infillion’s XGraph for hyper-local precision.","Which team merch do you buy? 
+
+How often do you attend/watch games? 
+
+What snacks fuel your game day? 
+
+Which betting platforms do you use? 
+
+Do interactive ads boost your brand recall?","Stadiums (NFL venues like SoFi Stadium, college football venues like Michigan Stadium), sports bars (i.e., Buffalo Wild Wings, Hooters, local pubs), retail sporting goods stores (i.e., Dick Sporting Goods, Academy Sports, Big5 Sporting Goods), QSRs near stadiums (i.e., Wingstop, Buffalo Wild Wings, McDonald's), convenience stores (i.e., 7-11, Circle K, Sheetz); dwell time: 1→ ì3 hrs, frequency: 2→ ì4 visits/week, historical lookback: August 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – maximizes VCR for hype moments; Mid Funnel: Interactive Quiz Ads – engages fan knowledge; Lower Funnel: Shop Now CTAs – drives instant purchases. Plus: Open Web retargeting during game breaks. Formats optimized via AI-driven creative performance analytics.,"Programmatic OpenWeb Video (Sports Sites, Streaming Apps), Display (Banner Ads on Fan Forums); Devices: iPhone 13+, Samsung Galaxy S22+ (Android 12+), Smart TVs (Roku, Amazon Fire), Gaming Consoles (PS5, Xbox Series X); Carriers: Verizon, AT&T; OS: iOS 15+, Android 12+; Cross-device: Household clusters via XGraph for phone-to-CTV targeting during game dayparts (Saturdays/Sundays, 12 PM–11 PM).",,
+Unidos Unidos Unidos,60M,Meeting Moments,Hispanic Heritage Month,#7F1D1D → #F87171,"A vibrant celebration of Hispanic culture, this deal targets the proud, the passionate, and the family-oriented during Hispanic Heritage Month. It’s a full-funnel fiesta for brands in food, travel, or retail looking to connect with a diverse audience craving cultural resonance and spicy authenticity.","Audience Segments: Cultural Connectors, Young Familia; Signal Sources: Gimbal SDK (cultural festivals, Latin grocery stores, family restaurants; dwell >45 min, frequency 3x/week), TrueX Surveys (cultural pride, purchase drivers); Behavioral Drivers: Community engagement, mobile shopping; Retargeting Logic: Event attendees, ethnic food shoppers; Modeled with Infillion’s XGraph for cultural affinity.","What cultural events do you attend?
+
+How do family traditions influence purchases? 
+
+Which brands reflect your heritage? 
+
+What’s your go-to platform for discovering products? 
+
+Do you engage with bilingual ads?","Cultural festivals (i.e., Fiesta DC, Los Angeles Latino Heritage Festival), Latin grocery stores (i.e., El Super, Vallarta Supermarkets, Cardenas Markets), family-owned restaurants (i.e., local taquerias, pupuserias), community centers (i.e., local Hispanic cultural centers, YMCA with cultural programming); dwell time: 30→ ì60 min, frequency: 3→ ì5 visits/week, historical lookback: September 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – celebrates cultural pride; Mid Funnel: Carousel Ads – showcases product stories; Lower Funnel: Add-To-Cart – seamless purchase flow. Plus: Retargeting on mobile/CTV during family gatherings. Formats powered by Predictive Intelligence for engagement.,"Programmatic OpenWeb Video (Cultural Sites, Streaming Apps), Display (Banners on Community News Sites); Devices: iPhone 12+, Google Pixel 6+ (Android 12+), Smart TVs (Samsung, LG); OS: iOS 15+, Android 12+; Carriers: T-Mobile, Sprint; Cross-device: Household clusters via XGraph for phone-to-CTV during family evenings (6 PM–10 PM).",,
+Basic B Behavior,28M,Evergreen,Pumpkin Spice BBs,#6B7280 → #D1D5DB,"For the unapologetically basic, this deal targets pumpkin spice sippers and UGG-booted brunchers chasing cozy vibes year-round. Ideal for lifestyle, beauty, or coffee brands aiming to cash in on predictable yet profitable consumer habits with a side of self-aware snark.","Audience Segments: Brunch Besties, Trendy Traditionalists; Signal Sources: Gimbal SDK (coffee shops, boutique retail, yoga studios; dwell >30 min, frequency 3x/week), TrueX Surveys (lifestyle preferences, brand loyalty); Behavioral Drivers: Social media trends, influencer follows; Retargeting Logic: Coffee shop visitors, beauty ad clickers; Modeled with Infillion’s XGraph for trend alignment.","What’s your go-to coffee order? 
+
+How often do you shop lifestyle brands? 
+
+Which influencers shape your purchases? 
+
+Do you prefer video or static ads? 
+
+How important are seasonal deals?","Coffee shops (i.e., Starbucks, Peet Coffee, Dunkin, local cafes like Blue Bottle), boutique retail (i.e., Anthropologie, Free People, Urban Outfitters), yoga studios (i.e., CorePower Yoga, local studios), brunch spots (i.e., The Breakfast Club, local diners); dwell time: 20→ ì60 min, frequency: 3→ ì5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – taps into aesthetic vibes; Mid Funnel: Shoppable Stories – drives engagement; Lower Funnel: One-Tap Checkout – minimizes friction. Plus: Open Web retargeting during social scrolling. Formats optimized via Predictive Storyboard analytics.,"Programmatic OpenWeb Display (Lifestyle Blogs, Retail Sites), Video (Streaming Apps); Devices: iPhone 14+, Samsung Galaxy A54 (Android 13+), Laptops (MacBook Air, Dell XPS); OS: iOS 16+, Android 13+; Carriers: AT&T, Verizon; Cross-device: Individual-level tracking for phone-to-laptop during morning coffee runs (7 AM–10 AM) and weekend brunch hours (10 AM–2 PM).",,
+Weekend Warriors,50M,Evergreen,Performance,#15803D → #86EFAC,"These adrenaline junkies live for Saturday hikes, Sunday gym sessions, and crushing it outdoors. This deal targets fitness fanatics and adventure seekers for brands in activewear, gear, or energy drinks, with a nod to their ‘go hard or go home’ ethos.","Audience Segments: Fitness Freaks, Outdoor Enthusiasts; Signal Sources: Gimbal SDK (gyms, hiking trails, sporting goods stores; dwell >45 min, frequency 2x/week), TrueX Surveys (fitness goals, gear preferences); Behavioral Drivers: App usage, social challenges; Retargeting Logic: Trail visitors, fitness app users; Modeled with Infillion’s XGraph for activity-based targeting.","What’s your weekend workout routine? 
+
+Which gear brands do you trust?
+ 
+How often do you shop for activewear? 
+
+What motivates your fitness goals? 
+
+Do dynamic ads catch your eye?","Gyms (i.e., Planet Fitness, 24 Hour Fitness, Equinox), hiking trails (i.e., Runyon Canyon, local state parks), sporting goods stores (i.e., REI, Dick Sporting Goods, Academy Sports), outdoor retailers (i.e., Bass Pro Shops, Cabela); dwell time: 45→ ì90 min, frequency: 2→ ì4 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – showcases epic adventures; Mid Funnel: Interactive Gear Guides – builds trust; Lower Funnel: Add-To-Cart – instant purchase flow. Plus: Retargeting on mobile during workout planning. Formats driven by AI-optimized creative performance.,"Programmatic OpenWeb Video (Fitness Apps, Outdoor Blogs), Display (Banner Ads on Sports Sites); Devices: Apple Watch (WatchOS 9+), Samsung Galaxy S23 (Android 13+), Smart TVs (Roku); OS: iOS 16+, Android 13+; Carriers: Verizon, T-Mobile; Cross-device: Household clusters for phone-to-wearable during pre-workout app checks (5 AM–8 AM) and post-hike browsing (3 PM–7 PM).",,
+FLANNEL SZN,38M,Meeting Moments,Fall Fashion Frenzy,#B91C1C → #FCA5A5,"When the leaves turn, so do the wardrobes. This deal captures the flannel-obsessed, cider-sipping fall fanatics ready to flex their cozy aesthetic. Perfect for apparel, home decor, or seasonal food brands looking to lean into autumnal obsession with a witty edge.","Audience Segments: Cozy Curators, Fall Fashionistas; Signal Sources: Gimbal SDK (apple orchards, clothing stores, cafes; dwell >30 min, frequency 3x/week), TrueX Surveys (seasonal style, purchase triggers); Behavioral Drivers: Social media aesthetics, seasonal shopping; Retargeting Logic: Orchard visitors, apparel ad clickers; Modeled with Infillion’s XGraph for fall affinity.","What fall trends do you follow?
+
+How often do you shop seasonal apparel?
+
+Which cozy brands resonate?
+
+What’s your go-to fall activity?
+
+Do you engage with immersive ads?","Apple orchards (i.e., local farms, Carter Orchard), clothing stores (i.e., Gap, H&M, J.Crew), coffee shops (i.e., Starbucks, local roasters), fall festivals (i.e., local harvest fairs, pumpkin patches); dwell time: 30→ ì60 min, frequency: 3→ ì5 visits/week, historical lookback: September 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – evokes fall vibes; Mid Funnel: Lookbook Sliders – inspires style; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Open Web retargeting during cozy evenings. Formats optimized via Predictive Intelligence for engagement.,"Programmatic OpenWeb Display (Fashion Retail Sites, Lifestyle Blogs), Video (Streaming Lifestyle Content); Devices: iPhone 13+, Google Pixel 7 (Android 13+), Laptops (HP Spectre, MacBook Pro); OS: iOS 15+, Android 13+; Carriers: AT&T, Spectrum; Cross-device: Individual-level tracking for phone-to-laptop during evening style scrolls (7 PM–10 PM) and weekend shopping (11 AM–3 PM).",,
+Ghouls Just Wanna Have Fun,42M,Meeting Moments,Halloween Hype,#4B0082 → #A78BFA,"Spooky season brings out the ghouls, goblins, and costume-crazed. This deal targets Halloween enthusiasts planning parties, trick-or-treating, or haunted house runs. Ideal for candy, costume, or entertainment brands ready to haunt the full funnel with devilish charm.","Audience Segments: Spooky Stans, Party Planners; Signal Sources: Gimbal SDK (party stores, haunted attractions, supermarkets; dwell >30 min, frequency 2x/week), TrueX Surveys (Halloween plans, purchase intent); Behavioral Drivers: Event planning, social sharing; Retargeting Logic: Costume shop visitors, spooky ad clickers; Modeled with Infillion’s XGraph for festive targeting.","What's your Halloween costume vibe?
+
+How much do you spend on spooky decor?
+
+Which candy brands dominate your basket?
+
+What’s your go-to Halloween activity?
+
+Do interactive ads scare up your interest?","Party stores (i.e., Party City, Spirit Halloween), haunted attractions (i.e., Universal Horror Nights, local haunts), supermarkets (i.e., Target, Walmart, Kroger), costume shops (i.e., local boutiques, Halloween Express); dwell time: 30→ ì60 min, frequency: 2→ ì4 visits/week, historical lookback: October 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – sets spooky mood; Mid Funnel: Interactive Polls – engages party planners; Lower Funnel: Add-To-Cart – seamless checkout. Plus: Retargeting on mobile/CTV during Halloween prep. Formats powered by AI-driven creative analytics.,"Programmatic OpenWeb Video (Entertainment Sites, Streaming Apps), Display (Banners on Retail Sites); Devices: iPhone 14+, Samsung Galaxy Z Fold (Android 12+), Smart TVs (Vizio, Samsung); OS: iOS 16+, Android 12+; Carriers: T-Mobile, Verizon; Cross-device: Household clusters for phone-to-CTV during spooky season nights (8 PM–12 AM).",,
+"""New Year, New Me""",55M,Meeting Moments,Resolution Rush,#064E3B → #6EE7B7,"January’s delusion of grandeur hits hard. This deal targets resolution-chasers dreaming of gym gains, meal preps, and self-improvement apps. Perfect for fitness, wellness, or tech brands capitalizing on the fleeting optimism of a new year.","Audience Segments: Goal Getters, Wellness Wannabes; Signal Sources: Gimbal SDK (gyms, health food stores, bookstores; dwell >45 min, frequency 3x/week), TrueX Surveys (resolution goals, app usage); Behavioral Drivers: App downloads, social motivation; Retargeting Logic: Gym visitors, wellness ad clickers; Modeled with Infillion’s XGraph for goal-driven targeting.","What's your top New Year’s resolution?
+
+How often do you shop for wellness products?
+
+Which apps support your goals?
+
+What motivates your self-improvement?
+
+Do dynamic ads inspire action?","Gyms (i.e., Planet Fitness, Equinox, Crunch Fitness), health food stores (i.e., Whole Foods, Sprouts, Trader Joe), bookstores (self-help sections at Barnes & Noble, indie bookstores), fitness retail (i.e., Lululemon, Nike); dwell time: 45→ ì90 min, frequency: 3→ ì5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – inspires transformation; Mid Funnel: Progress Trackers – builds engagement; Lower Funnel: Subscription CTAs – drives sign-ups. Plus: Open Web retargeting during morning motivation. Formats optimized via Predictive Storyboard analytics.,"Programmatic OpenWeb Video (Fitness Apps, Wellness Sites), Display (Banners on Self-Help Blogs); Devices: Apple Watch (WatchOS 9+), Google Pixel 8 (Android 13+), Laptops (Lenovo Yoga, MacBook Air); OS: iOS 16+, Android 13+; Carriers: AT&T, T-Mobile; Cross-device: Individual-level tracking for wearable-to-laptop during morning resolution checks (6 AM–9 AM) and evening wellness searches (7 PM–10 PM).",,
+Boozy Bipeds,30M,Evergreen,Sensitive,#7C3AED → #C4B5FD,"In line with Infillion’s Ad Content Guidelines, this deal targets adults 21+ who savor craft cocktails, microbrews, or wine tastings with a side of sophistication. Ideal for alcohol brands navigating the boozy landscape with finesse and a wink.","Audience Segments: Craft Connoisseurs, Social Sippers; Signal Sources: TrueX Surveys (drinking habits, brand preferences); Behavioral Drivers: Social outings, premium purchases; Retargeting Logic: Bar proximity, alcohol ad clickers; Modeled with Infillion’s XGraph for taste-based targeting.","How often do you try new cocktails?
+
+Which alcohol brands align with your vibe?
+
+What’s your go-to nightlife spot?
+
+Do you prefer video or static ads?
+
+How important are exclusive deals?","In line with Infillion Ad Content Guidelines, this deal leverages survey-driven insights instead of location-based POIs for sensitive categories.",Upper Funnel: Vertical Video – showcases premium vibes; Mid Funnel: Interactive Tasting Guides – engages sippers; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Retargeting on mobile during nightlife hours. Formats optimized via Predictive Intelligence for engagement.,"Programmatic OpenWeb Video (Lifestyle Sites, Streaming Apps), Display (Banners on Nightlife Blogs); Devices: iPhone 13+, Samsung Galaxy S22 (Android 12+), Smart TVs (LG, Sony); OS: iOS 15+, Android 12+; Carriers: Verizon, Spectrum; Cross-device: Household clusters for phone-to-CTV during nightlife hours (9 PM–1 AM).",,
+Cultured AF,25M,Evergreen,Arts & Culture,#831843 → #F9A8D4,"For the artsy elite who brunch at galleries and vibe at indie bookstores, this deal targets culture vultures craving authentic experiences. Perfect for travel, luxury, or niche retail brands aiming to charm the pretentious with a knowing smirk.","Audience Segments: Art Aficionados, Indie Intellectuals; Signal Sources: Gimbal SDK (galleries, theaters, indie bookstores; dwell >45 min, frequency 2x/week), TrueX Surveys (cultural interests, purchase habits); Behavioral Drivers: Event attendance, social curation; Retargeting Logic: Gallery visitors, culture ad clickers; Modeled with Infillion’s XGraph for niche targeting.","Which cultural events do you attend?
+
+How often do you shop indie brands?
+
+What inspires your travel plans?
+
+Which platforms shape your aesthetic?
+
+Do immersive ads resonate?","Art galleries (i.e., local galleries, The Getty), indie bookstores (i.e., The Last Bookstore, Skylight Books), theaters (i.e., AMC, local playhouses), boutique cafes (i.e., Urth Caff√©, local artisanal spots); dwell time: 45→ ì90 min, frequency: 2→ ì4 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – captures artistic vibes; Mid Funnel: Curated Lookbooks – builds trust; Lower Funnel: Book Now CTAs – drives bookings. Plus: Open Web retargeting during cultural browsing. Formats powered by AI-driven creative performance.,"Programmatic OpenWeb Display (Art Blogs, Travel Sites), Video (Cultural Streaming); Devices: iPad Pro (iOS 15+), MacBook Pro (macOS Ventura+), Smart TVs (Samsung); OS: iOS 15+, macOS 13+; Carriers: AT&T, T-Mobile; Cross-device: Individual-level tracking for tablet-to-laptop during weekend gallery visits (10 AM–4 PM) and evening culture binges (8 PM–11 PM).",,
+What's Your Rising?,20M,Evergreen,Religion & Spirituality,#5B21B6 → #C4B5FD,"Astrology buffs and cosmic curious unite in this deal for star-gazers obsessed with horoscopes and manifesting vibes. Ideal for wellness, fashion, or spiritual brands targeting the zodiac-obsessed with a playful, celestial edge.","Audience Segments: Cosmic Curators, Zodiac Zealots; Signal Sources: Gimbal SDK (metaphysical shops, wellness centers, bookstores; dwell >30 min, frequency 2x/week), TrueX Surveys (astrology engagement, purchase triggers); Behavioral Drivers: Social media trends, spiritual exploration; Retargeting Logic: Metaphysical shop visitors, astrology ad clickers; Modeled with Infillion’s XGraph for cosmic affinity.","How often do you check your horoscope?
+
+Which spiritual products do you buy?
+
+What’s your go-to astrology app?
+
+Do zodiac-themed ads catch your eye?
+
+How important are personalized offers?","Metaphysical shops (i.e., The Crystal Matrix, local occult stores), wellness centers (i.e., The Den Meditation, local yoga retreats), bookstores (spirituality sections at Barnes & Noble, indie bookstores), yoga studios (i.e., YogaWorks, local studios); dwell time: 30→ ì60 min, frequency: 2→ ì4 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – evokes cosmic vibes; Mid Funnel: Zodiac Quizzes – engages users; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Retargeting on mobile during spiritual scrolling. Formats optimized via Predictive Storyboard analytics.,"Programmatic OpenWeb Video (Wellness Apps, Spiritual Sites), Display (Banners on Astrology Blogs); Devices: iPhone 12+, Google Pixel 6 (Android 12+), Smart TVs (Roku); OS: iOS 15+, Android 12+; Carriers: Verizon, T-Mobile; Cross-device: Household clusters for phone-to-TV during late-night cosmic scrolls (10 PM–1 AM) and morning mindfulness (6 AM–8 AM).",,
+This Car Could Be Yours!,35M,Evergreen,Automotive,#B91C1C → #FCA5A5,"Rev up for auto enthusiasts dreaming of shiny new rides. This deal targets car shoppers and gearheads for automotive, insurance, or accessory brands, with a cheeky nod to their horsepower fantasies.","Audience Segments: Car Dreamers, Gearhead Gurus; Signal Sources: Gimbal SDK (dealerships, auto parts stores, car shows; dwell >45 min, frequency 2x/week), TrueX Surveys (car preferences, purchase intent); Behavioral Drivers: Research habits, social sharing; Retargeting Logic: Dealership visitors, auto ad clickers; Modeled with Infillion’s XGraph for auto affinity.","What’s your dream car brand?
+
+How often do you visit dealerships?
+
+Which accessories do you prioritize?
+
+What’s your go-to car research platform?
+
+Do interactive ads drive engagement?","Car dealerships (i.e., Toyota, Ford, Tesla), auto parts stores (i.e., AutoZone, OReilly Auto Parts, Advance Auto Parts), car shows (i.e., SEMA, local auto expos), service centers (i.e., Jiffy Lube, Midas); dwell time: 45→ ì90 min, frequency: 2→ ì4 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – showcases sleek rides; Mid Funnel: Interactive Configurators – builds excitement; Lower Funnel: Test Drive CTAs – drives bookings. Plus: Open Web retargeting during car research. Formats powered by AI-driven creative performance.,"Programmatic OpenWeb Video (Auto Review Sites, Streaming Apps), Display (Banners on Car Forums); Devices: iPhone 14+, Samsung Galaxy S23 (Android 13+), Laptops (Dell XPS, HP Spectre); OS: iOS 16+, Android 13+; Carriers: AT&T, Verizon; Cross-device: Individual-level tracking for phone-to-laptop during weekend dealership visits (10 AM–3 PM) and evening research (7 PM–10 PM).",,
+Prose Posse,22M,Evergreen,Literary,#1E3A8A → #60A5FA,"Bookworms and literary snobs unite in this deal for avid readers who haunt bookstores and sip coffee while debating prose. Perfect for publishing, coffee, or lifestyle brands targeting the intellectually smug.","Audience Segments: Lit Lovers, Coffeehouse Critics; Signal Sources: Gimbal SDK (bookstores, cafes, libraries; dwell >45 min, frequency 3x/week), TrueX Surveys (reading habits, genre preferences); Behavioral Drivers: Social media book clubs, event attendance; Retargeting Logic: Bookstore visitors, literary ad clickers; Modeled with Infillion’s XGraph for reader targeting.","What genres do you read?
+
+How often do you visit bookstores?
+
+Which authors influence your purchases?
+
+What’s your go-to reading platform?
+
+Do immersive ads spark interest?","Bookstores (i.e., Barnes & Noble, Strand Bookstore, indie shops), cafes (i.e., Starbucks, local roasters like Blue Bottle), libraries (i.e., public libraries, university libraries); dwell time: 45→ ì90 min, frequency: 3→ ì5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – evokes literary vibes; Mid Funnel: Book Preview Sliders – engages readers; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Open Web retargeting during reading hours. Formats optimized via Predictive Intelligence.,"Programmatic OpenWeb Display (Book Blogs, E-Reader Sites), Video (Literary Streaming); Devices: iPad Air (iOS 15+), MacBook Air (macOS Ventura+), Smart TVs (LG); OS: iOS 15+, macOS 13+; Carriers: T-Mobile, Spectrum; Cross-device: Individual-level tracking for tablet-to-laptop during cozy reading hours (8 PM–11 PM) and weekend bookstore runs (11 AM–3 PM).",,
+Xshorts? Never Heard of Her,30M,Evergreen,Brand-Safety,#DB2777 → #F9A8D4,"This deal targets short-form video addicts scrolling Xshorts for their next viral fix. Ideal for entertainment, fashion, or snack brands catching eyes in the infinite scroll with a sarcastic smirk.","Audience Segments: Scroll Savants, Viral Vanguards; Signal Sources: Gimbal SDK (coffee shops, retail, transit hubs; dwell >30 min, frequency 3x/week), TrueX Surveys (content preferences, ad engagement); Behavioral Drivers: Social media addiction, trend chasing; Retargeting Logic: Video ad clickers, Xshorts users; Modeled with Infillion’s XGraph for scroll-based targeting.","What types of videos keep you scrolling?
+
+How often do you shop via social ads?
+
+Which brands go viral for you?
+
+What’s your go-to platform for trends?
+
+Do interactive ads hook you?","Coffee shops (i.e., Starbucks, Dunkin, local cafes), retail stores (i.e., Target, H&M, Zara), transit hubs (i.e., bus stations, train stations, airports); dwell time: 30→ ì60 min, frequency: 3→ ì5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – mimics Xshorts vibe; Mid Funnel: Swipeable Stories – drives engagement; Lower Funnel: One-Tap Checkout – seamless purchases. Plus: Retargeting on mobile during scroll sessions. Formats powered by AI-driven creative analytics.,"Programmatic OpenWeb Video (Entertainment Apps, Trend Blogs), Display (Banners on Lifestyle Sites); Devices: iPhone 13+, Google Pixel 7 (Android 13+), Laptops (Lenovo ThinkPad); OS: iOS 16+, Android 13+; Carriers: Verizon, AT&T; Cross-device: Individual-level tracking for phone-to-laptop during late-night scroll marathons (10 PM–2 AM).",,
+Smoke Weed Everyday,18M,Evergreen,Sensitive - Cannabis & CBD,#15803D → #86EFAC,"In line with Infillion’s Ad Content Guidelines, this deal targets cannabis enthusiasts vibing with dispensary runs and chill sessions. Perfect for cannabis-adjacent brands navigating the green scene with a laid-back wink.","Audience Segments: Chill Connoisseurs, Stash Shoppers; Signal Sources: TrueX Surveys (cannabis preferences, purchase habits); Behavioral Drivers: Social relaxation, premium purchases; Retargeting Logic: Dispensary proximity, cannabis ad clickers; Modeled with Infillion’s XGraph for lifestyle targeting.","
+How often do you visit dispensaries?
+
+Which cannabis products do you prefer?
+
+What’s your go-to chill spot?
+
+Do you engage with lifestyle ads?
+
+How important are exclusive deals?","In line with Infillion Ad Content Guidelines, this deal leverages survey-driven insights instead of location-based POIs for sensitive categories.",Upper Funnel: Vertical Video – sets chill vibes; Mid Funnel: Product Sliders – showcases variety; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Retargeting on mobile during leisure hours. Formats optimized via Predictive Storyboard analytics.,"Programmatic OpenWeb Video (Lifestyle Streaming, Wellness Sites), Display (Banners on Chill Blogs); Devices: iPhone 12+, Samsung Galaxy A53 (Android 12+), Smart TVs (Roku, Amazon Fire); OS: iOS 15+, Android 12+; Carriers: T-Mobile, Verizon; Cross-device: Household clusters for phone-to-CTV during evening relaxation (8 PM–12 AM).",,
+Good Luck Players,25M,Evergreen,Sensitive - Gambling & Betting,#B91C1C → #FCA5A5,"In line with Infillion’s Ad Content Guidelines, this deal targets lottery enthusiasts and casual gamblers chasing their lucky break. Ideal for gaming or betting brands aiming to spark dreams with a cheeky edge.","Audience Segments: Luck Chasers, Casual Bettors; Signal Sources: TrueX Surveys (gaming habits, purchase intent); Behavioral Drivers: Social engagement, risk-taking; Retargeting Logic: Betting app users, gaming ad clickers; Modeled with Infillion’s XGraph for thrill-based targeting.","How often do you play lotteries?
+
+Which betting platforms do you use?
+
+What’s your go-to lucky ritual?
+
+Do interactive ads spark excitement?
+
+How important are quick-play offers?","In line with Infillion Ad Content Guidelines, this deal leverages survey-driven insights instead of location-based POIs for sensitive categories.",Upper Funnel: Vertical Video – evokes winning vibes; Mid Funnel: Interactive Odds Games – engages players; Lower Funnel: Play Now CTAs – drives action. Plus: Retargeting on mobile during gaming hours. Formats powered by AI-driven creative performance.,"Programmatic OpenWeb Video (Gaming Sites, Streaming Apps), Display (Banners on Betting Blogs); Devices: iPhone 13+, Google Pixel 6 (Android 12+), Smart TVs (Samsung); OS: iOS 15+, Android 12+; Carriers: AT&T, T-Mobile; Cross-device: Individual-level tracking for phone-to-TV during lottery draw nights (7 PM–10 PM).",,
+Succession Meets Mom & Pop,22M,Evergreen,Obligated Shoppers,#1E3A8A → #60A5FA,"For small business stans who dream of empire-building while shopping local, this deal targets entrepreneurial spirits and community supporters. Perfect for SaaS, retail, or finance brands with a nod to scrappy ambition.","Audience Segments: Local Loyalists, Startup Dreamers; Signal Sources: Gimbal SDK (local shops, co-working spaces, cafes; dwell >45 min, frequency 3x/week), TrueX Surveys (business goals, purchase habits); Behavioral Drivers: Community support, social media; Retargeting Logic: Local shop visitors, business ad clickers; Modeled with Infillion’s XGraph for local affinity.","How often do you shop local?
+
+What business tools do you use?
+
+Which brands support your community?
+
+What’s your go-to platform for business tips?
+
+Do interactive ads inspire action?","Local shops (i.e., independent boutiques, hardware stores), co-working spaces (i.e., WeWork, local hubs), cafes (i.e., Starbucks, local roasters), farmers markets (i.e., local weekend markets); dwell time: 45→ ì90 min, frequency: 3→ ì5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – celebrates local vibes; Mid Funnel: Success Stories – builds trust; Lower Funnel: Sign-Up CTAs – drives subscriptions. Plus: Open Web retargeting during business browsing. Formats optimized via Predictive Intelligence.,"Programmatic OpenWeb Display (Business Blogs, Local Retail Sites), Video (SaaS Platforms); Devices: MacBook Pro (macOS Ventura+), iPhone 14+ (iOS 16+), Laptops (Dell XPS); OS: iOS 16+, macOS 13+; Carriers: Verizon, Spectrum; Cross-device: Individual-level tracking for laptop-to-phone during weekday co-working (9 AM–3 PM) and evening networking (6 PM–9 PM).",,
+Varsity Shoppers,40M,Meeting Moments,Back-to-School Blitz,#4B5563 → #9CA3AF,"High school and college kids gearing up for the academic grind. This deal targets teens and young adults splurging on gear, tech, and snacks for the school year with a sardonic nod to their hustle.","Audience Segments: Academic Achievers, Trendy Teens; Signal Sources: Gimbal SDK (school supply stores, tech retailers, QSRs; dwell >30 min, frequency 3x/week), TrueX Surveys (school prep, purchase drivers); Behavioral Drivers: Social trends, mobile shopping; Retargeting Logic: Campus proximity, school ad clickers; Modeled with Infillion’s XGraph for student targeting.","What school supplies do you prioritize?
+
+How often do you shop for tech?
+
+Which brands define your style?
+
+What’s your go-to social platform?
+
+Do dynamic ads catch your eye?","Tech stores (i.e., Best Buy, Micro Center), co-working spaces (i.e., WeWork, local tech hubs), cafes (i.e., Starbucks, local roasters), tech meetups (i.e., blockchain conferences, local crypto events); dwell time: 45→ ì90 min, frequency: 2→ ì4 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – captures school vibes; Mid Funnel: Shoppable Lookbooks – inspires purchases; Lower Funnel: Add-To-Cart – seamless checkout. Plus: Retargeting on mobile during study breaks. Formats powered by AI-driven creative analytics.,"Programmatic OpenWeb Video (Education Apps, Retail Sites), Display (Banners on Tech Blogs); Devices: iPhone 13+, Samsung Galaxy A54 (Android 13+), Laptops (HP Pavilion); OS: iOS 16+, Android 13+; Carriers: T-Mobile, AT&T; Cross-device: Household clusters for phone-to-laptop during after-school shopping (3 PM–7 PM) and weekend mall runs (11 AM–4 PM).",,
+Hodl Herd,20M,Evergreen,Sensitive - Crypto & Trading,#B45309 → #FBBF24,"Crypto bros and blockchain believers unite in this deal for digital asset enthusiasts. Perfect for fintech, tech, or lifestyle brands targeting the decentralized dreamers with a tongue-in-cheek vibe.","Audience Segments: Crypto Crusaders, Blockchain Believers; Signal Sources: Gimbal SDK (tech stores, co-working spaces, cafes; dwell >45 min, frequency 2x/week), TrueX Surveys (crypto habits, investment goals); Behavioral Drivers: Social media trends, app usage; Retargeting Logic: Crypto app users, tech ad clickers; Modeled with Infillion’s XGraph for crypto affinity.","How often do you trade crypto?
+
+Which platforms do you trust?
+
+What’s your go-to investment app?
+
+Do crypto-themed ads resonate?","Bars (i.e., local craft beer spots, rooftop lounges), cafes (i.e., Starbucks, local bistros), retail (i.e., Sephora, H&M, Zara), date-night restaurants (i.e., The Cheesecake Factory, local farm-to-table spots); dwell time: 30→ ì60 min, frequency: 3→ ì5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – evokes crypto hype; Mid Funnel: Interactive Charts – engages investors; Lower Funnel: Sign-Up CTAs – drives registrations. Plus: Open Web retargeting during trading hours. Formats optimized via Predictive Storyboard analytics.,"Programmatic OpenWeb Video (Crypto News Sites, Fintech Apps), Display (Banners on Trading Blogs); Devices: iPhone 14+, Google Pixel 8 (Android 13+), Laptops (ASUS ROG); OS: iOS 16+, Android 13+; Carriers: Verizon, T-Mobile; Cross-device: Individual-level tracking for phone-to-laptop during late-night trading (11 PM–3 AM) and weekend portfolio checks (10 AM–2 PM).",,
+Swipe Right,30M,Meeting Moments,Romance,#DB2777 _ #F9A8D4,"For hopeless romantics and serial swipers, this deal targets dating app devotees looking for love or a fling. Ideal for lifestyle, beauty, or dining brands catching hearts with a playful wink.","Audience Segments: Love Seekers, Casual Swipers; Signal Sources: Gimbal SDK (bars, cafes, retail; dwell >30 min, frequency 3x/week), TrueX Surveys (dating habits, purchase intent); Behavioral Drivers: Social outings, mobile engagement; Retargeting Logic: Dating app users, lifestyle ad clickers; Modeled with Infillion’s XGraph for romantic targeting.","How important are exclusive offers?
+
+How often do you use dating apps?
+
+What’s your go-to date spot?
+
+Which brands enhance your dating game?","Hardware stores (i.e., Home Depot, Lowe, Ace Hardware), garden centers (i.e., local nurseries, Armstrong Garden Centers), furniture retail (i.e., IKEA, Ashley Furniture); dwell time: 45→ ì90 min, frequency: 2→ ì4 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – sets romantic vibes; Mid Funnel: Date Idea Sliders – inspires plans; Lower Funnel: Book Now CTAs – drives reservations. Plus: Retargeting on mobile during swiping sessions. Formats powered by AI-driven creative performance.,"Programmatic OpenWeb Video (Lifestyle Apps, Dating Blogs), Display (Banners on Retail Sites); Devices: iPhone 13+, Samsung Galaxy S22 (Android 12+), Laptops (MacBook Air); OS: iOS 15+, Android 12+; Carriers: AT&T, Verizon; Cross-device: Individual-level tracking for phone-to-laptop during evening swiping (8 PM–11 PM) and weekend date planning (2 PM–6 PM).",,
+Home Depot Honeys,35M,Evergreen,DIY,#B91C1C _ #FCA5A5,"DIY queens and weekend project kings flock to this deal for home improvement enthusiasts. Perfect for hardware, decor, or tool brands targeting the hands-on crowd with a gritty charm.","Audience Segments: DIY Dynamos, Home Improvers; Signal Sources: Gimbal SDK (hardware stores, garden centers, furniture retail; dwell >45 min, frequency 2x/week), TrueX Surveys (project habits, purchase drivers); Behavioral Drivers: Research habits, social sharing; Retargeting Logic: Hardware store visitors, DIY ad clickers; Modeled with Infillion’s XGraph for project-based targeting.","
+What’s your latest DIY project?
+
+How often do you shop at hardware stores?
+
+Which tools do you prioritize?
+
+What’s your go-to project inspiration platform?
+
+Do dynamic ads drive engagement?","Bookstores (i.e., Barnes & Noble, Powell Books, indie bookstores), libraries (i.e., public libraries, university libraries), university campuses (i.e., UCLA, NYU), co-working spaces (i.e., WeWork, local hubs); dwell time: 45→ ì90 min, frequency: 3→ ì5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – showcases project wins; Mid Funnel: How-To Guides – builds trust; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Open Web retargeting during project planning. Formats optimized via Predictive Intelligence.,"Programmatic OpenWeb Video (DIY Blogs, Home Improvement Apps), Display (Banners on Hardware Sites); Devices: iPad Pro (iOS 15+), Samsung Galaxy Tab S8 (Android 12+), Laptops (HP Omen); OS: iOS 15+, Android 12+; Carriers: T-Mobile, Spectrum; Cross-device: Household clusters for tablet-to-laptop during weekend project planning (9 AM–1 PM) and evening tutorials (7 PM–10 PM).",,
+Knowledge Is Power,28M,Evergreen,Education & Learning,#B91C1C → #FCA5A5,"For lifelong learners and trivia nerds, this deal targets those chasing intellectual flexes at bookstores, libraries, or online courses. Ideal for education, tech, or publishing brands with a witty nod to brainy ambition.","Audience Segments: Brainy Bookworms, Course Collectors; Signal Sources: Gimbal SDK (bookstores, libraries, universities; dwell >45 min, frequency 3x/week), TrueX Surveys (learning habits, course preferences); Behavioral Drivers: App usage, social engagement; Retargeting Logic: Bookstore visitors, education ad clickers; Modeled with Infillion’s XGraph for knowledge-based targeting.","Do interactive ads spark interest?
+
+What topics do you study?
+
+How often do you buy educational materials?
+
+Which platforms support your learning?
+
+What’s your go-to study spot?
+
+Do immersive ads inspire action?","Restaurants (i.e., local bistros, The Cheesecake Factory), grocery stores (i.e., Whole Foods, Trader Joe, Sprouts), cooking schools (i.e., Sur La Table, local culinary workshops), farmers markets (i.e., local weekend markets); dwell time: 30→ ì60 min, frequency: 3→ ì5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – celebrates learning; Mid Funnel: Course Previews – engages learners; Lower Funnel: Sign-Up CTAs – drives enrollments. Plus: Open Web retargeting during study sessions. Formats powered by AI-driven creative analytics.,"Programmatic OpenWeb Video (E-Learning Platforms, Education Blogs), Display (Banners on Study Sites); Devices: MacBook Pro (macOS Ventura+), iPad Air (iOS 15+), Laptops (Dell XPS); OS: iOS 15+, macOS 13+; Carriers: Verizon, AT&T; Cross-device: Individual-level tracking for laptop-to-tablet during evening study sessions (7 PM–10 PM) and weekend course browsing (10 AM–2 PM).",,
+The Food Eats First,32M,Evergreen,Foodies & Eating Out,#1E3A8A → #60A5FA,"Foodies who snap pics before bites, this deal targets culinary obsessives at restaurants, markets, or cooking classes. Perfect for food, kitchenware, or delivery brands with a savory, self-aware twist.","Audience Segments: Culinary Creators, Foodie Influencers; Signal Sources: Gimbal SDK (restaurants, grocery stores, cooking schools; dwell >30 min, frequency 3x/week), TrueX Surveys (dining habits, recipe sources); Behavioral Drivers: Social media sharing, app usage; Retargeting Logic: Restaurant visitors, food ad clickers; Modeled with Infillion’s XGraph for foodie targeting.","What cuisines do you crave?
+
+How often do you try new restaurants?
+
+Which food brands inspire you?
+
+What’s your go-to recipe platform?
+
+Do interactive ads whet your appetite?","Restaurants, grocery stores (i.e. Whole Foods, Trader Joe’s), cooking schools, farmers markets; dwell time: 30–60 min, frequency: 3–5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – showcases dishes; Mid Funnel: Recipe Sliders – inspires cooking; Lower Funnel: Order Now CTAs – drives delivery. Plus: Retargeting on mobile during meal planning. Formats optimized via Predictive Storyboard analytics.,"Programmatic OpenWeb Video (Food Delivery Apps, Culinary Blogs), Display (Banners on Grocery Sites); Devices: iPhone 14+, Samsung Galaxy S23 (Android 13+), Smart TVs (Samsung); OS: iOS 16+, Android 13+; Carriers: T-Mobile, Verizon; Cross-device: Household clusters for phone-to-TV during pre-dinner scrolls (5 PM–8 PM) and weekend foodie outings (12 PM–4 PM).",,
+"Yes, I love Technology... But Not As Much As You You See!",38M,Evergreen,Early Adopters & Technology,#1D4ED8 → #93C5FD,"Tech nerds and gadget geeks unite in this deal for early adopters chasing the latest devices. Ideal for tech, gaming, or accessory brands targeting the plugged-in with a sarcastic tech-bro vibe.","Audience Segments: Gadget Gurus, Tech Trendsetters; Signal Sources: Gimbal SDK (electronics stores, tech events, cafes; dwell >45 min, frequency 2x/week), TrueX Surveys (tech preferences, purchase intent); Behavioral Drivers: App usage, social trends; Retargeting Logic: Tech store visitors, gadget ad clickers; Modeled with Infillion’s XGraph for tech affinity.","What’s your latest tech obsession?
+
+How often do you shop for gadgets?
+
+Which brands define innovation?
+
+What’s your go-to tech news platform?
+
+Do dynamic ads spark interest?","Electronics stores (i.e. Best Buy, Apple Store), tech events, cafes; dwell time: 45–90 min, frequency: 2–4 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – showcases tech; Mid Funnel: Feature Sliders – builds excitement; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Open Web retargeting during tech browsing. Formats powered by AI-driven creative performance.,"Programmatic OpenWeb Video (Tech Review Sites, Gadget Apps), Display (Banners on Tech Forums); Devices: iPhone 14+, Google Pixel 7 Pro (Android 13+), Laptops (ASUS ZenBook); OS: iOS 16+, Android 13+; Carriers: AT&T, Verizon; Cross-device: Individual-level tracking for phone-to-laptop during evening gadget research (8 PM–11 PM) and weekend store visits (11 AM–3 PM).",,
+GG GG,25M,Evergreen,Esports & Gamers,#B91C1C → #FCA5A5,"Gamers who live for headshots and leaderboard glory. This deal targets esports fans and casual players for gaming, tech, or snack brands with a cheeky nod to their grind.","Audience Segments: Esports Elites, Casual Gamers; Signal Sources: Gimbal SDK (gaming stores, cafes, tech retailers; dwell >45 min, frequency 2x/week), TrueX Surveys (gaming habits, purchase drivers); Behavioral Drivers: App usage, social engagement; Retargeting Logic: Gaming store visitors, game ad clickers; Modeled with Infillion’s XGraph for gamer targeting.","What games do you play?
+
+How often do you buy gaming gear?
+
+Which platforms host your sessions?
+
+What’s your go-to gaming snack?
+
+Do interactive ads level up your interest?","Gaming stores (i.e. GameStop), cafes, tech retailers (i.e. Best Buy); dwell time: 45–90 min, frequency: 2–4 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – captures gaming hype; Mid Funnel: Gear Showcases – engages players; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Retargeting on mobile/CTV during gaming sessions. Formats optimized via Predictive Intelligence.,"Programmatic OpenWeb Video (Gaming Apps, Streaming Sites), Display (Banners on Esports Blogs); Devices: PS5, Xbox Series X, iPhone 13+ (iOS 15+), Laptops (Alienware); OS: iOS 15+, Windows 11; Carriers: Verizon, T-Mobile; Cross-device: Household clusters for console-to-phone during late-night gaming (10 PM–2 AM) and weekend tournaments (1 PM–6 PM).",,
+Pot It Like Its Hot,20M,Evergreen,Home & Garden,#15803D → #86EFAC,"Plant parents and green thumbs unite in this deal for botanical buffs tending their urban jungles. Perfect for gardening, decor, or lifestyle brands with a leafy, sarcastic charm.","Audience Segments: Plant Parents, Green Gurus; Signal Sources: Gimbal SDK (garden centers, home decor stores, farmers markets; dwell >45 min, frequency 2x/week), TrueX Surveys (plant care habits, purchase intent); Behavioral Drivers: Social media aesthetics, app usage; Retargeting Logic: Garden center visitors, plant ad clickers; Modeled with Infillion’s XGraph for botanical targeting.","What plants do you own?
+
+How often do you shop for gardening supplies?
+
+Which brands support your green vibe?
+
+What’s your go-to plant care app?
+
+Do dynamic ads grow your interest?
+","Garden centers, home decor stores (i.e. IKEA, West Elm), farmers markets; dwell time: 45–90 min, frequency: 2–4 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – showcases greenery; Mid Funnel: Care Tip Sliders – engages plant lovers; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Open Web retargeting during gardening planning. Formats powered by AI-driven creative analytics.,"Programmatic OpenWeb Video (Gardening Apps, Decor Blogs), Display (Banners on Plant Care Sites); Devices: iPhone 12+, Samsung Galaxy Tab S8 (Android 12+), Smart TVs (LG); OS: iOS 15+, Android 12+; Carriers: AT&T, Spectrum; Cross-device: Individual-level tracking for phone-to-tablet during weekend gardening (10 AM–2 PM) and evening plant care (7 PM–10 PM).",,
+Get Well Soon,28M,Evergreen,Pharmacy,#6B7280 → #D1D5DB,"In line with Infillion’s Ad Content Guidelines, this deal targets health-conscious folks seeking wellness solutions. Ideal for OTC meds, wellness, or healthcare brands with a caring yet cheeky tone.","Audience Segments: Wellness Warriors, Health Seekers; Signal Sources: TrueX Surveys (health concerns, purchase habits); Behavioral Drivers: Research habits, app usage; Retargeting Logic: Health app users, wellness ad clickers; Modeled with Infillion’s XGraph for health-based targeting.","How often do you shop for wellness products?
+
+Which health brands do you trust?
+
+What’s your go-to health app?
+
+Do health-focused ads resonate?
+
+How important are quick-delivery offers?","In line with Infillion’s Ad Content Guidelines, this deal leverages survey-driven insights instead of location-based POIs for sensitive categories.",Upper Funnel: Vertical Video – promotes wellness; Mid Funnel: Health Tips – builds trust; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Retargeting on mobile during health research. Formats optimized via Predictive Storyboard analytics.,"Programmatic OpenWeb Video (Health Apps, Wellness Sites), Display (Banners on Medical Blogs); Devices: iPhone 13+, Google Pixel 6 (Android 12+), Smart TVs (Roku); OS: iOS 15+, Android 12+; Carriers: Verizon, T-Mobile; Cross-device: Individual-level tracking for phone-to-TV during morning wellness checks (6 AM–9 AM) and evening health searches (8 PM–10 PM).",,
+Click Champs,35M,Evergreen,Performance - CTR%,#1D4ED8 → #93C5FD,"For serial clickers who live for the next deal, this deal targets impulse buyers and ad engagers. Perfect for e-commerce, retail, or app brands with a nod to their trigger-happy habits.","Audience Segments: Deal Hunters, Click Crusaders; Signal Sources: Gimbal SDK (retail stores, malls, QSRs; dwell >30 min, frequency 3x/week), TrueX Surveys (purchase triggers, ad engagement); Behavioral Drivers: Social media deals, app usage; Retargeting Logic: Retail visitors, ad clickers; Modeled with Infillion’s XGraph for impulse targeting.","What deals make you click?
+
+How often do you shop online?
+
+Which platforms drive your purchases?
+
+What’s your go-to deal app?
+
+Do interactive ads spark action?","Retail stores (i.e. Target, Walmart), malls, QSRs (i.e. McDonald’s, Starbucks); dwell time: 30–60 min, frequency: 3–5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – showcases deals; Mid Funnel: Deal Sliders – engages shoppers; Lower Funnel: One-Tap Checkout – seamless purchases. Plus: Retargeting on mobile during shopping sprees. Formats powered by AI-driven creative performance.,"Programmatic OpenWeb Video (E-Commerce Apps, Retail Sites), Display (Banners on Deal Blogs); Devices: iPhone 14+, Samsung Galaxy S23 (Android 13+), Laptops (HP Pavilion); OS: iOS 16+, Android 13+; Carriers: AT&T, Verizon; Cross-device: Household clusters for phone-to-laptop during evening deal hunting (7 PM–11 PM) and weekend sales (10 AM–3 PM).",,
+90%+ Viewing Club,30M,Evergreen,Performance - VCR%,#B91C1C → #FCA5A5,"For ad aficionados who actually watch the whole thing, this deal targets high-attention viewers. Ideal for premium brands seeking max VCR with a smug nod to their focus.","Audience Segments: Ad Aficionados, Content Completers; Signal Sources: TrueX Surveys (ad engagement, content preferences); Behavioral Drivers: High VCR, social sharing; Retargeting Logic: Ad completers, premium ad clickers; Modeled with Infillion’s XGraph for attention-based targeting.","What makes you watch an ad to the end?
+
+Which brands hold your attention?
+
+How often do you engage with video ads?
+
+What’s your go-to streaming platform?
+
+Do immersive ads keep you hooked?",N/A (survey-driven for high-attention targeting).,Upper Funnel: Vertical Video – maximizes viewability; Mid Funnel: Interactive Stories – engages viewers; Lower Funnel: Shop Now CTAs – drives action. Plus: Retargeting on CTV during binge sessions. Formats optimized via Predictive Intelligence.,"Programmatic OpenWeb Video (Premium Streaming Sites, Ad Networks), Display (Banners on High-VCR Sites); Devices: Smart TVs (Samsung, LG), iPhone 13+ (iOS 15+), Laptops (Dell XPS); OS: iOS 15+, Android 12+; Carriers: T-Mobile, Verizon; Cross-device: Household clusters for phone-to-CTV during binge-watching nights (8 PM–12 AM).",,
+Above-the-Fold Fortitude,28M,Evergreen,Performance - Viewability,#1E3A8A → #60A5FA,"For scroll-stoppers who engage with premium placements, this deal targets above-the-fold ad lovers. Perfect for luxury, tech, or lifestyle brands with a confident, top-shelf vibe.","Audience Segments: Premium Planners, Ad Engagers; Signal Sources: TrueX Surveys (ad placement preferences, purchase intent); Behavioral Drivers: High engagement, social trends; Retargeting Logic: Above-the-fold ad clickers, premium app users; Modeled with Infillion’s XGraph for placement-based targeting.","
+What makes an ad grab your attention?
+
+How often do you click premium ads?
+
+Which brands feel top-tier?
+
+What’s your go-to browsing platform?
+
+Do dynamic ads drive engagement?",N/A (survey-driven for placement-based targeting).,Upper Funnel: Vertical Video – commands attention; Mid Funnel: Premium Sliders – builds trust; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Retargeting on mobile/desktop during browsing. Formats powered by AI-driven creative analytics.,"Programmatic OpenWeb Display (Premium News Sites, Lifestyle Blogs), Video (High-VCR Apps); Devices: MacBook Pro (macOS Ventura+), iPhone 14+ (iOS 16+), Smart TVs (Sony); OS: iOS 16+, macOS 13+; Carriers: AT&T, Verizon; Cross-device: Individual-level tracking for laptop-to-phone during morning news scrolls (7 AM–10 AM) and evening browsing (8 PM–11 PM).",,
+Niche Richards & Susans,25M,Evergreen,Hobbies & Interests,#6B7280 → #D1D5DB,"For hyper-specific hobbyists chasing niche passions, this deal targets collectors and enthusiasts. Ideal for specialty retail, hobby, or subscription brands with a quirky, insider vibe.","Audience Segments: Niche Nerds, Hobby Honchos; Signal Sources: Gimbal SDK (specialty stores, hobby shops, conventions; dwell >45 min, frequency 2x/week), TrueX Surveys (hobby habits, purchase drivers); Behavioral Drivers: Community engagement, app usage; Retargeting Logic: Hobby shop visitors, niche ad clickers; Modeled with Infillion’s XGraph for niche targeting.","What’s your niche hobby?
+
+How often do you shop specialty stores?
+
+Which brands fuel your passion?
+
+What’s your go-to hobby platform?
+
+Do interactive ads spark excitement?","Specialty stores, hobby shops (i.e. comic stores, craft stores), conventions; dwell time: 45–90 min, frequency: 2–4 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – celebrates niches; Mid Funnel: Collection Showcases – engages enthusiasts; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Retargeting on mobile during hobby browsing. Formats optimized via Predictive Storyboard analytics.,"Programmatic OpenWeb Video (Hobby Apps, Collector Blogs), Display (Banners on Niche Forums); Devices: iPhone 13+, Samsung Galaxy Tab S8 (Android 12+), Laptops (ASUS ROG); OS: iOS 15+, Android 12+; Carriers: T-Mobile, Verizon; Cross-device: Individual-level tracking for phone-to-laptop during weekend convention trips (10 AM–4 PM) and evening niche scrolls (8 PM–11 PM).",,
+Legal Services Civilian Seekers,20M,Evergreen,Sensitive - Legal ,#1E3A8A → #60A5FA,"In line with Infillion’s Ad Content Guidelines, this deal targets folks navigating legal needs with urgency. Perfect for legal service or consultation brands with a serious yet approachable tone.","Audience Segments: Legal Learners, Service Seekers; Signal Sources: TrueX Surveys (legal needs, service preferences); Behavioral Drivers: Research habits, app usage; Retargeting Logic: Legal app users, service ad clickers; Modeled with Infillion’s XGraph for need-based targeting.","How often do you research legal services?
+
+Which legal needs are you addressing?
+
+What’s your go-to legal resource?
+
+Do professional ads resonate?
+
+How important are quick-consult offers?","In line with Infillion’s Ad Content Guidelines, this deal leverages survey-driven insights instead of location-based POIs for sensitive categories.",Upper Funnel: Vertical Video – builds trust; Mid Funnel: Service Guides – engages seekers; Lower Funnel: Consult Now CTAs – drives bookings. Plus: Retargeting on mobile during research. Formats powered by AI-driven creative performance.,"Programmatic OpenWeb Video (Legal Service Sites, Informational Apps), Display (Banners on Legal Blogs); Devices: iPhone 14+, Google Pixel 6 (Android 12+), Laptops (Dell XPS); OS: iOS 16+, Android 12+; Carriers: AT&T, Verizon; Cross-device: Individual-level tracking for phone-to-laptop during weekday research (9 AM–3 PM) and evening consultations (7 PM–10 PM).",,
+Millennial Moms & Dad Bods,45M,Evergreen,New Parents,#DB2777 → #F9A8D4,"For parents juggling sippy cups and existential dread, this deal targets millennial caregivers. Ideal for family, retail, or wellness brands with a sarcastic nod to their chaos.","Audience Segments: Cool Parents, Caregiver Champs; Signal Sources: Gimbal SDK (grocery stores, kid-friendly venues, retail; dwell >30 min, frequency 3x/week), TrueX Surveys (parenting habits, purchase drivers); Behavioral Drivers: Social media, app usage; Retargeting Logic: Kid store visitors, family ad clickers; Modeled with Infillion’s XGraph for parent targeting.","What parenting products do you buy?
+
+How often do you shop for kids?
+
+Which brands ease your chaos?
+
+What’s your go-to parenting platform?
+
+Do interactive ads help?","Grocery stores, kid-friendly venues (i.e. Chuck E. Cheese), retail (i.e. Target, Carter’s); dwell time: 30–60 min, frequency: 3–5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – captures parent life; Mid Funnel: Family Sliders – engages caregivers; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Retargeting on mobile during family planning. Formats optimized via Predictive Intelligence.,"Programmatic OpenWeb Video (Parenting Apps, Family Blogs), Display (Banners on Retail Sites); Devices: iPhone 13+, Samsung Galaxy A54 (Android 13+), Smart TVs (Roku); OS: iOS 16+, Android 13+; Carriers: T-Mobile, Verizon; Cross-device: Household clusters for phone-to-TV during morning kid prep (6 AM–9 AM) and evening family time (7 PM–9 PM).",,
+Redfiners & Zillow Zoners,38M,Evergreen,Real Estate,#B91C1C → #FCA5A5,"House hunters and property dreamers scrolling real estate apps. This deal targets homebuyers and renters for mortgage, decor, or moving brands with a witty, aspirational edge.","Audience Segments: Home Hunters, Property Planners; Signal Sources: Gimbal SDK (open houses, home decor stores, moving services; dwell >45 min, frequency 2x/week), TrueX Surveys (housing goals, purchase intent); Behavioral Drivers: Research habits, app usage; Retargeting Logic: Open house visitors, real estate ad clickers; Modeled with Infillion’s XGraph for housing affinity.","What’s your dream home type?
+
+How often do you browse real estate?
+
+Which decor brands inspire you?
+
+What’s your go-to housing app?
+
+Do dynamic ads drive engagement?","Open houses, home decor stores (i.e. HomeGoods, IKEA), moving services; dwell time: 45–90 min, frequency: 2–4 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – showcases homes; Mid Funnel: Home Tours – engages dreamers; Lower Funnel: Apply Now CTAs – drives applications. Plus: Retargeting on mobile during house hunting. Formats powered by AI-driven creative analytics.,"Programmatic OpenWeb Video (Real Estate Apps, Property Sites), Display (Banners on Decor Blogs); Devices: iPad Pro (iOS 15+), Samsung Galaxy S23 (Android 13+), Laptops (MacBook Pro); OS: iOS 16+, Android 13+; Carriers: AT&T, Verizon; Cross-device: Individual-level tracking for tablet-to-laptop during weekend open houses (10 AM–3 PM) and evening browsing (8 PM–11 PM).",,
+Venue Hopping Festival Folks,30M,Meeting Moments,Summer Festivals,#831843 → #F9A8D4,"For music lovers and festival chasers dancing through summer, this deal targets vibe-curators at concerts and events. Perfect for apparel, travel, or beverage brands with a euphoric, snarky tone.","Audience Segments: Festival Fanatics, Vibe Curators; Signal Sources: Gimbal SDK (concert venues, festival grounds, retail; dwell >1 hr, frequency 2x/week), TrueX Surveys (event habits, purchase drivers); Behavioral Drivers: Social sharing, app usage; Retargeting Logic: Festival attendees, event ad clickers; Modeled with Infillion’s XGraph for festival targeting.","What festivals do you attend?
+
+How often do you shop festival gear?
+
+Which brands match your vibe?
+
+What’s your go-to event app?
+
+Do immersive ads amplify your excitement?","Concert venues, festival grounds, retail (i.e. Urban Outfitters, H&M); dwell time: 1–3 hrs, frequency: 2–4 visits/week, historical lookback: June 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – captures festival energy; Mid Funnel: Event Sliders – engages planners; Lower Funnel: Buy Now CTAs – drives tickets. Plus: Retargeting on mobile during festival season. Formats optimized via Predictive Storyboard analytics.,"Programmatic OpenWeb Video (Event Apps, Music Streaming), Display (Banners on Festival Blogs); Devices: iPhone 14+, Google Pixel 7 (Android 13+), Smart TVs (Samsung); OS: iOS 16+, Android 13+; Carriers: T-Mobile, Verizon; Cross-device: Household clusters for phone-to-TV during festival weekends (12 PM–10 PM) and pre-event planning (6 PM–9 PM).",,
+Campfire Cartographers,25M,Evergreen,Outdoors & Camping,#15803D → #86EFAC,"Outdoor adventurers mapping their next escape. This deal targets campers and explorers for gear, travel, or snack brands with a rugged, witty charm.","Audience Segments: Trailblazers, Campfire Kings; Signal Sources: Gimbal SDK (campgrounds, outdoor retailers, national parks; dwell >1 hr, frequency 2x/week), TrueX Surveys (outdoor habits, purchase intent); Behavioral Drivers: Social media, app usage; Retargeting Logic: Campground visitors, outdoor ad clickers; Modeled with Infillion’s XGraph for adventure targeting.","
+What’s your go-to outdoor activity?
+
+How often do you shop for gear?
+
+Which brands fuel your adventures?
+
+What’s your favorite travel app?
+
+Do dynamic ads inspire exploration?","Campgrounds, outdoor retailers (i.e. REI, Bass Pro), national parks; dwell time: 1–3 hrs, frequency: 2–4 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – showcases nature; Mid Funnel: Gear Guides – engages adventurers; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Retargeting on mobile during trip planning. Formats powered by AI-driven creative performance.,"Programmatic OpenWeb Video (Travel Apps, Outdoor Blogs), Display (Banners on Gear Sites); Devices: iPhone 13+, Samsung Galaxy S22 (Android 12+), Laptops (Lenovo ThinkPad); OS: iOS 15+, Android 12+; Carriers: AT&T, Verizon; Cross-device: Individual-level tracking for phone-to-laptop during weekend trip planning (10 AM–2 PM) and evening adventure scrolls (7 PM–10 PM).",,
+I Have 30 Nicknames For My Pet,22M,Evergreen,Pets,#DB2777 → #F9A8D4,"Pet parents who treat their fur babies like royalty. This deal targets obsessive animal lovers for pet food, toys, or care brands with a playful, over-the-top vibe.","Audience Segments: Pet Pamperers, Fur Fanatics; Signal Sources: Gimbal SDK (pet stores, vet clinics, dog parks; dwell >30 min, frequency 3x/week), TrueX Surveys (pet care habits, purchase drivers); Behavioral Drivers: Social media, app usage; Retargeting Logic: Pet store visitors, pet ad clickers; Modeled with Infillion’s XGraph for pet affinity.","What’s your pet’s favorite treat?
+
+How often do you shop for pet supplies?
+
+Which brands spoil your pet?
+
+What’s your go-to pet care app?
+
+Do interactive ads wag your tail?","Pet stores (i.e. Petco, PetSmart), vet clinics, dog parks; dwell time: 30–60 min, frequency: 3–5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – celebrates pets; Mid Funnel: Product Sliders – engages owners; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Retargeting on mobile during pet shopping. Formats optimized via Predictive Intelligence.,"Programmatic OpenWeb Video (Pet Care Apps, Pet Blogs), Display (Banners on Retail Sites); Devices: iPhone 12+, Samsung Galaxy A53 (Android 12+), Smart TVs (Roku); OS: iOS 15+, Android 12+; Carriers: T-Mobile, Verizon; Cross-device: Household clusters for phone-to-TV during evening pet care (7 PM–10 PM) and weekend store runs (11 AM–3 PM).",,
+Pharma Direct to Consumer,28M,Evergreen,Sensitive - Pharma,#6B7280 → #D1D5DB,"In line with Infillion’s Ad Content Guidelines, this deal targets health-conscious consumers seeking prescription solutions. Ideal for pharma or healthcare brands with a direct, empathetic tone.","Audience Segments: Health Advocates, Med Seekers; Signal Sources: TrueX Surveys (health needs, purchase habits); Behavioral Drivers: Research habits, app usage; Retargeting Logic: Health app users, pharma ad clickers; Modeled with Infillion’s XGraph for health-based targeting.","
+How often do you research medications?
+
+Which health concerns drive your purchases?
+
+What’s your go-to health resource?
+
+Do professional ads build trust?
+
+How important are quick-consult offers?","In line with Infillion’s Ad Content Guidelines, this deal leverages survey-driven insights instead of location-based POIs for sensitive categories.",Upper Funnel: Vertical Video – promotes health; Mid Funnel: Info Sliders – educates consumers; Lower Funnel: Consult Now CTAs – drives action. Plus: Retargeting on mobile during health research. Formats powered by AI-driven creative analytics.,"Programmatic OpenWeb Video (Pharma Sites, Health Apps), Display (Banners on Medical Blogs); Devices: iPhone 13+, Google Pixel 6 (Android 12+), Laptops (HP Spectre); OS: iOS 15+, Android 12+; Carriers: AT&T, Verizon; Cross-device: Individual-level tracking for phone-to-laptop during morning health checks (6 AM–9 AM) and evening research (8 PM–10 PM).",,
+An Apple A Day...,30M,Evergreen,Health & Wellness,#15803D → #86EFAC,"Health nuts and wellness warriors chasing clean eats and fitness goals. This deal targets nutrition enthusiasts for food, fitness, or supplement brands with a fresh, snarky vibe.","Audience Segments: Clean Eaters, Fitness Fanatics; Signal Sources: Gimbal SDK (health food stores, gyms, farmers markets; dwell >45 min, frequency 3x/week), TrueX Surveys (diet habits, purchase drivers); Behavioral Drivers: Social media, app usage; Retargeting Logic: Health store visitors, wellness ad clickers; Modeled with Infillion’s XGraph for health affinity.","What’s your go-to healthy snack?
+
+How often do you shop for supplements?
+
+Which brands align with your diet?
+
+What’s your favorite fitness app?
+
+Do dynamic ads motivate you?","Health food stores (i.e. Whole Foods, Sprouts), gyms, farmers markets; dwell time: 45–90 min, frequency: 3–5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – showcases health; Mid Funnel: Nutrition Guides – engages eaters; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Retargeting on mobile during meal planning. Formats optimized via Predictive Storyboard analytics.,"Programmatic OpenWeb Video (Fitness Apps, Wellness Blogs), Display (Banners on Health Sites); Devices: Apple Watch (WatchOS 9+), Samsung Galaxy S23 (Android 13+), Smart TVs (LG); OS: iOS 16+, Android 13+; Carriers: T-Mobile, Verizon; Cross-device: Household clusters for wearable-to-TV during morning workout planning (6 AM–8 AM) and evening meal prep (6 PM–9 PM).",,
+"Apparently I'm On The News, But My Grandpa Just Watches The Powerball",25M,Evergreen,News & Politics ,#1E3A8A → #60A5FA,"For news junkies and lottery dreamers, this deal targets current event buffs and chance-takers. Ideal for media, gaming, or lifestyle brands with a sarcastic, headline-chasing tone.","Audience Segments: News Nerds, Lottery Lovers; Signal Sources: Gimbal SDK (convenience stores, newsstands, cafes; dwell >30 min, frequency 3x/week), TrueX Surveys (news habits, gaming preferences); Behavioral Drivers: Social media, app usage; Retargeting Logic: Convenience store visitors, news ad clickers; Modeled with Infillion’s XGraph for news affinity.","What news topics do you follow?
+
+How often do you play lotteries?
+
+Which platforms keep you informed?
+
+What’s your go-to news app?
+
+Do interactive ads grab your attention?","Convenience stores (i.e. 7-11, Circle K), newsstands, cafes; dwell time: 30–60 min, frequency: 3–5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – captures headlines; Mid Funnel: News Sliders – engages readers; Lower Funnel: Play Now CTAs – drives action. Plus: Retargeting on mobile during news browsing. Formats powered by AI-driven creative performance.,"Programmatic OpenWeb Video (News Apps, Streaming Sites), Display (Banners on News Blogs); Devices: iPhone 13+, Samsung Galaxy A53 (Android 12+), Smart TVs (Samsung); OS: iOS 15+, Android 12+; Carriers: AT&T, Verizon; Cross-device: Individual-level tracking for phone-to-TV during morning news scrolls (7 AM–10 AM) and evening lottery draws (7 PM–9 PM).",,
+I'm Agnostic What Are You?,22M,Evergreen,Sensitive - Super Religious,#5B21B6 → #C4B5FD,"For soul-searchers and faithful followers, this deal targets spiritual seekers at places of worship or bookstores. Ideal for wellness, publishing, or charity brands with a reverent, witty tone.","Audience Segments: Faithful Followers, Spiritual Seekers; Signal Sources: Gimbal SDK (places of worship, bookstores, wellness centers; dwell >45 min, frequency 2x/week), TrueX Surveys (spiritual habits, purchase intent); Behavioral Drivers: Community engagement, app usage; Retargeting Logic: Worship visitors, spiritual ad clickers; Modeled with Infillion’s XGraph for faith-based targeting.","What spiritual practices do you follow?
+
+How often do you buy spiritual products?
+
+Which brands align with your beliefs?
+
+What’s your go-to spiritual app?
+
+Do immersive ads resonate?","Places of worship, bookstores (spirituality sections), wellness centers; dwell time: 45–90 min, frequency: 2–4 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – evokes faith; Mid Funnel: Inspirational Stories – engages seekers; Lower Funnel: Donate Now CTAs – drives action. Plus: Retargeting on mobile during spiritual moments. Formats optimized via Predictive Intelligence.,"Programmatic OpenWeb Video (Spiritual Apps, Wellness Sites), Display (Banners on Faith Blogs); Devices: iPhone 12+, Google Pixel 6 (Android 12+), Smart TVs (Roku); OS: iOS 15+, Android 12+; Carriers: T-Mobile, Verizon; Cross-device: Household clusters for phone-to-TV during Sunday mornings (8 AM–11 AM) and evening reflections (8 PM–10 PM).",,
+We Need to Eat at That New Spot!,28M,Evergreen,Opening Night,#15803D → #86EFAC,"Foodies chasing the latest hot restaurant openings. This deal targets trendsetters and diners for restaurant, delivery, or lifestyle brands with a hungry, snarky vibe.","Audience Segments: Trendy Tasters, Dining Dynamos; Signal Sources: Gimbal SDK (new restaurants, food halls, cafes; dwell >45 min, frequency 3x/week), TrueX Surveys (dining preferences, reservation habits); Behavioral Drivers: Social media, app usage; Retargeting Logic: Restaurant visitors, food ad clickers; Modeled with Infillion’s XGraph for dining affinity.","What new restaurants are you trying?
+
+How often do you book reservations?
+
+Which cuisines excite you?
+
+What’s your go-to dining app?
+
+Do dynamic ads whet your appetite?","New restaurants, food halls, cafes; dwell time: 45–90 min, frequency: 3–5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – showcases dining; Mid Funnel: Menu Sliders – engages foodies; Lower Funnel: Book Now CTAs – drives reservations. Plus: Retargeting on mobile during dining plans. Formats powered by AI-driven creative analytics.,"Programmatic OpenWeb Video (Reservation Apps, Food Blogs), Display (Banners on Dining Sites); Devices: iPhone 14+, Samsung Galaxy S23 (Android 13+), Smart TVs (LG); OS: iOS 16+, Android 13+; Carriers: AT&T, Verizon; Cross-device: Individual-level tracking for phone-to-TV during evening dining plans (5 PM–8 PM) and weekend outings (12 PM–4 PM).",,
+Put it in the Bag,35M,Evergreen,The 1%,#DB2777 → #F9A8D4,"Rich shopaholics who live for the checkout rush. This deal targets impulse buyers (wifey with the credit card) and retail lovers for fashion, beauty, or e-commerce brands with a bold, sassy tone.","Audience Segments: Retail Royalty, Impulse Icons; Signal Sources: Gimbal SDK (malls, boutiques, department stores; dwell >30 min, frequency 3x/week), TrueX Surveys (shopping habits, purchase triggers); Behavioral Drivers: Social media, app usage; Retargeting Logic: Retail visitors, shopping ad clickers; Modeled with Infillion’s XGraph for retail affinity.","What’s your go-to shopping spot?
+
+How often do you splurge on fashion?
+
+Which brands define your style?
+
+What’s your favorite shopping app?
+
+Do interactive ads spark purchases?","Malls, boutiques, department stores (i.e. Nordstrom, Macy’s); dwell time: 30–60 min, frequency: 3–5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – showcases style; Mid Funnel: Shoppable Lookbooks – engages buyers; Lower Funnel: One-Tap Checkout – seamless purchases. Plus: Retargeting on mobile during shopping sprees. Formats optimized via Predictive Storyboard analytics.,"Mobile iOS (15+), Android (12+), Desktop/Laptop (Mac/PC), CTV (Smart TVs); Adjust for evening and weekend peaks.",,
+Swipers & Bag Grabbers,32M,Evergreen,Methodical Savers,#B91C1C → #FCA5A5,"For deal-seekers and coupon clippers, this deal targets bargain hunters grabbing every sale. Ideal for retail, grocery, or app brands with a thrifty, cheeky edge.","Audience Segments: Bargain Bosses, Coupon Kings; Signal Sources: Gimbal SDK (discount stores, grocery stores, malls; dwell >30 min, frequency 3x/week), TrueX Surveys (deal preferences, purchase habits); Behavioral Drivers: Social media deals, app usage; Retargeting Logic: Discount store visitors, deal ad clickers; Modeled with Infillion’s XGraph for bargain targeting.","What deals make you shop?
+
+How often do you hunt for discounts?
+
+Which brands offer the best savings?
+
+What’s your go-to deal app?
+
+Do dynamic ads drive purchases?","Discount stores (i.e. TJ Maxx, Ross), grocery stores, malls; dwell time: 30–60 min, frequency: 3–5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – highlights deals; Mid Funnel: Coupon Sliders – engages hunters; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Retargeting on mobile during deal hunting. Formats powered by AI-driven creative performance.,"Mobile iOS (15+), Android (12+), Desktop/Laptop (Mac/PC), CTV (Smart TVs); Adjust for evening and weekend peaks.",,
+Twitter Finger Social Patrollers,30M,Evergreen,Social Media,#1D4ED8 → #93C5FD,"For X warriors dropping hot takes and memes, this deal targets social media mavens. Ideal for entertainment, lifestyle, or tech brands with a viral, snarky tone.","Audience Segments: Meme Makers, Social Savants; Signal Sources: Gimbal SDK (cafes, retail, transit hubs; dwell >30 min, frequency 3x/week), TrueX Surveys (social habits, content preferences); Behavioral Drivers: Social media addiction, app usage; Retargeting Logic: X app users, social ad clickers; Modeled with Infillion’s XGraph for social affinity.","What content do you share on X?
+
+How often do you engage with ads?
+
+Which brands go viral for you?
+
+What’s your go-to social platform?
+
+Do interactive ads spark engagement?","Cafes, retail stores, transit hubs; dwell time: 30–60 min, frequency: 3–5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – mimics X vibe; Mid Funnel: Meme Sliders – engages users; Lower Funnel: Shop Now CTAs – drives action. Plus: Retargeting on mobile during social scrolling. Formats optimized via Predictive Intelligence.,"Mobile iOS (15+), Android (12+), Desktop/Laptop (Mac/PC); Adjust for evening and late-night peaks.",,
+Sporty Spices & Stevens,35M,Evergreen,Sports,#15803D → #86EFAC,"Athletes and fitness buffs chasing gains and glory. This deal targets active folks for sportswear, fitness, or nutrition brands with a sweaty, confident vibe.","Audience Segments: Fitness Freaks, Sporty Stars; Signal Sources: Gimbal SDK (gyms, sporting goods stores, sports venues; dwell >45 min, frequency 3x/week), TrueX Surveys (fitness habits, purchase drivers); Behavioral Drivers: Social media, app usage; Retargeting Logic: Gym visitors, sports ad clickers; Modeled with Infillion’s XGraph for fitness affinity.","What’s your go-to workout?
+
+How often do you shop for sportswear?
+
+Which brands fuel your fitness?
+
+What’s your favorite fitness app?
+
+Do dynamic ads pump you up?","Gyms, sporting goods stores (i.e. Dick’s, REI), sports venues; dwell time: 45–90 min, frequency: 3–5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – showcases fitness; Mid Funnel: Gear Sliders – engages athletes; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Retargeting on mobile during workout planning. Formats powered by AI-driven creative analytics.,"Mobile iOS (15+), Android (12+), Desktop/Laptop (Mac/PC), CTV (Smart TVs, Fitness Devices); Adjust for morning and evening peaks.",,
+Drip Chasers,28M,Evergreen,Fashion & Lifestyle,#DB2777 → #F9A8D4,"Fashion-forward hypebeasts chasing the latest drops. This deal targets style mavens for apparel, sneaker, or accessory brands with a bold, trendy edge.","Audience Segments: Style Savants, Hypebeast Heroes; Signal Sources: Gimbal SDK (sneaker stores, boutiques, malls; dwell >30 min, frequency 3x/week), TrueX Surveys (fashion preferences, purchase triggers); Behavioral Drivers: Social media trends, app usage; Retargeting Logic: Sneaker store visitors, fashion ad clickers; Modeled with Infillion’s XGraph for style affinity.","
+What’s your latest fashion obsession?
+
+How often do you shop for drops?
+
+Which brands define your drip?
+
+What’s your go-to style app?
+
+Do interactive ads spark hype?","Sneaker stores (i.e. Foot Locker, StockX), boutiques, malls; dwell time: 30–60 min, frequency: 3–5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – showcases style; Mid Funnel: Drop Sliders – engages trendsetters; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Retargeting on mobile during drop hunts. Formats optimized via Predictive Storyboard analytics.,"Mobile iOS (15+), Android (12+), Desktop/Laptop (Mac/PC), CTV (Smart TVs); Adjust for evening and weekend peaks.",,
+Health-Conscious Capsule Consumers,30M,Evergreen,Sensitive - Vitamins & Supplements,#15803D → #86EFAC,"Wellness warriors popping vitamins and chasing zen. This deal targets supplement shoppers for health, fitness, or lifestyle brands with a clean, snarky vibe.","Audience Segments: Wellness Wizzes, Supplement Savants; Signal Sources: Gimbal SDK (health food stores, pharmacies, gyms; dwell >45 min, frequency 3x/week), TrueX Surveys (supplement habits, purchase drivers); Behavioral Drivers: Social media, app usage; Retargeting Logic: Health store visitors, wellness ad clickers; Modeled with Infillion’s XGraph for health affinity.","What supplements do you take?
+
+How often do you shop for wellness?
+
+Which brands align with your health goals?
+
+What’s your go-to wellness app?
+
+Do dynamic ads inspire action?","Health food stores (i.e. GNC, Vitamin Shoppe), pharmacies, gyms; dwell time: 45–90 min, frequency: 3–5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – promotes wellness; Mid Funnel: Supplement Guides – engages shoppers; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Retargeting on mobile during health shopping. Formats powered by AI-driven creative performance.,"Mobile iOS (15+), Android (12+), Desktop/Laptop (Mac/PC), CTV (Smart TVs, Fitness Devices); Adjust for morning and evening peaks.",,
+Gym Gladiators,35M,Evergreen,Fitness & Exercise,#B91C1C → #FCA5A5,"Fitness freaks battling for gains in the gym. This deal targets workout warriors for sportswear, equipment, or nutrition brands with a gritty, motivational tone.","Audience Segments: Iron Pumpers, Cardio Kings; Signal Sources: Gimbal SDK (gyms, sporting goods stores, health food stores; dwell >45 min, frequency 3x/week), TrueX Surveys (fitness goals, purchase habits); Behavioral Drivers: Social media, app usage; Retargeting Logic: Gym visitors, fitness ad clickers; Modeled with Infillion’s XGraph for fitness targeting.","What’s your gym routine?
+
+How often do you shop for fitness gear?
+
+Which brands fuel your workouts?
+
+What’s your go-to fitness app?
+
+Do dynamic ads pump you up?","Gyms, sporting goods stores (i.e. Dick’s, Academy Sports), health food stores; dwell time: 45–90 min, frequency: 3–5 visits/week, historical lookback: January 2025 to TTL refresh every 30 days.",Upper Funnel: Vertical Video – showcases grit; Mid Funnel: Gear Guides – engages warriors; Lower Funnel: Shop Now CTAs – drives purchases. Plus: Retargeting on mobile during workout planning. Formats optimized via Predictive Storyboard analytics.,"Mobile iOS (15+), Android (12+), Desktop/Laptop (Mac/PC), CTV (Smart TVs, Fitness Devices); Adjust for morning and evening peaks.",,
