@@ -104,6 +104,13 @@ const stepColors = ['text-pink-400', 'text-blue-400', 'text-yellow-400', 'text-g
 const vibrantChipColors = ['bg-pink-500', 'bg-blue-500', 'bg-yellow-400', 'bg-green-500', 'bg-purple-500', 'bg-orange-400'];
 function vibrantChipColor(index: number) { return vibrantChipColors[index % vibrantChipColors.length]; }
 
+// Modular Required/Optional label
+const RequiredOptionalLabel = ({ required }: { required: boolean }) => (
+  <span className={`ml-2 text-xs font-bold`} style={{ color: required ? '#ff5a36' : '#84B067' }}>
+    {required ? '(Required)' : '(Optional)'}
+  </span>
+);
+
 const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<Record<string, any>>({
@@ -288,7 +295,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                 <div key={field} className="flex flex-col">
                   <label htmlFor={field} className="mb-1 text-foreground font-sans" title={fieldTooltips[field] || ''}>
                     {fieldLabels[field]}
-                    <span className={`ml-2 text-xs ${['description', 'customAudience', 'measurement'].includes(field) ? 'text-blue-200' : 'text-accent font-bold'}`}>{['description', 'customAudience', 'measurement'].includes(field) ? '(Optional)' : '(Required)'}</span>
+                    <RequiredOptionalLabel required={['agencyName', 'advertiserName', 'description', 'audienceTaxonomy', 'customAudience', 'creatives', 'deviceTypes'].includes(field)} />
                     {fieldTooltips[field] && <Tooltip text={fieldTooltips[field]} />}
                   </label>
                   {/* Only one input/textarea/select per field */}
@@ -340,6 +347,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                             placeholder="Search..."
                             styles={selectStyles}
                             theme={selectTheme}
+                            className="w-full max-w-full"
                           />
                           <Tooltip text={fieldTooltips[field]} />
                         </div>
@@ -351,7 +359,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                           name={field}
                           value={form[field] || ''}
                           onChange={handleChange}
-                          className="p-2 border rounded text-foreground bg-background placeholder-[#A0A0A0]"
+                          className="p-2 border rounded text-foreground bg-background placeholder-[#A0A0A0] min-h-[120px] resize-y"
                           aria-label={`Enter ${fieldLabels[field]}`}
                           onFocus={() => setDescriptionPlaceholder('')}
                           placeholder={descriptionPlaceholder}
@@ -364,7 +372,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                           name={field}
                           value={form[field] || ''}
                           onChange={handleChange}
-                          className="p-2 border rounded text-foreground bg-background placeholder-[#A0A0A0]"
+                          className="p-2 border rounded text-foreground bg-background placeholder-[#A0A0A0] min-h-[120px] resize-y"
                           aria-label={`Enter ${fieldLabels[field]}`}
                           onFocus={() => setCustomAudiencePlaceholder('')}
                           placeholder={customAudiencePlaceholder}
@@ -377,7 +385,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                           name={field}
                           value={form[field] || ''}
                           onChange={handleChange}
-                          className="p-2 border rounded text-foreground bg-background placeholder-[#A0A0A0]"
+                          className="p-2 border rounded text-foreground bg-background placeholder-[#A0A0A0] min-h-[120px] resize-y"
                           aria-label={`Enter ${fieldLabels[field]}`}
                           onFocus={() => setMeasurementPlaceholder('')}
                           placeholder={measurementPlaceholder}

@@ -6,10 +6,34 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { evergreenPMPs, mergedAndNewPMPs } from '../data/pmpData';
 import { createAsanaTask } from '../lib/asana';
 
-// Modular Tooltip component
-const Tooltip = ({ text }: { text: string }) => (
-  <span className="ml-2 cursor-pointer text-accent transition-transform duration-200 hover:scale-110" tabIndex={0} title={text || 'Select from the dropdown'} aria-label={text || 'Select from the dropdown'}>❓</span>
+// Modular Required/Optional label
+const RequiredOptionalLabel = ({ required }: { required: boolean }) => (
+  <span className={`ml-2 text-xs font-bold`} style={{ color: required ? '#ff5a36' : '#84B067' }}>
+    {required ? '(Required)' : '(Optional)'}
+  </span>
 );
+// Modular Tooltip (reuse from RFP Generator)
+const Tooltip = ({ text }: { text: string }) => {
+  const [show, setShow] = useState(false);
+  return (
+    <span
+      className="ml-2 cursor-pointer text-accent transition-transform duration-200 hover:scale-110 hover:text-blue-400 relative"
+      tabIndex={0}
+      onMouseEnter={() => setShow(true)}
+      onMouseLeave={() => setShow(false)}
+      onFocus={() => setShow(true)}
+      onBlur={() => setShow(false)}
+      aria-label={text || 'Select from the dropdown'}
+    >
+      ❓
+      {show && (
+        <span className="absolute left-6 top-1/2 -translate-y-1/2 bg-background text-foreground border border-border rounded shadow-lg px-3 py-2 text-xs z-50 w-64">
+          {text}
+        </span>
+      )}
+    </span>
+  );
+};
 
 const sspOptions = [
   { value: 'Nexxen', label: 'Nexxen' },
@@ -19,7 +43,6 @@ const sspOptions = [
 ];
 const dspOptions = [
   { value: 'MediaMath', label: 'MediaMath' },
-  { value: 'Index', label: 'Index' },
   { value: 'The Trade Desk', label: 'The Trade Desk' },
   { value: 'DV360', label: 'DV360' },
   { value: 'Adelphic', label: 'Adelphic' },
@@ -88,12 +111,12 @@ const steps = [
     label: 'Client Details',
     fields: [
       { name: 'agencyName', label: 'Agency Name', type: 'text', required: true, placeholder: 'Enter agency name' },
-      { name: 'advertiserNames', label: 'Advertiser Name(s)', type: 'text', required: true, placeholder: 'Enter advertiser/brand names' },
+      { name: 'advertiserNames', label: 'Advertiser/Brand Name(s)', type: 'text', required: true, placeholder: 'Enter advertiser/brand names' },
       { name: 'dealName', label: 'Deal Name', type: 'text', required: true, placeholder: 'Enter custom deal name' },
       { name: 'flighting', label: 'Flighting', type: 'date-range', required: true, placeholder: 'Select flighting dates' },
       { name: 'dsps', label: 'DSP(s)', type: 'multi-select', required: true, options: dspOptions, placeholder: 'Select DSP(s)' },
       { name: 'dspOtherName', label: 'DSP (Other) Name', type: 'text', required: false, placeholder: 'If "Other" selected, specify name', conditional: (form: any) => form.dsps?.some((d:any) => d.value === 'Other') },
-      { name: 'dspSeatId', label: 'DSP Seat ID', type: 'text', required: false, placeholder: 'Optional seat ID' },
+      { name: 'dspSeatId', label: 'DSP Seat/Partner ID', type: 'text', required: false, placeholder: 'Optional seat ID' },
       { name: 'ssps', label: 'Preferred SSP(s)', type: 'multi-select', required: false, options: sspOptions, placeholder: 'Select SSP(s)', tooltip: 'Optional: Preferred supply partners' },
       { name: 'creatives', label: 'Infillion Curated Creative', type: 'multi-select', required: true, options: creativeOptions, placeholder: 'Select creative types' },
     ],
@@ -247,7 +270,7 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
                       ) : Array.isArray(form[field.name]) ? (
                         <span className="inline-flex flex-wrap gap-2">
                           {form[field.name].map((v: any, idx: number) => (
-                            <span key={idx} className="bg-accent text-accent-foreground px-2 py-1 rounded-full text-xs font-medium">{v.label || v}</span>
+                            <span key={idx} className="bg-accent text-accent-foreground px-2 py-1 rounded-full text-xs font-medium">{typeof v === 'object' && v.label ? v.label : v}</span>
                           ))}
                         </span>
                       ) : (
@@ -281,9 +304,8 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
               <div key={field.name} className="flex flex-col mb-2">
                 <label htmlFor={field.name} className="mb-1 text-foreground font-sans">
                   {field.label}
-                  {field.required && <span className="ml-1 text-xs text-accent font-bold">*</span>}
+                  <RequiredOptionalLabel required={field.required} />
                   {field.tooltip && <Tooltip text={field.tooltip} />}
-                  <span className={`ml-2 text-xs ${field.required ? 'text-accent font-bold' : 'text-blue-200'}`}>{field.required ? '(Required)' : '(Optional)'}</span>
                 </label>
                 {field.type === 'text' && (
                   <input
@@ -381,6 +403,28 @@ function CustomDealCreationModal({ open, onClose }: { open: boolean; onClose: ()
                     aria-required={field.required}
                     aria-invalid={!!errors[field.name]}
                   />
+                )}
+                {field.name === 'dsps' && Array.isArray(form.dsps) && form.dsps.length > 1 && (
+                  <div className="flex flex-col gap-2 mt-2">
+                    {form.dsps.map((dsp: any, idx: number) => (
+                      <div key={dsp.value} className="flex flex-col">
+                        <label htmlFor={`dspSeatId_${dsp.value}`} className="mb-1 text-foreground font-sans">
+                          DSP Seat/Partner ID for {dsp.label}
+                          <RequiredOptionalLabel required={false} />
+                        </label>
+                        <input
+                          id={`dspSeatId_${dsp.value}`}
+                          name={`dspSeatId_${dsp.value}`}
+                          type="text"
+                          value={form[`dspSeatId_${dsp.value}`] || ''}
+                          onChange={e => handleChange(`dspSeatId_${dsp.value}`, e.target.value)}
+                          className="p-2 border rounded text-foreground bg-background border-border"
+                          placeholder={`Enter seat/partner ID for ${dsp.label}`}
+                          aria-label={`DSP Seat/Partner ID for ${dsp.label}`}
+                        />
+                      </div>
+                    ))}
+                  </div>
                 )}
                 {errors[field.name] && <span className="text-red-500 text-xs mt-1">{errors[field.name]}</span>}
                 {field.type === 'date-range' && flightingError && <span className="text-red-500 text-xs mt-1">{flightingError}</span>}
