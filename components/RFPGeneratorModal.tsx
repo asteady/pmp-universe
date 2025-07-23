@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { createAsanaTask } from '../lib/asana';
 import audienceTaxonomy from '../data/audienceTaxonomy.json';
 import Select from 'react-select';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 // The modal will always reflect the current theme (light/dark) because it uses CSS variables set on :root and updated via the html class (see app/layout.tsx)
 
@@ -9,7 +11,7 @@ import Select from 'react-select';
 const steps = [
   {
     label: 'Client Details',
-    fields: ['agencyName', 'advertiserName', 'description'],
+    fields: ['agencyName', 'advertiserName', 'description', 'dueDate'], // Add dueDate
   },
   {
     label: 'Deal Settings',
@@ -25,6 +27,7 @@ const fieldLabels: Record<string, string> = {
   agencyName: 'Agency Name',
   advertiserName: 'Advertiser/Brand Name',
   description: 'Description',
+  dueDate: 'Due Date',
   audienceTaxonomy: 'Audience Taxonomy',
   customAudience: 'Custom Audience',
   creatives: 'Creatives',
@@ -39,11 +42,28 @@ const creativeTypes = [
 const deviceTypes = [
   'Smartphone', 'Desktop', 'Tablet', 'CTV'
 ];
-
-// 1. Add tooltips to all dropdowns
-const Tooltip = ({ text }: { text: string }) => (
-  <span className="ml-2 cursor-pointer text-accent" tabIndex={0} title={text || 'Select from the dropdown'} aria-label={text || 'Select from the dropdown'}>❓</span>
-);
+// 2. Update Tooltip component for hover animation
+const Tooltip = ({ text }: { text: string }) => {
+  const [show, setShow] = useState(false);
+  return (
+    <span
+      className="ml-2 cursor-pointer text-accent transition-transform duration-200 hover:scale-110 hover:text-blue-400 relative"
+      tabIndex={0}
+      onMouseEnter={() => setShow(true)}
+      onMouseLeave={() => setShow(false)}
+      onFocus={() => setShow(true)}
+      onBlur={() => setShow(false)}
+      aria-label={text || 'Select from the dropdown'}
+    >
+      ❓
+      {show && (
+        <span className="absolute left-6 top-1/2 -translate-y-1/2 bg-background text-foreground border border-border rounded shadow-lg px-3 py-2 text-xs z-50 w-64">
+          {text}
+        </span>
+      )}
+    </span>
+  );
+};
 
 // 2. Update (Required)/(Optional) text color
 // 3. Enhance dropdown menu backdrops
@@ -102,6 +122,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
   const [submitSuccess, setSubmitSuccess] = useState(false);
   // Only one input for search
   const [audienceInput, setAudienceInput] = useState('');
+  const [dueDate, setDueDate] = useState<Date | null>(null);
 
   // Alphabetize options
   const allAudienceOptions = audienceTaxonomy
@@ -126,6 +147,9 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
         ) {
           newErrors[field] = 'This field is required.';
         }
+      }
+      if (field === 'dueDate' && !dueDate) {
+        newErrors['dueDate'] = 'Due date is required.';
       }
     });
     setErrors(newErrors);
@@ -158,6 +182,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
     agencyName: '',
     advertiserName: '',
     description: '',
+    dueDate: 'Select the due date for this RFP. This will be used as the Asana due date.',
     audienceTaxonomy: 'Please select from the drop down menu. You must select at least one pre-built Segment, and you can select as many as you’d like!',
     customAudience: '',
     creatives: 'Studio is currently helping curate these RFPs, but we will auto-generate these soon. Let us know if you need any of these. Multi-select enabled!',
@@ -182,6 +207,7 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
         audienceTaxonomy: form.audienceTaxonomy.map((opt: any) => opt.value),
         creatives: form.creatives.map((opt: any) => opt.value),
         deviceTypes: form.deviceTypes.map((opt: any) => opt.value),
+        dueDate: dueDate ? dueDate.toISOString().split('T')[0] : '',
       };
       await createAsanaTask(payload, { formType: 'rfp' });
       setSubmitSuccess(true);
@@ -224,10 +250,12 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                   {s.fields.map(field => (
                     <div key={field} className="mb-2">
                       <span className="font-semibold text-foreground">{fieldLabels[field] || field}:</span>{' '}
-                      {Array.isArray(form[field]) ? (
+                      {field === 'dueDate' ? (
+                        <span className="bg-muted text-foreground px-2 py-1 rounded text-xs font-mono ml-1">{dueDate ? dueDate.toLocaleDateString() : ''}</span>
+                      ) : Array.isArray(form[field]) ? (
                         <span className="inline-flex flex-wrap gap-2">
                           {form[field].map((v: any, idx: number) => (
-                            <span key={idx} className={`${vibrantChipColor(idx)} text-white px-2 py-1 rounded-full text-xs font-medium`}>{v.label || v}</span>
+                            <span key={idx} className={`${vibrantChipColor(idx)} text-white px-2 py-1 rounded-full text-xs font-medium`}>{typeof v === 'object' && v.label ? v.label : v}</span>
                           ))}
                         </span>
                       ) : (
@@ -235,6 +263,13 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                       )}
                     </div>
                   ))}
+                  {/* Show Due Date in review step */}
+                  {i === 0 && (
+                    <div className="mb-2">
+                      <span className="font-semibold text-foreground">Due Date:</span>{' '}
+                      <span className="bg-muted text-foreground px-2 py-1 rounded text-xs font-mono ml-1">{dueDate ? dueDate.toLocaleDateString() : ''}</span>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -254,105 +289,144 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                   <label htmlFor={field} className="mb-1 text-foreground font-sans" title={fieldTooltips[field] || ''}>
                     {fieldLabels[field]}
                     <span className={`ml-2 text-xs ${['description', 'customAudience', 'measurement'].includes(field) ? 'text-blue-200' : 'text-accent font-bold'}`}>{['description', 'customAudience', 'measurement'].includes(field) ? '(Optional)' : '(Required)'}</span>
+                    {fieldTooltips[field] && <Tooltip text={fieldTooltips[field]} />}
                   </label>
-                  {field === 'audienceTaxonomy' && (
-                    <div>
-                      <Select
-                        isMulti
-                        options={filteredAudienceOptions}
-                        value={form.audienceTaxonomy}
-                        onChange={opts => handleSelectChange('audienceTaxonomy', opts || [])}
-                        classNamePrefix="react-select"
-                        placeholder="Search audiences..."
-                        styles={selectStyles}
-                        theme={selectTheme}
-                        menuPortalTarget={typeof window !== 'undefined' ? document.body : undefined}
-                        menuPosition="fixed"
-                        maxMenuHeight={200}
-                        inputValue={audienceInput}
-                        onInputChange={val => setAudienceInput(val)}
+                  {/* Only one input/textarea/select per field */}
+                  {(() => {
+                    if (field === 'dueDate') {
+                      return (
+                        <DatePicker
+                          selected={dueDate}
+                          onChange={date => setDueDate(date)}
+                          placeholderText="Select due date"
+                          className="p-2 border rounded text-foreground bg-background border-border placeholder-[#A0A0A0]"
+                          aria-label="Due Date"
+                          aria-required={true}
+                          aria-invalid={!!errors['dueDate']}
+                        />
+                      );
+                    }
+                    if (field === 'audienceTaxonomy') {
+                      return (
+                        <div>
+                          <Select
+                            isMulti
+                            options={filteredAudienceOptions}
+                            value={form.audienceTaxonomy}
+                            onChange={opts => handleSelectChange('audienceTaxonomy', opts || [])}
+                            classNamePrefix="react-select"
+                            placeholder="Search audiences..."
+                            styles={selectStyles}
+                            theme={selectTheme}
+                            menuPortalTarget={typeof window !== 'undefined' ? document.body : undefined}
+                            menuPosition="fixed"
+                            maxMenuHeight={200}
+                            inputValue={audienceInput}
+                            onInputChange={val => setAudienceInput(val)}
+                          />
+                          <Tooltip text={fieldTooltips[field]} />
+                        </div>
+                      );
+                    }
+                    if (field === 'creatives' || field === 'deviceTypes') {
+                      return (
+                        <div className="flex items-center">
+                          <Select
+                            isMulti
+                            options={field === 'creatives' ? creativeTypes.map(type => ({ value: type, label: type })) : deviceTypes.map(type => ({ value: type, label: type }))}
+                            value={form[field]}
+                            onChange={opts => handleSelectChange(field, opts || [])}
+                            classNamePrefix="react-select"
+                            placeholder="Search..."
+                            styles={selectStyles}
+                            theme={selectTheme}
+                          />
+                          <Tooltip text={fieldTooltips[field]} />
+                        </div>
+                      );
+                    }
+                    if (field === 'description') {
+                      return (
+                        <textarea
+                          name={field}
+                          value={form[field] || ''}
+                          onChange={handleChange}
+                          className="p-2 border rounded text-foreground bg-background placeholder-[#A0A0A0]"
+                          aria-label={`Enter ${fieldLabels[field]}`}
+                          onFocus={() => setDescriptionPlaceholder('')}
+                          placeholder={descriptionPlaceholder}
+                        />
+                      );
+                    }
+                    if (field === 'customAudience') {
+                      return (
+                        <textarea
+                          name={field}
+                          value={form[field] || ''}
+                          onChange={handleChange}
+                          className="p-2 border rounded text-foreground bg-background placeholder-[#A0A0A0]"
+                          aria-label={`Enter ${fieldLabels[field]}`}
+                          onFocus={() => setCustomAudiencePlaceholder('')}
+                          placeholder={customAudiencePlaceholder}
+                        />
+                      );
+                    }
+                    if (field === 'measurement') {
+                      return (
+                        <textarea
+                          name={field}
+                          value={form[field] || ''}
+                          onChange={handleChange}
+                          className="p-2 border rounded text-foreground bg-background placeholder-[#A0A0A0]"
+                          aria-label={`Enter ${fieldLabels[field]}`}
+                          onFocus={() => setMeasurementPlaceholder('')}
+                          placeholder={measurementPlaceholder}
+                        />
+                      );
+                    }
+                    if (field === 'agencyName') {
+                      return (
+                        <input
+                          name={field}
+                          value={form[field] || ''}
+                          onChange={handleChange}
+                          aria-label={`Enter ${fieldLabels[field]}`}
+                          aria-required={true}
+                          aria-invalid={!!errors[field]}
+                          className={`p-2 border rounded text-foreground bg-background placeholder-[#A0A0A0] ${errors[field] ? 'border-red-500' : ''}`}
+                          onFocus={() => setAgencyNamePlaceholder('')}
+                          placeholder={agencyNamePlaceholder}
+                        />
+                      );
+                    }
+                    if (field === 'advertiserName') {
+                      return (
+                        <input
+                          name={field}
+                          value={form[field] || ''}
+                          onChange={handleChange}
+                          aria-label={`Enter ${fieldLabels[field]}`}
+                          aria-required={true}
+                          aria-invalid={!!errors[field]}
+                          className={`p-2 border rounded text-foreground bg-background placeholder-[#A0A0A0] ${errors[field] ? 'border-red-500' : ''}`}
+                          onFocus={() => setAdvertiserNamePlaceholder('')}
+                          placeholder={advertiserNamePlaceholder}
+                        />
+                      );
+                    }
+                    // fallback for any other field
+                    return (
+                      <input
+                        name={field}
+                        value={form[field] || ''}
+                        onChange={handleChange}
+                        aria-label={`Enter ${fieldLabels[field]}`}
+                        aria-required={true}
+                        aria-invalid={!!errors[field]}
+                        className={`p-2 border rounded text-foreground bg-background placeholder-[#A0A0A0] ${errors[field] ? 'border-red-500' : ''}`}
                       />
-                      <Tooltip text={fieldTooltips[field]} />
-                    </div>
-                  )}
-                  {field !== 'audienceTaxonomy' && (field === 'creatives' || field === 'deviceTypes') && (
-                    <div className="flex items-center">
-                      <Select
-                        isMulti
-                        options={field === 'creatives' ? creativeTypes.map(type => ({ value: type, label: type })) : deviceTypes.map(type => ({ value: type, label: type }))}
-                        value={form[field]}
-                        onChange={opts => handleSelectChange(field, opts || [])}
-                        classNamePrefix="react-select"
-                        placeholder="Search..."
-                        styles={selectStyles}
-                        theme={selectTheme}
-                      />
-                      <Tooltip text={fieldTooltips[field]} />
-                    </div>
-                  )}
-                  {field !== 'audienceTaxonomy' && field !== 'creatives' && field !== 'deviceTypes' && (field === 'description' || field === 'customAudience' || field === 'measurement') && (
-                    <textarea
-                      name={field}
-                      value={form[field] || ''}
-                      onChange={handleChange}
-                      className="p-2 border rounded text-foreground bg-background"
-                      aria-label={`Enter ${fieldLabels[field]}`}
-                      onFocus={() => setDescriptionPlaceholder('')}
-                      placeholder={descriptionPlaceholder}
-                    />
-                  )}
-                  {field !== 'audienceTaxonomy' && field !== 'creatives' && field !== 'deviceTypes' && field !== 'description' && field !== 'customAudience' && field !== 'measurement' && (
-                    <input
-                      name={field}
-                      value={form[field] || ''}
-                      onChange={handleChange}
-                      aria-label={`Enter ${fieldLabels[field]}`}
-                      aria-required={true}
-                      aria-invalid={!!errors[field]}
-                      className={`p-2 border rounded text-foreground bg-background ${errors[field] ? 'border-red-500' : ''}`}
-                      onFocus={() => setAgencyNamePlaceholder('')}
-                      placeholder={agencyNamePlaceholder}
-                    />
-                  )}
-                  {field !== 'audienceTaxonomy' && field !== 'creatives' && field !== 'deviceTypes' && field !== 'description' && field !== 'customAudience' && field !== 'measurement' && (
-                    <input
-                      name={field}
-                      value={form[field] || ''}
-                      onChange={handleChange}
-                      aria-label={`Enter ${fieldLabels[field]}`}
-                      aria-required={true}
-                      aria-invalid={!!errors[field]}
-                      className={`p-2 border rounded text-foreground bg-background ${errors[field] ? 'border-red-500' : ''}`}
-                      onFocus={() => setAdvertiserNamePlaceholder('')}
-                      placeholder={advertiserNamePlaceholder}
-                    />
-                  )}
-                  {field !== 'audienceTaxonomy' && field !== 'creatives' && field !== 'deviceTypes' && field !== 'description' && field !== 'customAudience' && field !== 'measurement' && (
-                    <textarea
-                      name={field}
-                      value={form[field] || ''}
-                      onChange={handleChange}
-                      aria-label={`Enter ${fieldLabels[field]}`}
-                      aria-required={true}
-                      aria-invalid={!!errors[field]}
-                      className={`p-2 border rounded text-foreground bg-background ${errors[field] ? 'border-red-500' : ''}`}
-                      onFocus={() => setCustomAudiencePlaceholder('')}
-                      placeholder={customAudiencePlaceholder}
-                    />
-                  )}
-                  {field !== 'audienceTaxonomy' && field !== 'creatives' && field !== 'deviceTypes' && field !== 'description' && field !== 'customAudience' && field !== 'measurement' && (
-                    <textarea
-                      name={field}
-                      value={form[field] || ''}
-                      onChange={handleChange}
-                      aria-label={`Enter ${fieldLabels[field]}`}
-                      aria-required={true}
-                      aria-invalid={!!errors[field]}
-                      className={`p-2 border rounded text-foreground bg-background ${errors[field] ? 'border-red-500' : ''}`}
-                      onFocus={() => setMeasurementPlaceholder('')}
-                      placeholder={measurementPlaceholder}
-                    />
-                  )}
+                    );
+                  })()}
                   {errors[field] && <span className="text-red-500 text-xs mt-1">{errors[field]}</span>}
                 </div>
               ))}
