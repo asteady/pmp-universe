@@ -308,21 +308,21 @@ const RFPGeneratorModal = ({ open, onClose }: { open: boolean; onClose: () => vo
                     }
                     if (field === 'audienceTaxonomy') {
                       return (
-                        <div>
+                        <div className="flex items-center">
                           <Select
                             isMulti
-                            options={filteredAudienceOptions}
-                            value={form.audienceTaxonomy}
-                            onChange={opts => handleSelectChange('audienceTaxonomy', opts || [])}
+                            inputId="audienceTaxonomy"
+                            name="audienceTaxonomy"
+                            options={allAudienceOptions}
+                            value={form.audienceTaxonomy || []}
+                            onChange={val => handleSelectChange('audienceTaxonomy', val)}
                             classNamePrefix="react-select"
-                            placeholder="Search audiences..."
+                            placeholder="Search and select audience segments"
                             styles={selectStyles}
                             theme={selectTheme}
-                            menuPortalTarget={typeof window !== 'undefined' ? document.body : undefined}
-                            menuPosition="fixed"
-                            maxMenuHeight={200}
-                            inputValue={audienceInput}
-                            onInputChange={val => setAudienceInput(val)}
+                            aria-label={fieldLabels[field]}
+                            aria-required={true}
+                            aria-invalid={!!errors[field]}
                           />
                           <Tooltip text={fieldTooltips[field]} />
                         </div>
